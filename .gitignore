@@ -2,3 +2,5 @@ node_modules/
 *.sublime*
 .DS_Store
 npm-debug.log
+test/
+*.js
