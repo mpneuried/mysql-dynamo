@@ -1,11 +1,13 @@
 mysql = require('mysql')
+should = require('should')
 _ = require('lodash')
 
 CONFIG = 
 	clearTestTableBefore: false
 	cretaeAndFillTestTableBefore: false
-	iHashes: 300
+	iHashes: 500
 	iItems: 1000
+	verbose: false
 
 randomString = ( string_length = 5, specialLevel = 0 ) ->
 	chars = "BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz"
@@ -50,6 +52,8 @@ describe 'Proof of concept', ->
 		return
 
 	describe "Fill DB", ->
+		# increase the timeout for filling th db with data
+		this.timeout( 20 * 60 * 1000 )
 		if CONFIG.clearTestTableBefore
 			it "delete existing Table", ( done )->
 
@@ -108,22 +112,63 @@ describe 'Proof of concept', ->
 	describe 'TEST', ->
 
 		hashes = []
+		ranges = []
+		testCount = 2
+		
+		it "Get the number of elements in the table", ( done )->
+			
 
-		it "Get som random Hashes", ( done )->
+			DB.query "SELECT TABLE_ROWS as count FROM information_schema.tables WHERE table_schema = database() AND table_name = 'poc'", ( err, rows )=>
+				throw err if err
+				rows.length.should.equal( 1 )
+				#should.exist( rows[ 0 ] )
+				#should.exist( rows[ 0 ].count )
+				console.log rows[ 0 ].count
+				done()
+				return
+			return
+		
+		it "Get some random Hashes", ( done )->
 
-			DB.query "SELECT _h FROM poc GROUP BY _h LIMIT 10 OFFSET #{randRange( 1,100 )}", ( err, rows )=>
+			DB.query "SELECT _h FROM poc GROUP BY _h ORDER BY RAND() LIMIT #{testCount}", ( err, rows )=>
 				throw err if err
 				hashes = _.pluck( rows, "_h" )
-				console.log "10 Random Hashes #{ hashes.join(", ") }"
+				console.log "#{testCount} Random Hashes #{ hashes.join(", ") }" if CONFIG.verbose
 				done()
 				return
 			return
 
-		it "Test", ( done )->
-			DB.query "SELECT 1 + 1 AS solution", ( err, rows, fields )=>
+		it "Get som random Range Numbers", ( done )->
+
+			for idx in [1..testCount]
+				ranges.push( randRange( 1,1000 ) )
+			console.log "#{testCount} Random Ranges #{ ranges.join(", ") }" if CONFIG.verbose
+			done()
+			return
+
+		it "Performance test a Range query", ( done )->
+			statments = []
+			for _h, idx in hashes
+
+				statments.push """
+					SELECT _h, _r FROM poc
+					WHERE _h = "#{_h}"
+					AND _r > #{ ranges[ idx ] }
+					LIMIT 30
+				"""
+			console.time( "Duration of #{testCount} range selects with #{testCount} results in one query" )
+			DB.query statments.join( ";" ), ( err, results, fields )=>
+				console.timeEnd( "Duration of #{testCount} range selects with #{testCount} results in one query" )
 				if err
 					throw err
-				console.log rows
+				if statments.length is 1
+					results = [ results ] 
+				for rows, idx in results
+					for row in rows
+						row._h.should.equal( hashes[ idx ] )
+
+					rows.length.should.be.within( 1, 30 )
+
 				done()
 				return
 

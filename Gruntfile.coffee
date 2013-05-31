@@ -30,9 +30,9 @@ module.exports = (grunt) ->
 				require: [ "should" ]
 				reporter: "Spec"
 				bail: true
-				timeout: 100000
+				timeout: 10000
 
-			all: [ "test/poc.js" ]
+			all: [ "test/general.js" ]
 
 		includereplace:
 			pckg:
