@@ -2,11 +2,12 @@ _ = require('lodash')._
 
 mysql = require 'mysql'
 Table = require "./table"
+utils = require( "./utils" )
 
 module.exports = class MySQLDynamoManager extends require( "./basic" )
 
 	defaults: =>
-		@extend super
+		@extend super,
 			# the mysql driver pooling options
 			host: 'localhost'
 			user: 'root'
@@ -63,7 +64,7 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 		return
 
 	_fetchTables: ( cb )=>
-		statement = "SELECT table_name as name, table_rows as rows, index_length FROM information_schema.tables WHERE  table_schema = database()"
+		statement = "SELECT table_name as name, table_rows as rows FROM information_schema.tables WHERE  table_schema = database()"
 		# allways fetch tables on a call
 		@sql statement, ( err, results )=>
 			if err
@@ -88,7 +89,8 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 				
 				# generate a Table Object for each table-element out of @tableSettings
 				_ext = @_dbTables[ table.name ]
-				_opt = _.extend {},
+				console.log _ext
+				_opt = 
 					manager: @
 					external: _ext
 					logging: @config.logging
@@ -100,10 +102,7 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 			cb( null )
 
 		else
-			error = new Error
-			error.name = "no-tables-fetched"
-			error.message = "Currently not tables fetched. Please run `Manager.connect()` first."
-			cb( error )
+			@_handeError( cb, "no-tables-fetched" )
 
 		return
 
@@ -164,10 +163,7 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 		tbl = @get tableName
 
 		if not tbl
-			error = new Error
-			error.name = "table-not-found"
-			error.message = "Table `#{ tableName }` not found."
-			cb( error )
+			@_handeError( cb, "table-not-found", tableName: tableName )
 		else
 
 			tbl.generate ( err, generated )=>
@@ -187,3 +183,4 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 	ERRORS: =>
 		@extend super, 
 			"no-tables-fetched": "Currently not tables fetched. Please run `Manager.connect()` first."
+			"table-not-found": "Table `<%= tableName %>` not found."

@@ -18,7 +18,8 @@
 		"async": "*",
 		"colors": "*",
 		"lodash": "*",
-		"mysql": "*"
+		"mysql": "*",
+		"node-uuid": "*"
 	},
 	"devDependencies": {
 		"should": "*",

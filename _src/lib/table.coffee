@@ -1,50 +1,77 @@
+uuid = require 'node-uuid'
 _ = require('lodash')._
 
 module.exports = class MySQLDynamoTable extends require( "./basic" )
 
 	constructor: ( @_model_settings, options )->
 
-		@__defineGetter__ "name", =>
+		@mng = options.manager
+		@external = options.external
+
+		@getter "name", =>
 			@_model_settings.name
 
-		@__defineGetter__ "tableName", =>
-			@_model_settings.combineTableTo or @_model_settings.name or null
+		@getter "tableName", =>
+			@_model_settings.name
 
-		@__defineGetter__ "isCombinedTable", =>
-			@_model_settings.combineTableTo?
-		
-		@__defineGetter__ "combinedHashDelimiter", =>
-			""
-
-		@__defineGetter__ "existend", =>
+		@getter "existend", =>
 			@external?
 
-		@__defineGetter__ "hasRange", =>
+		@getter "hasRange", =>
 			if @_model_settings?.rangeKey?.length then true else false
 
-		@__defineGetter__ "hashKey", =>
+		@getter "hashKey", =>
 			@_model_settings?.hashKey or null
 
-		@__defineGetter__ "hashKeyType", =>
-			if @isCombinedTable
-				"S"
-			else
-				@_model_settings?.hashKeyType or "S"
+		@getter "hashKeyType", =>
+			@_model_settings?.hashKeyType or "S"
 
-		@__defineGetter__ "rangeKey", =>
+		@getter "hashKeyLength", =>
+			@_model_settings?.hashKeyLength or if @hashKeyType is "N" then 5 else 255
+
+
+		@getter "rangeKey", =>
 			@_model_settings?.rangeKey or null
 
-		@__defineGetter__ "rangeKeyType", =>
+		@getter "rangeKeyType", =>
 			if @hasRange
 				@_model_settings?.rangeKeyType or "N"
 			else
 				null
 
+		@getter "rangeKeyLength", =>
+			@_model_settings?.rangeKeyLength or if @rangeKeyType is "N" then 5 else 255
+
 		super( options )
 		return
 
+	sql: =>
+		@mng.sql.apply( @mng, arguments )
+
 	initialize: =>
 		@log "debug", "init table", @tableName, @hashKey, @rangeKey
+
+		SQLBuilder = ( require( "./sql" ) )( logging: @config.logging )
+
+		@builder = new SQLBuilder()
+			
+		@builder.table = @name
+		
+		@builder.hash =
+			key: @hashKey
+			type: @hashKeyType
+			length: @hashKeyLength
+
+		if @hasRange
+			@builder.range =
+				key: @rangeKey
+				type: @rangeKeyType
+				length: @rangeKeyLength
+		
+		@builder.setAttrs( _.clone( @_model_settings.attributes ) )
+
+		if @_model_settings.defaultfields?
+			@builder.fields = @_model_settings.defaultfields
 		return
 
 	generate: ( cb )=>
@@ -57,9 +84,363 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 			cb( null, false )
 		return
 
-	_generate: =>
-		@log "debug", "generate table", @tableConfig
+	_generate: ( cb )=>
 
-		
+		statement = @builder.create()
+
+		@sql statement, ( err, result )=>
+			@log "debug", "table generated", statement, err, result 
+			if err
+				cb( err )
+				return
+
+			@external = 
+				name: @name
+				rows: 0
+
+			cb( null, @external )
+			return
+		return
+
+	get: ( args..., cb )=>
+		if @_isExistend( cb )
+			options = null
+			switch args.length
+				when 1
+					[ _id ] = args
+				when 2
+					[ _id, options ] = args
+
+			options = @_getOptions( options )
+			
+			
+			sql = @builder.clone()
+
+			sql.fields = options.fields if options.fields?
+			sql.forward = if options.forward? then options.forward else true
+			sql.limit = if options.limit? then options.limit else 1000
+
+			sql.filter( @_deFixHash( _id, cb ) )
+
+			@sql sql.query( false ), ( err, results )=>
+				if err
+					cb( err )
+					return
+
+				if results?.length
+					_obj = @_postProcess( results[ 0 ] )
+					@emit( "get", _obj )
+					cb( null,  _obj )
+				else
+					@emit( "get-empty" )
+					cb( null, null )
+				return
 
 		return
+
+	mget: ( args..., cb )=>
+		if @_isExistend( cb )
+			options = null
+			switch args.length
+				when 1
+					[ _ids ] = args
+				when 2
+					[ _ids, options ] = args
+
+			options = @_getOptions( options )
+			
+			sql = @builder.clone()
+
+			sql.fields = options.fields if options.fields?
+			sql.forward = if options.forward? then options.forward else true
+			sql.limit = if options.limit? then options.limit else 1000
+
+			for _id in _ids
+				sql.or().filterGroup().filter( @_deFixHash( _id, cb ) )
+
+			_statement = sql.query( false )
+			@log "debug", "mget", _ids, _statement
+
+			@sql _statement, ( err, results )=>
+				if err
+					cb( err )
+					return
+
+
+				if results?.length
+					_objs = []
+					for _obj in results
+					 	_objs.push( @_postProcess( _obj ) )
+					@emit( "mget", _objs )
+					cb( null, _objs )
+				else
+					@emit( "mget-empty" )
+					cb( null, [] )
+				return
+
+		return
+
+	find: ( args..., cb )=>
+
+		if @_isExistend( cb )
+
+			options = null
+			startAt = null
+			query = {}
+			switch args.length
+				when 1
+					[ query ] = args
+				when 2
+					[ query, _x ] = args
+					if _.isString( _x ) or _.isNumber( _x )
+						startAt = _x
+					else
+						options = _x
+				when 3
+					[ query, startAt, options ] = args
+
+			options = @_getOptions( options )
+
+			if startAt?
+				startAt = @_deFixHash( startAt, cb )
+
+			@log "debug", "find", query, startAt, options
+
+			sql = @builder.clone()
+			sql.fields = options.fields if options.fields?
+			sql.forward = if options.forward? then options.forward else true
+			sql.limit = if options.limit? then options.limit else 1000
+
+			sql.filter( query )
+			_statement = sql.query()
+
+			@sql _statement, ( err, result )=>
+				if err
+					cb( err )
+					return
+				@log "debug", "find query", _statement, result
+				cb( null, result )
+				return
+
+		return
+
+	set: ( args..., cb )=>
+		if @_isExistend( cb )
+			options = null
+
+			switch args.length
+				when 1
+					_create = true
+					_id = null
+					[ attributes ] = args
+				when 2
+					if _.isString( args[ 0 ] ) or _.isNumber( args[ 0 ] ) or _.isArray( args[ 0 ] )
+						_create = false
+						[ _id, attributes ] = args
+					else
+						_create = true
+						_id = null
+						[ attributes, options ] = args
+				when 3
+					_create = false
+					[ _id, attributes, options ] = args
+			
+			options = @_getOptions( options )
+
+			sql = @builder.clone()
+
+			sql.validateAttributes _create, attributes, ( err, attributes )=>
+				if err
+					@_error( cb, err )
+				else
+					if _create
+						@_createId attributes, ( err, attributes )=>
+							@log "debug", "create a item", attributes, options
+							
+							sql.fields = options.fields if options.fields?
+							
+							statements = [ sql.insert( attributes ) ]
+
+							sqlGet = @builder.clone()
+
+							_query = {}
+							if @hasRange
+								_query[ @hashKey ] = attributes[ @hashKey ]
+								_query[ @rangeKey ] = attributes[ @rangeKey ]
+							else
+								_query[ @hashKey ] = attributes[ @hashKey ]
+							sqlGet.filter( _query )
+
+							statements.push sqlGet.query( false )
+
+							@sql statements.join( ";\n" ), ( err, results )=>
+								if err
+									cb( err )
+									return
+								[ _meta, _inserted ] = results
+								if _inserted?.length
+									_obj = @_postProcess( _inserted[ 0 ] )
+									@log "warning", "insert", statements, _obj
+									
+									@emit( "create", _obj )
+									cb( null, _obj )
+								else 
+									cb( null, null )
+								return
+							return
+
+					else
+						
+						@log "debug", "update a item", _id, attributes, options
+						
+						sql.fields = options.fields if options.fields?
+
+						sql.filter( @_deFixHash( _id, cb ) )
+
+						statements = [ sql.update( attributes ), sql.query( false ) ]
+
+						@sql statements.join( ";\n" ), ( err, results )=>
+							if err
+								cb( err )
+								return
+
+							@log "warning", "update", statements
+
+							[ _meta, _updated ] = results
+							if _updated?.length
+								_obj = @_postProcess( _updated[ 0 ] )  
+								
+								@emit( "update", _obj )
+
+								cb( null, _obj )
+							else 
+								cb( null, null )
+							return
+				return
+		return
+
+	_isExistend: ( cb )=>
+		if @existend
+			true
+		else 
+			if _.isFunction( cb )
+				# table not existend
+				@_handleError( cb, "table-not-created", tableName: @tableName )
+			false
+
+	_getOptions: ( options = {} )=>
+		_defOpt =
+			fields: if @_model_settings.defaultfields? then @_model_settings.defaultfields else null
+			forward: if @_model_settings.forward? then @_model_settings.forward else true
+			
+		_.extend( _defOpt, options or {} )
+
+
+	_deFixHash: ( attrs, cb )=>
+		
+		if _.isString( attrs ) or _.isNumber( attrs ) or _.isArray( attrs )
+			_hName = @hashKey
+			_attrs = {}
+			_attrs[ _hName ] = _.clone( attrs )
+		else
+			_attrs = _.clone( attrs )
+		
+		if @hasRange
+			_hType = @hashKeyType
+			_rName = @rangeKey
+			_rType = @rangeKeyType
+
+			if not _.isArray( _attrs[ _hName ] )
+
+				@_handleError( cb, "invalid-range-call" )
+				return
+
+			[ _h, _r ] = _attrs[ _hName ]
+			_attrs[ _hName ] =  @_convertValue( _h, _hType )
+			_attrs[ _rName ] =  @_convertValue( _r, _rType )
+
+		_attrs
+
+	_convertValue: ( val, type )=>
+		switch type.toUpperCase()
+			when "N", "numeric"
+				parseFloat( val, 10 )
+			when "S", "string"
+				val.toString( val ) if val
+			else
+				val
+
+	_postProcess: ( attrs )=>
+		attrs
+
+	_createId: ( attributes, cb )=>
+		@_createHashKey attributes, ( attributes )=>
+
+			# create range attribute if defined in shema
+			if @hasRange
+				@_createRangeKey attributes, ( attributes )=>
+					cb( null, attributes )
+					return
+			else
+				cb( null, attributes )
+			return
+
+		return
+
+	_createHashKey: ( attributes, cbH )=>
+		_hName = @hashKey
+		_hType = @hashKeyType
+
+		if @_model_settings.fnCreateHash and _.isFunction( @_model_settings.fnCreateHash )
+			@_model_settings.fnCreateHash attributes, ( _hash )=>
+				attributes[ _hName ] = @_convertValue( _hash, _hType )
+				cbH( attributes )
+				return
+
+		else if attributes[ _hName ]?
+			# check the type
+	
+			attributes[ _hName ] = @_convertValue( attributes[ _hName ], _hType )
+			cbH( attributes )
+
+		else
+			# create default id as uuid if not defined by attributes
+			attributes[ _hName ] = @_convertValue( @_defaultHashKey(), _hType )
+			cbH( attributes )
+
+		return
+
+	_createRangeKey: ( attributes, cbR )=>
+		_rName = @rangeKey
+		_rType = @rangeKeyType
+		
+		if @_model_settings.fnCreateRange and _.isFunction( @_model_settings.fnCreateRange )
+			@_model_settings.fnCreateRange attributes, ( __range )=>
+				attributes[ _rName ] = @_convertValue( __range, _rType )
+				cbR( attributes )
+				return
+
+		else if attributes[ _rName ]?
+			# check the type
+	
+			attributes[ _rName ] = @_convertValue( attributes[ _rName ], _rType )
+			cbR( attributes )
+
+		else
+			# create default range as timestamp if not defined by attributes
+			attributes[ _rName ] = @_convertValue( @_defaultRangeKey(), _rType )
+			cbR( attributes )
+
+		return
+
+	_defaultHashKey: =>
+		uuid.v1()
+
+	_defaultRangeKey: =>
+		Date.now()
+
+
+	ERRORS: =>
+		@extend super, 
+			"table-not-created": "Table '<%= tableName %>' not existend at AWS. please run `Table.generate()` or `Manager.generateAll()` first."
+			"invalid-range-call": "If you try to access a hash/range item you have to pass a Array of `[hash,range]` as id."

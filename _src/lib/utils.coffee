@@ -1,3 +1,5 @@
+_ = require('lodash')._
+
 module.exports =
 
 	# simple serial flow controll
@@ -32,3 +34,11 @@ module.exports =
 			iterate() unless ++started is fns.length
 
 		iterate()
+
+	# check for a single `true` element in an array
+	checkArray: ( ar )->
+
+		if _.isArray( ar )
+			_.any( ar, _.identity )
+		else
+			_.identity( ar )

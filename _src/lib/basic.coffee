@@ -41,7 +41,25 @@ module.exports = class Base extends require('events').EventEmitter
 	initialize: =>
 		return
 
-		
+	define: =>
+		[ prop, fnGet, fnSet ] = arguments
+		if _.isFunction( fnGet )
+			_oGetSet = 
+				get: fnGet
+			_oGetSet.set = fnSet if fnSet? and _.isFunction( fnSet )
+			Object.defineProperty @, prop, _oGetSet
+		else
+			Object.defineProperty @, prop, fnGet
+		return
+
+	getter: ( prop, fnGet )=>
+		Object.defineProperty @, prop, get: fnGet
+		return
+
+	setter: ( prop, fnGet )=>
+		Object.defineProperty @, prop, set: fnGet
+		return	
+
 	# handle a error
 	###
 	## _handleError
@@ -166,4 +184,4 @@ module.exports = class Base extends require('events').EventEmitter
 		return
 
 	ERRORS: =>
-		{}
+		"not-implemented": "This function is planed but currently not implemented"

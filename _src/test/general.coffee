@@ -22,6 +22,7 @@ tableG = null
 describe "----- #{ testTitle } TESTS -----", ->
 	before ( done )->
 		done()
+		return
 
 	describe 'Initialization', ->
 		it 'init manager', ( done )->
@@ -51,6 +52,29 @@ describe "----- #{ testTitle } TESTS -----", ->
 			done()
 			return
 
+		it 'clear all test tables', ( done )->
+			_clearStatements = []
+			for _name, _tbl of _CONFIG.tables
+				_clearStatements.push( "DELETE FROM #{ _tbl.name.toLowerCase() }" )
+			
+			dynDB.sql _clearStatements.join( ";" ), ( err, results )->
+				throw err if err
+				done()
+				return
+			return
+
+		it "List the existing tables", ( done )->
+			dynDB.list ( err, tables )->
+				throw err if err
+
+				# create expected list of tables
+				tbls = []
+				for tbl in Object.keys( _CONFIG.tables )
+					tbls.push( tbl.toLowerCase() )
+				tables.should.eql( tbls )
+
+				done()
+			return
 		return
 
 	describe "Create tables", ->
