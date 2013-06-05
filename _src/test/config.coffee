@@ -2,10 +2,10 @@ _envVars = process.env
 
 module.exports  =
 	mysql:
-		host: _envVars.MYSQLDYN_TEST_HOST or 'localhost'
-		user: _envVars.MYSQLDYN_TEST_USER or 'root'
-		password : _envVars.MYSQLDYN_TEST_PW or 'never'
-		database: _envVars.MYSQLDYN_TEST_DB or "simple-dynamo-offline"
+		host: if _envVars.MYSQLDYN_TEST_HOST? then _envVars.MYSQLDYN_TEST_HOST else 'localhost'
+		user: if _envVars.MYSQLDYN_TEST_USER? then _envVars.MYSQLDYN_TEST_USER else 'root'
+		password : if _envVars.MYSQLDYN_TEST_PW? then _envVars.MYSQLDYN_TEST_PW else 'never'
+		database: if _envVars.MYSQLDYN_TEST_DB? then _envVars.MYSQLDYN_TEST_DB else "simple-dynamo-offline"
 		multipleStatements: true
 		logging:
 			severity: "warning"
