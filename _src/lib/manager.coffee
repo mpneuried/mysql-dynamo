@@ -13,7 +13,7 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 			user: 'root'
 			password: 'secret'
 			database: "your-database"
-			multipleStatements: false
+			multipleStatements: true
 			waitForConnections: true
 			connectionLimit: 10
 			queueLimit: 0
