@@ -36,7 +36,11 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 	sql: =>
 		[ args..., cb ] = arguments
 
-		@log "debug" , "run query", args
+		@log "info" , "run query", args
+
+		# if statements is an Array concat them to a multi statement
+		if _.isArray( args[ 0 ] )
+			args[ 0 ] = args[ 0 ].join( ";\n" )
 		
 		@pool.getConnection ( err, conn )=>
 			if err
@@ -89,7 +93,6 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 				
 				# generate a Table Object for each table-element out of @tableSettings
 				_ext = @_dbTables[ table.name ]
-				console.log _ext
 				_opt = 
 					manager: @
 					external: _ext

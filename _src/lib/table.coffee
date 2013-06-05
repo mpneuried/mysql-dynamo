@@ -120,7 +120,10 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 			sql.forward = if options.forward? then options.forward else true
 			sql.limit = if options.limit? then options.limit else 1000
 
-			sql.filter( @_deFixHash( _id, cb ) )
+			_query = @_deFixHash( _id, cb )
+			return unless _query?
+
+			sql.filter( _query )
 
 			@sql sql.query( false ), ( err, results )=>
 				if err
@@ -156,7 +159,9 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 			sql.limit = if options.limit? then options.limit else 1000
 
 			for _id in _ids
-				sql.or().filterGroup().filter( @_deFixHash( _id, cb ) )
+				_query = @_deFixHash( _id, cb )
+				if _query?
+					sql.or().filterGroup().filter( _query )
 
 			_statement = sql.query( false )
 			@log "debug", "mget", _ids, _statement
@@ -202,7 +207,20 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 			options = @_getOptions( options )
 
 			if startAt?
+				if @isRange
+					@_handleError( cb, "startat-not-allowed" )
+					return
+
 				startAt = @_deFixHash( startAt, cb )
+
+				if query[ @hashKey ]?
+					_qHash = _.first( _.values( query[ @hashKey ] ) )
+
+				if _qHash? and startAt[ @hashKey ] isnt _qHash
+					@_handleError( cb, "invalid-startat-hash" )
+					return
+
+				query[ @rangeKey ] = { ">": startAt[ @rangeKey ] }
 
 			@log "debug", "find", query, startAt, options
 
@@ -249,75 +267,129 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 
 			sql = @builder.clone()
 
-			sql.validateAttributes _create, attributes, ( err, attributes )=>
+			@_validateAttributes _create, attributes, ( err, attributes )=>
 				if err
-					@_error( cb, err )
-				else
-					if _create
-						@_createId attributes, ( err, attributes )=>
-							@log "debug", "create a item", attributes, options
-							
-							sql.fields = options.fields if options.fields?
-							
-							statements = [ sql.insert( attributes ) ]
+					cb( err )
+					return
 
-							sqlGet = @builder.clone()
-
-							_query = {}
-							if @hasRange
-								_query[ @hashKey ] = attributes[ @hashKey ]
-								_query[ @rangeKey ] = attributes[ @rangeKey ]
-							else
-								_query[ @hashKey ] = attributes[ @hashKey ]
-							sqlGet.filter( _query )
-
-							statements.push sqlGet.query( false )
-
-							@sql statements.join( ";\n" ), ( err, results )=>
-								if err
-									cb( err )
-									return
-								[ _meta, _inserted ] = results
-								if _inserted?.length
-									_obj = @_postProcess( _inserted[ 0 ] )
-									@log "warning", "insert", statements, _obj
-									
-									@emit( "create", _obj )
-									cb( null, _obj )
-								else 
-									cb( null, null )
-								return
-							return
-
-					else
-						
-						@log "debug", "update a item", _id, attributes, options
+				if _create
+					@_createId attributes, ( err, attributes )=>
+						@log "debug", "create a item", attributes, options
 						
 						sql.fields = options.fields if options.fields?
+						
+						statements = [ sql.insert( attributes ) ]
 
-						sql.filter( @_deFixHash( _id, cb ) )
+						sqlGet = @builder.clone()
 
-						statements = [ sql.update( attributes ), sql.query( false ) ]
+						_query = {}
+						if @hasRange
+							_query[ @hashKey ] = attributes[ @hashKey ]
+							_query[ @rangeKey ] = attributes[ @rangeKey ]
+						else
+							_query[ @hashKey ] = attributes[ @hashKey ]
+						sqlGet.filter( _query )
 
-						@sql statements.join( ";\n" ), ( err, results )=>
+						statements.push sqlGet.query( false )
+
+						@sql statements, ( err, results )=>
+							@log "info", "insert", err,results
 							if err
+								if err.code is "ER_DUP_ENTRY"
+									@_handleError( cb, "conditional-check-failed" )
+									return
 								cb( err )
 								return
-
-							@log "warning", "update", statements
-
-							[ _meta, _updated ] = results
-							if _updated?.length
-								_obj = @_postProcess( _updated[ 0 ] )  
+							[ _meta, _inserted ] = results
+							if _inserted?.length
+								_obj = @_postProcess( _inserted[ 0 ] )
+								@log "debug", "insert", statements, _obj
 								
-								@emit( "update", _obj )
-
+								@emit( "create", _obj )
 								cb( null, _obj )
 							else 
 								cb( null, null )
 							return
+						return
+
+				else
+					
+					@log "debug", "update a item", _id, attributes, options
+					
+					sql.fields = options.fields if options.fields?
+
+					_query = @_deFixHash( _id, cb )
+					return unless _query?
+
+					sql.filter( _query )
+
+					_select = sql.query( false )
+
+					if options.conditionals?
+						sql.filter( options.conditionals )
+
+					statements = [ sql.update( attributes ), _select ]
+
+					@sql statements, ( err, results )=>
+						if err
+							cb( err )
+							return
+
+						@log "debug", "update", results
+
+						[ _meta, _updated ] = results
+						if _meta.affectedRows <= 0
+							@_handleError( cb, "conditional-check-failed" )
+							return
+
+						if _updated?.length
+							_obj = @_postProcess( _updated[ 0 ] )  
+							
+							@emit( "update", _obj )
+
+							cb( null, _obj )
+						else 
+							cb( null, null )
+						return
 				return
 		return
+
+	del: ( _id, cb )=>
+		[ args..., cb ] = arguments
+		[ _id, options ] = args
+
+		options or= {}
+		
+		if @_isExistend( cb )
+			_query = @_deFixHash( _id, cb )
+			return unless _query?
+
+			_statements = []
+
+			sql = @builder.clone()
+
+			sql.fields = options.fields if options.fields?
+			sql.filter( _query )
+			_statements = [ sql.query( false ),sql.del() ]
+
+			@sql _statements, ( err, results )=>
+				if err
+					cb( err )
+					return
+				[ _meta, _deleted ] = results
+				@log "debug", "deleted", _meta, _deleted
+				if _deleted?.length
+					_obj = @_postProcess( _deleted[ 0 ] )
+					@emit( "delete", _deleted )
+					cb( null,  _obj )
+				else
+					@emit( "del-empty" )
+					cb( null, null )
+				return
+
+
+		return
+
 
 	_isExistend: ( cb )=>
 		if @existend
@@ -370,7 +442,30 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 			else
 				val
 
+	_validateAttributes: ( isCreate, attrs, cb )=>
+		_omit = []
+		for _k, _v of attrs
+			attrs[ _k ] = null if not _.isNumber( _v ) and _.isEmpty( _v )
+
+		@log "debug", "_validateAttributes",  attrs, _omit
+
+		cb( null, attrs )
+		return
+
 	_postProcess: ( attrs )=>
+		# convert set to array
+		_arrayKeys = @builder.attrArrayKeys
+		if _arrayKeys.length
+			for _aKey in _arrayKeys
+				if attrs[ _aKey ]?
+					attrs[ _aKey ] = @builder.setToArray( attrs[ _aKey ] ) 
+
+		# remove empty attributes
+		_omit = []
+		for _k, _v of attrs
+			_omit.push( _k ) if not _.isNumber( _v ) and _.isEmpty( _v )
+		attrs = _.omit( attrs, _omit )
+
 		attrs
 
 	_createId: ( attributes, cb )=>
@@ -442,5 +537,8 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 
 	ERRORS: =>
 		@extend super, 
+			"invalid-startat-hash": "The `startAt` has to be equal a queried hash."
+			"startat-not-allowed": "`startAt` value is only allowed for range tables"
+			"conditional-check-failed": "This is not a valid request. It doesnt match the conditions or you tried to insert a existing hash."
 			"table-not-created": "Table '<%= tableName %>' not existend at AWS. please run `Table.generate()` or `Manager.generateAll()` first."
 			"invalid-range-call": "If you try to access a hash/range item you have to pass a Array of `[hash,range]` as id."

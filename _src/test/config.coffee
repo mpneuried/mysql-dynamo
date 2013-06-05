@@ -1,12 +1,14 @@
+_envVars = process.env
+
 module.exports  =
 	mysql:
-		host: 'localhost'
-		user: 'root'
-		password : 'never'
-		database: "simple-dynamo-offline"
+		host: _envVars.MYSQLDYN_TEST_HOST or 'localhost'
+		user: _envVars.MYSQLDYN_TEST_USER or 'root'
+		password : _envVars.MYSQLDYN_TEST_PW or 'never'
+		database: _envVars.MYSQLDYN_TEST_DB or "simple-dynamo-offline"
 		multipleStatements: true
 		logging:
-			severity: "debug"
+			severity: "warning"
 
 	test:
 		deleteTablesOnEnd: true

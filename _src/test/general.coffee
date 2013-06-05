@@ -491,10 +491,9 @@ describe "----- #{ testTitle } TESTS -----", ->
 		it "insert #{ _D1.inserts.length } items to range list of table 1", ( done )->
 			aFns = []
 			for insert in _D1.inserts
-				_throtteldSet = _.throttle( table1.set, 250 )
 				aFns.push _.bind( ( insert, cba )->
 					tbl = @
-					_throtteldSet _.clone( insert ), ( err, item )->
+					table1.set _.clone( insert ), ( err, item )->
 						throw err if err
 						if tbl.isCombinedTable
 							item.id.should.equal( tbl.name + tbl.combinedHashDelimiter + insert.user )
@@ -515,10 +514,9 @@ describe "----- #{ testTitle } TESTS -----", ->
 		it "insert #{ _D2.inserts.length } items to range list of table 2", ( done )->
 			aFns = []
 			for insert in _D2.inserts
-				_throtteldSet = _.throttle( table2.set, 250 )
 				aFns.push _.bind( ( insert, cba )->
 					tbl = @
-					_throtteldSet _.clone( insert ), ( err, item )->
+					table2.set _.clone( insert ), ( err, item )->
 						throw err if err
 						if tbl.isCombinedTable
 							item.id.should.equal( tbl.name + tbl.combinedHashDelimiter + insert.user )
@@ -656,9 +654,8 @@ describe "----- #{ testTitle } TESTS -----", ->
 		it "delete whole data from table 1", ( done )->
 			aFns = []
 			for item in _G1
-				_throtteldDel = _.throttle( table1.del, 250 )
 				aFns.push _.bind( ( item, cba )->
-					_throtteldDel [ item.id, item.t ], ( err )->
+					table1.del [ item.id, item.t ], ( err )->
 						throw err if err
 						_ItemCount1--
 						cba()
@@ -670,9 +667,8 @@ describe "----- #{ testTitle } TESTS -----", ->
 		it "delete whole data from table 2", ( done )->
 			aFns = []
 			for item in _G2
-				_throtteldDel = _.throttle( table2.del, 250 )
 				aFns.push _.bind( ( item, cba )->
-					_throtteldDel [ item.id, item.t ], ( err )->
+					table2.del [ item.id, item.t ], ( err )->
 						throw err if err
 						_ItemCount2--
 						cba()
@@ -860,135 +856,119 @@ describe "----- #{ testTitle } TESTS -----", ->
 			return
 
 		it "test $add action with empty array", ( done )->
-			_.delay( =>
-				table.set _G[ "insert1" ].id, _.clone( _D[ "update8" ] ), ( err, item )->
-					throw err if err
+		
+			table.set _G[ "insert1" ].id, _.clone( _D[ "update8" ] ), ( err, item )->
+				throw err if err
 
-					should.exist( item.id )
-					should.exist( item.name )
-					should.exist( item.users )
+				should.exist( item.id )
+				should.exist( item.name )
+				should.exist( item.users )
 
-					item.name.should.equal( _D[ "insert1" ].name )
-					item.users.should.eql( [ "y" ] )
+				item.name.should.equal( _D[ "insert1" ].name )
+				item.users.should.eql( [ "y" ] )
 
-					_G[ "insert1" ] = item
+				_G[ "insert1" ] = item
 
-					done()
-					return
+				done()
 				return
-			, 250 )
 			return
 
 		it "test $rem action with empty array", ( done )->
-			_.delay( =>
-				table.set _G[ "insert1" ].id, _.clone( _D[ "update9" ] ), ( err, item )->
-					throw err if err
+			
+			table.set _G[ "insert1" ].id, _.clone( _D[ "update9" ] ), ( err, item )->
+				throw err if err
 
-					should.exist( item.id )
-					should.exist( item.name )
-					should.exist( item.users )
+				should.exist( item.id )
+				should.exist( item.name )
+				should.exist( item.users )
 
-					item.name.should.equal( _D[ "insert1" ].name )
-					item.users.should.eql( [ "y" ] )
+				item.name.should.equal( _D[ "insert1" ].name )
+				item.users.should.eql( [ "y" ] )
 
-					_G[ "insert1" ] = item
+				_G[ "insert1" ] = item
 
-					done()
-					return
+				done()
 				return
-			, 250 )
 			return
 
 		it "update set to null should remove attribute", ( done )->
-			_.delay( =>
-				table.set _G[ "insert1" ].id, _.clone( _D[ "update10" ] ), ( err, item )->
-					throw err if err
+			
+			table.set _G[ "insert1" ].id, _.clone( _D[ "update10" ] ), ( err, item )->
+				throw err if err
 
-					should.exist( item.id )
-					should.exist( item.name )
-					should.not.exist( item.users )
+				should.exist( item.id )
+				should.exist( item.name )
+				should.not.exist( item.users )
 
-					item.name.should.equal( _D[ "insert1" ].name )
+				item.name.should.equal( _D[ "insert1" ].name )
 
-					_G[ "insert1" ] = item
+				_G[ "insert1" ] = item
 
-					done()
-					return
+				done()
 				return
-			, 250 )
 			return
 
 		it "create the test item2 with empty array as set", ( done )->
-			_.delay( =>
-				table.set _.clone( _D[ "insert2" ] ), ( err, item )->
-					throw err if err
+		
+			table.set _.clone( _D[ "insert2" ] ), ( err, item )->
+				throw err if err
 
-					should.exist( item.id )
-					should.exist( item.name )
-					should.not.exist( item.users )
+				should.exist( item.id )
+				should.exist( item.name )
+				should.not.exist( item.users )
 
-					item.name.should.equal( _D[ "insert2" ].name )
+				item.name.should.equal( _D[ "insert2" ].name )
 
-					_ItemCount++
-					_G[ "insert2" ] = item
+				_ItemCount++
+				_G[ "insert2" ] = item
 
-					done()
-					return
+				done()
 				return
-			, 250 )
 			return
 
 		it "create the test item3 with empty array as set", ( done )->
-			_.delay( =>
-				table.set _.clone( _D[ "insert3" ] ), ( err, item )->
-					throw err if err
+			
+			table.set _.clone( _D[ "insert3" ] ), ( err, item )->
+				throw err if err
 
-					should.exist( item.id )
-					should.exist( item.name )
-					should.not.exist( item.users )
+				should.exist( item.id )
+				should.exist( item.name )
+				should.not.exist( item.users )
 
-					item.name.should.equal( _D[ "insert3" ].name )
+				item.name.should.equal( _D[ "insert3" ].name )
 
-					_ItemCount++
-					_G[ "insert3" ] = item
+				_ItemCount++
+				_G[ "insert3" ] = item
 
-					done()
-					return
+				done()
 				return
-			, 250 )
 			return
 
 		it "delete test item. ( Has delay of 250ms to prevent from throughput error )", ( done )->
-			_.delay( =>
-				table.del _G[ "insert1" ].id, ( err )->
-					throw err if err
-					_ItemCount--
-					done()
-					return
+			
+			table.del _G[ "insert1" ].id, ( err )->
+				throw err if err
+				_ItemCount--
+				done()
 				return
-			, 250 )
 			return
 
 		it "delete test item 2", ( done )->
-			_.delay( =>
-				table.del _G[ "insert2" ].id, ( err )->
-					throw err if err
-					_ItemCount--
-					done()
-					return
+			
+			table.del _G[ "insert2" ].id, ( err )->
+				throw err if err
+				_ItemCount--
+				done()
 				return
-			, 250 )
 			return
 
 		it "delete test item 3", ( done )->
-			_.delay( =>
-				table.del _G[ "insert3" ].id, ( err )->
-					throw err if err
-					_ItemCount--
-					done()
-					return
+		
+			table.del _G[ "insert3" ].id, ( err )->
+				throw err if err
+				_ItemCount--
+				done()
 				return
-			, 250 )
 			return
 
 	return			

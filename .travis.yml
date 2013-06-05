@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - 0.8
+  - 0.10
+before_script:
+  - mysql -e 'create database mysql_dynamo_test;'
+
+# These are IAM credentials limited to Travis-CI, so don't get any funny ideas wiseguy.
+env: MYSQLDYN_TEST_HOST=127.0.0.1 MYSQLDYN_TEST_USER=root MYSQLDYN_TEST_PW= MYSQLDYN_TEST_DB=mysql_dynamo_test

@@ -35,6 +35,7 @@ module.exports = ( options )->
 
 			@_c.attrs or= []
 			@_c.attrKeys or= []
+			@_c.attrsArrayKeys or= []
 
 			super( options )
 			return
@@ -56,6 +57,8 @@ module.exports = ( options )->
 
 			@getter( "attrKeys", @getAttrKeys )
 
+			@getter( "attrArrayKeys", @getArrayAttrKeys )
+
 			@define( "fields", @getFields, @setFields )
 
 			@define( "limit", @getLimit, @setLimit )
@@ -73,47 +76,31 @@ module.exports = ( options )->
 			return
 
 		clone: =>
-			@log "info", "run clone", Object.keys( @_c )
+			@log "debug", "run clone", Object.keys( @_c )
 			return new SQLBuilder( _.clone( @_c ) )
 
 		insert: ( attributes )=>
 
+			attributes = @_validateAttributes( true, attributes )
+
 			statement = []
 			statement.push "INSERT INTO #{ @table }"
 
-			_keys = []
-			_vals = []
-			for _key, _val of attributes
-				_cnf = @_getAttrConfig( _key )
-				if _cnf
-					switch _cnf.type
-						when "string", "number", "S", "N"
-							_keys.push( _key )
-							_vals.push( mysql.escape( _val ) )
-						when "array", "A"
-							_keys.push( _key )
-							_vals.push( @_generateSetCommand( _key, _val, @config.sqlSetDelimiter ) )
+			[ _keys, _vals ] = @_getSaveVariables( attributes )
+			
 			statement.push( "( #{ _keys.join( ", " )} )" ) 
 			statement.push( "VALUES ( #{ _vals.join( ", " ) } )" )
 			return _.compact( statement ).join( "\n" )
 
 		update: ( attributes )=>
 
+			attributes = @_validateAttributes( false, attributes )
+
 			statement = []
 			statement.push "UPDATE #{ @table }"
 
-			_keys = []
-			_vals = []
-			for _key, _val of attributes
-				_cnf = @_getAttrConfig( _key )
-				if _cnf
-					switch _cnf.type
-						when "string", "number", "S", "N"
-							_keys.push( _key )
-							_vals.push( mysql.escape( _val ) )
-						when "array", "A"
-							_keys.push( _key )
-							_vals.push( @_generateSetCommand( _key, _val, @config.sqlSetDelimiter ) )
+			[ _keys, _vals ] = @_getSaveVariables( attributes )
+
 			_sets = []
 			for _key, _idx in _keys
 				_sets.push( "#{ _key } = #{ _vals[ _idx ] }" ) 
@@ -141,7 +128,7 @@ module.exports = ( options )->
 
 		filter: ( key, pred )=>
 			@_c.filters or= []
-			@log "warning", "filter", key, pred
+			@log "debug", "filter", key, pred
 			if _.isObject( key )
 				for _k, _pred of key
 					@filter( _k, _pred )
@@ -201,14 +188,14 @@ module.exports = ( options )->
 			@_c.filters or= []
 			_add = 0
 			if @_c._filterGroup? and @_c._filterGroup >= 0
-				@log "error", "filterGroup A", @_c.filters, @_c._filterGroup
+				@log "debug", "filterGroup A", @_c.filters, @_c._filterGroup
 				if @_c._filterGroup is 0
 					@_c.filters.unshift( "(" )
 				else
 					@_c.filters.splice( @_c._filterGroup, 0, "(" )
 				@_c.filters.push( ")" )
 				_add = 1
-				@log "error", "filterGroup B", @_c.filters, @_c._filterGroup
+				@log "debug", "filterGroup B", @_c.filters, @_c._filterGroup
 				@_c._filterGroup = null
 			if newGroup
 				@_c._filterGroup = ( @_c.filters?.length or 0 ) + _add
@@ -233,6 +220,15 @@ module.exports = ( options )->
 			statement.push "\n) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
 
 			statement.join( " " )
+
+		del: =>
+			statement = []
+			statement.push "DELETE"
+			statement.push "FROM #{ @table }"
+
+			statement.push @where
+
+			return _.compact( statement ).join( "\n" )
 		
 		genRowCreate: ( opt )=>
 
@@ -267,13 +263,14 @@ module.exports = ( options )->
 
 			return stmt
 
-		validateAttributes: ( isCreate, attrs, cb )=>
-			attrs = _.pick( attrs, @attrKeys )
-			@log "debug", "validateAttributes", attrs
-			cb( null, attrs )
-			return
+		setToArray: ( value )=>
+			_lDlm = @config.sqlSetDelimiter.length
+			if not value? or value?.length <= _lDlm
+				return null
+			# remove the first and last delimiter and slipt the set into an array
+			value[ _lDlm..-( _lDlm + 1 ) ].split( @config.sqlSetDelimiter )
 
-	
+
 
 	# Getter and Setter methods
 	
@@ -332,6 +329,8 @@ module.exports = ( options )->
 				if attr.key?
 					@_c.attrKeys.push attr.key
 					@_c.attrs.push @extend( {}, @config.attr, attr )
+					if attr.type in [ "A", "array" ]
+						@_c.attrsArrayKeys.push attr.key
 			return
 
 		getAttrs: =>
@@ -401,7 +400,33 @@ module.exports = ( options )->
 			else
 				"LIMIT #{ @config.limit }"
 
+		getArrayAttrKeys: =>
+			@_c.attrsArrayKeys or []
+
 	# private methods 
+		_getSaveVariables: ( attributes )=> 
+			_keys = []
+			_vals = []
+			for _key, _val of attributes
+				_cnf = @_getAttrConfig( _key )
+				if _cnf
+					switch _cnf.type
+						when "string", "number", "S", "N"
+							_keys.push( _key )
+							_vals.push( mysql.escape( _val ) )
+						when "array", "A"
+							_setval = @_generateSetCommand( _key, _val, @config.sqlSetDelimiter )
+							if _setval?
+								_keys.push( _key )
+								_vals.push( _setval )
+							@log "debug", "setCommand", _setval, _val, _key
+			return [ _keys, _vals ]
+
+		_validateAttributes: ( isCreate, attrs )=>
+			attrs = _.pick( attrs, @attrKeys )
+			@log "debug", "validateAttributes", attrs
+			return attrs
+
 		_getAttrConfig: ( key )=>
 			for attr in @attrs
 				return attr if attr.key is key
@@ -413,14 +438,20 @@ module.exports = ( options )->
 			set: _.template( 'IF( <%= key %> is NULL,"<%= dlm %>", <%= key %>)' )
 
 		_generateSetCommand: ( key, inp, dlm )=>
-			if _.isArray( inp )
-				dlm + inp.join( dlm ) + dlm
+			@log "debug", "_generateSetCommand", key, inp
+			if not inp?
+				mysql.escape( dlm )
+			else if _.isArray( inp )
+				if not inp.length 
+					mysql.escape( dlm )
+				else
+					mysql.escape( dlm + inp.join( dlm ) + dlm )
 			else if _.isObject( inp )
 				if inp[ "$reset" ]
 					if _.isArray( inp[ "$reset" ] )
-						'"' + dlm + inp[ "$reset" ].join( dlm ) + dlm + '"'
+						mysql.escape( dlm + inp[ "$reset" ].join( dlm ) + dlm )
 					else
-						'"' + dlm + inp[ "$reset" ] + dlm + '"'
+						mysql.escape( dlm + inp[ "$reset" ] + dlm )
 				else
 					_set = @_generateSetCommandTmpls.set( key:key, dlm:dlm )
 					_add = [ _set ]
@@ -450,7 +481,7 @@ module.exports = ( options )->
 					else 
 						null
 			else if inp?
-				 '"' + dlm + inp + dlm + '"'
+				 mysql.escape( dlm + inp + dlm )
 			else
 				null
 
