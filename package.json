@@ -16,6 +16,7 @@
 	"scripts": {
 		"test": "grunt build"
  	},
+ 	"main": "./index.js",
 	"dependencies": {
 		"extend": "*",
 		"async": "*",
