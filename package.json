@@ -1,14 +1,14 @@
 {
 	"author": "mp <mp@tcs.de> (www.tcs.de)",
-	"name": "simple-dynamo-offline",
+	"name": "mysql-dynamo",
 	"description": "A solution to use the `simple-dynamo` interface with a MySQL database. So you can create a offline version of a AWS-DynamoDB project.",
 	"keywords": [ "dynamo", "aws", "amazon", "model", "abstraction", "db", "simple", "offline", "local", "mysql" ],
 	"tags": [ "dynamo", "aws", "amazon", "model", "abstraction", "db", "simple", "offline", "local", "mysql" ],
 	"version": "0.1.0",
-	"homepage": "http://mpneuried.github.com/simple-dynamo-offline/",
+	"homepage": "http://mpneuried.github.com/mysql-dynamo/",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/mpneuried/simple-dynamo-offline.git"
+		"url": "git://github.com/mpneuried/mysql-dynamo.git"
 	},
 	"engines": {
 		"node": "> 0.8.*"
