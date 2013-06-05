@@ -28,7 +28,7 @@ module.exports = (grunt) ->
 		mochacli:
 			options:
 				require: [ "should" ]
-				reporter: "Spec"
+				reporter: "spec"
 				bail: true
 				timeout: 10000
 
