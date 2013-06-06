@@ -16,6 +16,7 @@ _setTable = "Rooms"
 _DATA = require "./testdata"
 
 dynDB = null
+dynDBDummy = null
 tableG = null
 
 
@@ -27,6 +28,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 	describe 'Initialization', ->
 		it 'init manager', ( done )->
 			dynDB = new MySQLDynamo( _CONFIG.mysql, _CONFIG.tables )
+			dynDBDummy = new MySQLDynamo( _CONFIG.mysql, _CONFIG.dummyTables )
 			done()
 			return
 
@@ -47,20 +49,105 @@ describe "----- #{ testTitle } TESTS -----", ->
 				return
 			return
 
+		it 'init table objects for dummy', ( done )->
+			dynDBDummy.connect ( err )->
+				throw err if err
+				done()
+				return
+			return
+
 		it 'post connect', ( done )->
 			dynDB.fetched.should.be.true
 			done()
 			return
 
-		it 'clear all test tables', ( done )->
-			_clearStatements = []
-			for _name, _tbl of _CONFIG.tables
-				_clearStatements.push( "DELETE FROM #{ _tbl.name.toLowerCase() }" )
-			
-			dynDB.sql _clearStatements.join( ";" ), ( err, results )->
+
+	describe "Create tables", ->
+		it "create a single table", ( done )->
+			dynDB.generate _CONFIG.test.singleCreateTableTest, ( err )->
 				throw err if err
 				done()
 				return
+			return
+
+		it "create all missing tables", ( done )->
+			dynDB.generateAll ( err )->
+				throw err if err
+				done()
+				return
+			return
+
+	describe 'Manager Tests', ->
+		it "List the existing tables", ( done )->
+			dynDB.list ( err, tables )->
+				throw err if err
+
+				# create expected list of tables
+				tbls = []
+				for tbl in Object.keys( _CONFIG.tables )
+					tbls.push( tbl.toLowerCase() )
+				tables.should.eql( tbls )
+
+				done()
+			return
+
+		it "Get a table", ( done )->
+
+			_cnf = _CONFIG.tables[ _CONFIG.test.singleCreateTableTest ]
+
+			_tbl = dynDB.get( _CONFIG.test.singleCreateTableTest )
+			_tbl.should.exist
+			_tbl?.name?.should.eql( _cnf.name )
+
+			done()
+			return
+
+		it "Try to get a not existend table", ( done )->
+
+			_tbl = dynDB.get( "notexistend" )
+			should.not.exist( _tbl )
+
+			done()
+			return
+
+		it "has for existend table", ( done )->
+
+			_has = dynDB.has( _CONFIG.test.singleCreateTableTest )
+			_has.should.be.true
+
+			done()
+			return
+
+		it "has for not existend table", ( done )->
+
+			_has = dynDB.has( "notexistend" )
+			_has.should.be.false
+
+			done()
+			return
+
+		it "Get check `existend` for real table", ( done )->
+
+			_tbl = dynDB.get( _CONFIG.test.singleCreateTableTest )
+			_tbl.should.exist
+			_tbl.existend.should.be.true
+			done()
+			return
+
+		it "Get check `existend` for dummy table", ( done )->
+
+			_tbl = dynDBDummy.get( "Dummy" )
+			_tbl.should.exist
+			_tbl.existend.should.be.false
+			done()
+			return
+
+		it "generate ( existend ) table", ( done )->
+
+			_has = dynDB.generate _CONFIG.test.singleCreateTableTest, ( err, created )->
+				throw err if err 
+				created.should.be.false
+				done()
 			return
 
 		it "List the existing tables", ( done )->
@@ -75,6 +162,18 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 				done()
 			return
+
+		it 'clear all test tables', ( done )->
+			_clearStatements = []
+			for _name, _tbl of _CONFIG.tables when dynDB
+				_clearStatements.push( "DELETE FROM #{ _tbl.name.toLowerCase() }" )
+			
+			dynDB.sql _clearStatements.join( ";" ), ( err, results )->
+				throw err if err
+				done()
+				return
+			return
+
 		return
 
 	describe "Create tables", ->
