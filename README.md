@@ -533,9 +533,13 @@ To provide a API to react on different events you can listen to a bunch of event
 	
 ## Changelogs
 
+### 0.1.2
+- Added code docs with docker
+- Some small code improvements
+
 ### 0.1.1
 
-- Added Readme docs
+- Added Readme
 
 ## Todos
 
