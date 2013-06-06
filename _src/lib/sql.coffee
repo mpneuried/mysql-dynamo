@@ -870,8 +870,13 @@ module.exports = ( options )->
 		@api private
 		###
 		_validateAttributes: ( isCreate, attrs )=>
-			attrs = _.pick( attrs, @attrKeys )
-			@log "debug", "validateAttributes", attrs
+			_keys = @attrKeys
+			_omited = _.difference( Object.keys( attrs ),_keys )
+			attrs = _.pick( attrs, _keys )
+			if _omited.length
+				@log "warning", "validateAttributes", "You tried to save to attributed not defined in the model config", _omited, attrs
+			else
+				@log "debug", "validateAttributes", attrs
 			return attrs
 
 		###

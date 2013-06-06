@@ -533,6 +533,10 @@ To provide a API to react on different events you can listen to a bunch of event
 	
 ## Changelogs
 
+### 0.1.4
+
+- Print out a warning if attributes are removed by the validation
+
 ### 0.1.3
 
 - Fixed package json to use the correct `mysql-node` version if an older version is already used within the project
