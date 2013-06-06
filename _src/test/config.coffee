@@ -6,12 +6,10 @@ module.exports  =
 		user: if _envVars.MYSQLDYN_TEST_USER? then _envVars.MYSQLDYN_TEST_USER else 'root'
 		password : if _envVars.MYSQLDYN_TEST_PW? then _envVars.MYSQLDYN_TEST_PW else 'never'
 		database: if _envVars.MYSQLDYN_TEST_DB? then _envVars.MYSQLDYN_TEST_DB else "simple-dynamo-offline"
-		multipleStatements: true
-		logging:
-			severity: "warning"
+		#logging: 
+		#	severity: "info"
 
 	test:
-		deleteTablesOnEnd: true
 		singleCreateTableTest: "Employees"
 
 	tables: 

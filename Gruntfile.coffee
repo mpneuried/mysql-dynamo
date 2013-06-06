@@ -46,6 +46,21 @@ module.exports = (grunt) ->
 				files:
 					"": ["index.js"]
 
+		docker:
+			codedocs:
+				expand: true
+				src: [ "README.md","_src/index.coffee","_src/lib/*.coffee" ]
+				dest: "_docs/"
+				options:
+					onlyUpdated: false
+					colourScheme: "autumn"
+					ignoreHidden: false
+					sidebarState: true
+					exclude: false
+					lineNums: true
+					js: []
+					css: []
+					extras: []
 
 	
 	# Load npm modules
@@ -64,6 +79,6 @@ module.exports = (grunt) ->
 	grunt.registerTask "docs", "docker"
 	grunt.registerTask "default", "build"
 	grunt.registerTask "test", [ "mochacli" ]
-	
+
 	# build the project
 	grunt.registerTask "build",[ "coffee", "includereplace", "test" ]

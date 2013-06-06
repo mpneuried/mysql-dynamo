@@ -243,7 +243,7 @@ tblTodos.set data, ( err, todo )->
 
 Get an existing element by id/hash
 
-**`Table.get( id, fnCallback )` Arguments** : 
+**`Table.get( id[, options], fnCallback )` Arguments** : 
 
 - **id**: *( `String|Number|Array` required )*  
 The id of an element. If the used table is a range table you have to use an array `[hash,range]` as combined id. Otherwise you will get an error. 

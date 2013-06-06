@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>README.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "", thisFile = "README.md", defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#mysql-dynamo">mysql-dynamo</a>
+      </div>
+      <div class="heading h1">
+        <a href="#install">Install</a>
+      </div>
+      <div class="heading h1">
+        <a href="#connection%20and%20table">Connection and Table</a>
+      </div>
+      <div class="heading h2">
+        <a href="#api%20differences%20to%20simple-dynamo">API differences to simple-dynamo</a>
+      </div>
+      <div class="heading h2">
+        <a href="#initialize">Initialize</a>
+      </div>
+      <div class="heading h3">
+        <a href="#connection%20settings">connection Settings</a>
+      </div>
+      <div class="heading h3">
+        <a href="#table%20definition">table Definition</a>
+      </div>
+      <div class="heading h2">
+        <a href="#first%20connect%20to%20mysql">First connect to MySQL</a>
+      </div>
+      <div class="heading h2">
+        <a href="#create%20all%20tables">Create all tables</a>
+      </div>
+      <div class="heading h2">
+        <a href="#get%20a%20table%20instance">Get a table instance</a>
+      </div>
+      <div class="heading h2">
+        <a href="#destroy%20a%20table%20(%20not%20implemented%20yet%20)">Destroy a table ( not implemented yet )</a>
+      </div>
+      <div class="heading h1">
+        <a href="#item%20handling">Item handling</a>
+      </div>
+      <div class="heading h2">
+        <a href="#write%20a%20new%20item%20(insert)">Write a new item (INSERT)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#get%20a%20item%20(get)">Get a item (GET)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#get%20many%20items%20(mget)">Get many items (MGET)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#update%20an%20item%20(update)">Update an item (UPDATE)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#delete%20an%20item%20(delete)">Delete an item (DELETE)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#query%20a%20table%20(find)">Query a table (FIND)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#working%20with%20sets">Working with sets</a>
+      </div>
+      <div class="heading h1">
+        <a href="#source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22">Source "key: [ "a", "b", "c" ]"</a>
+      </div>
+      <div class="heading h1">
+        <a href="#source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22">Source "key: [ "a", "b", "c" ]"</a>
+      </div>
+      <div class="heading h1">
+        <a href="#source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22">Source "key: [ "a", "b", "c" ]"</a>
+      </div>
+      <div class="heading h1">
+        <a href="#events">Events</a>
+      </div>
+      <div class="heading h2">
+        <a href="#manager%20events">Manager Events</a>
+      </div>
+      <div class="heading h2">
+        <a href="#table%20events">Table Events</a>
+      </div>
+      <div class="heading h2">
+        <a href="#changelogs">Changelogs</a>
+      </div>
+      <div class="heading h3">
+        <a href="#0.1.1">0.1.1</a>
+      </div>
+      <div class="heading h2">
+        <a href="#todos">Todos</a>
+      </div>
+      <div class="heading h3">
+        <a href="#work%20in%20progress">Work in progress</a>
+      </div>
+      <div class="heading h2">
+        <a href="#license">License</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="docs markdown">
+<div class="pilwrap" id="mysql-dynamo">
+  <h1>
+    <a href="#mysql-dynamo" name="mysql-dynamo" class="pilcrow">&#182;</a>
+    mysql-dynamo
+  </h1>
+</div>
+
+
+<p><a href="http://travis-ci.org/mpneuried/mysql-dynamo"><img src="https://secure.travis-ci.org/mpneuried/mysql-dynamo.png?branch=master" alt="Build Status" title="" /></a></p>
+
+<p>A solution to use the <strong><a href="http://mpneuried.github.io/simple-dynamo/">simple-dynamo</a></strong> interface with a MySQL database. So you can create a offline version of a AWS-DynamoDB project.</p>
+
+<p><em>Written in coffee-script</em></p>
+
+<p><strong>INFO: all examples are written in coffee-script</strong></p>
+
+
+<div class="pilwrap" id="install">
+  <h1>
+    <a href="#install" name="install" class="pilcrow">&#182;</a>
+    Install
+  </h1>
+</div>
+
+
+<div class='highlight'><pre><code language=''>  npm install mysql-dynamo
+</code></pre></div>
+
+
+<div class="pilwrap" id="connection%20and%20table">
+  <h1>
+    <a href="#connection%20and%20table" name="connection%20and%20table" class="pilcrow">&#182;</a>
+    Connection and Table
+  </h1>
+</div>
+
+
+
+<div class="pilwrap" id="api%20differences%20to%20simple-dynamo">
+  <h2>
+    <a href="#api%20differences%20to%20simple-dynamo" name="api%20differences%20to%20simple-dynamo" class="pilcrow">&#182;</a>
+    API differences to <code>simple-dynamo</code>
+  </h2>
+</div>
+
+
+<p>Compared to the <code>simple-dynamo</code> module you only have to make a few smears.</p>
+
+<ul>
+<li><strong>Table-Config</strong> <code>consistent</code> not existes and will be ignored</li>
+<li><strong>Table-Config</strong> <code>overwriteExistingHash</code> not exists. It always will NOT overwrite existing hashes</li>
+<li><strong>Table-Config</strong> <code>combineTableTo</code> not exists. Within MySQL there is no need to save tables</li>
+<li><strong>Item-Method-Options</strong> <code>consistent</code> not existes and will be ignored</li>
+<li><strong>Item-Method-Options</strong> <code>overwriteExistingHash</code> not exists. It always will NOT overwrite existing hashes</li>
+<li><strong>Manager-Method</strong> <code>destroy</code> Not implemented yet, because usually you can delete tehm manually</li>
+</ul>
+
+
+<div class="pilwrap" id="initialize">
+  <h2>
+    <a href="#initialize" name="initialize" class="pilcrow">&#182;</a>
+    Initialize
+  </h2>
+</div>
+
+
+<p>first you have to define the connection and table attributes and get an instance of the simple-dynamo interface.</p>
+
+<p><code>new MySqlDynamo( connectionSettings, tables )</code></p>
+
+
+<div class="pilwrap" id="connection%20settings">
+  <h3>
+    <a href="#connection%20settings" name="connection%20settings" class="pilcrow">&#182;</a>
+    connection Settings
+  </h3>
+</div>
+
+
+<ul>
+<li><strong>host</strong> : <em>( <code>String</code> required )</em> MySQL host</li>
+<li><strong>user</strong> : <em>( <code>String</code> optional: default = <code>root</code> )</em> MySQL user</li>
+<li><strong>password</strong> : <em>( <code>String</code> optional: default = <code>secret</code> )</em> MySQL password</li>
+<li><strong>database</strong> : <em>( <code>String</code> optional: default = <code>database</code> )</em> Database name</li>
+</ul>
+
+
+<div class="pilwrap" id="table%20definition">
+  <h3>
+    <a href="#table%20definition" name="table%20definition" class="pilcrow">&#182;</a>
+    table Definition
+  </h3>
+</div>
+
+
+<p>An Object of Tables. <br />
+The key you are using will be the key to get the table object.</p>
+
+<p>Every object can have the following keys:</p>
+
+<ul>
+<li><strong>name</strong> : <em>( <code>String</code> required )</em> <br />
+Tablename for MySQL</li>
+<li><strong>hashKey</strong> : <em>( <code>String</code> required )</em> <br />
+The hash key name of your ids/hashes</li>
+<li><strong>hashKeyType</strong> : <em>( <code>String</code> optional: default = <code>S</code> )</em> <br />
+The type of the <code>hashKey</code>. Possible values are: <code>S</code> = String and <code>N</code> = Numeric</li>
+<li><strong>rangeKey</strong>: <em>( String optional )</em> <br />
+The range key name of your range attribute. If not defined the table will be generated without the range methods</li>
+<li><strong>rangeKeyType</strong>: <em>( <code>String</code> optional: default = <code>N</code> )</em> <br />
+The type of the <code>rangeKey</code>. Possible values are: <code>S</code> = String and <code>N</code> = Numeric</li>
+<li><strong>fnCreateHash</strong>: <em>( <code>Function</code> optional: default = <code>new UUID</code> )</em> <br />
+Method to generate a custom hash key.  </li>
+<li><strong>defaultfields</strong>: <em>( <code>Array</code> optional )</em> <br />
+List of fields to return as default. If nothing is defined all fields will be received. You always can overwrite this using <code>options.fields</code>. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>attributes</strong>: The given attributes on create  </li>
+<li><strong>cb</strong>: Callback method to pass the custom generates id/hash. <code>cb( "my-special-hash" )</code></li></ul></li>
+<li><strong>fnCreateRange</strong>: <em>( <code>Function</code> optional: default = <code>current Timestamp</code> )</em> <br />
+Method to generate a custom range key. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>attributes</strong>: The given attributes on create  </li>
+<li><strong>cb</strong>: Callback method to pass the custom generates id/hash. <code>cb( "my-special-range" )</code></li></ul></li>
+<li><strong>attributes</strong>: <em>( <code>Array of Objects</code> required )</em> <br />
+An array of attribute Objects. Which will be validated <br />
+<strong>Attributes keys</strong>
+<ul><li><strong>key</strong>: <em>( <code>String</code> required )</em> <br />
+Column/Attribute name/key</li>
+<li><strong>type</strong>: <em>( <code>String</code> required )</em> <br />
+Datatype. possible values are <code>string</code> = String, <code>number</code> = Numeric and <code>array</code> = Array/Set of <strong>Strings</strong></li>
+<li><strong>required</strong>: <em>( <code>Boolean</code> optional: default = <code>false</code> )</em> <br />
+Validate the attribute to be required. <em>( Not implemented yet ! )</em></li></ul></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="first%20connect%20to%20mysql">
+  <h2>
+    <a href="#first%20connect%20to%20mysql" name="first%20connect%20to%20mysql" class="pilcrow">&#182;</a>
+    First connect to MySQL
+  </h2>
+</div>
+
+
+<p>The module has to know about the existing SQL tables so you have to read them first. <br />
+<strong>If you do not run <code>.connect()</code> the module will throw an error everytime</strong> </p>
+
+<p><strong><code>Manager.connect( fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. Single arguments on return is the error object. On success the error is <code>null</code></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="create%20all%20tables">
+  <h2>
+    <a href="#create%20all%20tables" name="create%20all%20tables" class="pilcrow">&#182;</a>
+    Create all tables
+  </h2>
+</div>
+
+
+<p>to create all missing tables just call <code>.createAll()</code>.</p>
+
+<p>This is not necessary if you know the tables has been created in the past.</p>
+
+<p><strong><code>Manager.generateAll( fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. Single arguments on return is the error object. On success the error is <code>null</code></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="get%20a%20table%20instance">
+  <h2>
+    <a href="#get%20a%20table%20instance" name="get%20a%20table%20instance" class="pilcrow">&#182;</a>
+    Get a table instance
+  </h2>
+</div>
+
+
+<p>To interact with a table you have to retrieve the table object. It's defined in the table-definitions</p>
+
+<p><strong><code>Manager.get( 'tableName' )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>tableName</strong>: <em>( <code>String</code> required )</em> <br />
+Method to retrieve the instance of a table object.</li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="destroy%20a%20table%20(%20not%20implemented%20yet%20)">
+  <h2>
+    <a href="#destroy%20a%20table%20(%20not%20implemented%20yet%20)" name="destroy%20a%20table%20(%20not%20implemented%20yet%20)" class="pilcrow">&#182;</a>
+    Destroy a table <em>( not implemented yet )</em>
+  </h2>
+</div>
+
+
+<p>destroy table in MySQL. This drops a table from MySQL will all the data</p>
+
+<p><strong><code>Table.destroy( fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>err</strong>: Usually <code>null</code>. On an error a object with <code>error</code> and <code>msg</code></li></ul></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="item%20handling">
+  <h1>
+    <a href="#item%20handling" name="item%20handling" class="pilcrow">&#182;</a>
+    Item handling
+  </h1>
+</div>
+
+
+
+<div class="pilwrap" id="write%20a%20new%20item%20(insert)">
+  <h2>
+    <a href="#write%20a%20new%20item%20(insert)" name="write%20a%20new%20item%20(insert)" class="pilcrow">&#182;</a>
+    Write a new item (INSERT)
+  </h2>
+</div>
+
+
+<p>Create a new item in a select table. You can also add some attributes not defined in the table-definition, which will be saved, too.</p>
+
+<p><strong><code>Table.set( data, options, fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>data</strong>: <em>( <code>Object</code> required )</em> <br />
+The data to save. You can define the hash and/or range key. If not the module will generate a hash/range automatically. <br />
+<em>Note:</em> If the used table uses the combined feature and you define the hash-key it's necessary to add the <code>name</code> out of the table-config in front of every hash.</li>
+<li><strong>options</strong>: <em>( <code>Object</code> optional )</em> <br />
+<ul><li><strong>fields</strong>: <em>( <code>Array</code> )</em> An array of fields to receive</li></ul></li>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>err</strong>: Usually <code>null</code>. On an error a object with <code>error</code> and <code>msg</code></li>
+<li><strong>item</strong>: the save item as simple object</li></ul></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="get%20a%20item%20(get)">
+  <h2>
+    <a href="#get%20a%20item%20(get)" name="get%20a%20item%20(get)" class="pilcrow">&#182;</a>
+    Get a item (GET)
+  </h2>
+</div>
+
+
+<p>Get an existing element by id/hash</p>
+
+<p><strong><code>Table.get( id[, options], fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>id</strong>: <em>( <code>String|Number|Array</code> required )</em> <br />
+The id of an element. If the used table is a range table you have to use an array <code>[hash,range]</code> as combined id. Otherwise you will get an error. </li>
+<li><strong>options</strong>: <em>( <code>Object</code> optional )</em> <br />
+<ul><li><strong>fields</strong>: <em>( <code>Array</code> )</em> An array of fields to receive. If nothing is defined all fields are returned.</li></ul></li>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>err</strong>: Usually <code>null</code>. On an error a object with <code>error</code> and <code>msg</code></li>
+<li><strong>item</strong>: the database item as simple object. If not found <code>null</code></li></ul></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+
+
+
+
+<div class="pilwrap" id="get%20many%20items%20(mget)">
+  <h2>
+    <a href="#get%20many%20items%20(mget)" name="get%20many%20items%20(mget)" class="pilcrow">&#182;</a>
+    Get many items (MGET)
+  </h2>
+</div>
+
+
+<p>Get an many existing elements by id/hash in one request</p>
+
+<p><strong><code>Table.mget( [ id1, id2, .. ], options, fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>ids</strong>: <em>( <code>Array</code> required )</em> <br />
+An array of id of an elements. If the used table is a range table you have to use an array of arrays <code>[hash,range]</code> as combined id. Otherwise you will get an error. </li>
+<li><strong>options</strong>: <em>( <code>Object</code> optional )</em> <br />
+<ul><li><strong>fields</strong>: <em>( <code>Array</code> )</em> An array of fields to receive. If nothing is defined all fields are returned.</li></ul></li>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>err</strong>: Usually <code>null</code>. On an error a object with <code>error</code> and <code>msg</code></li>
+<li><strong>items</strong>: the database items as a array of simple objects. Only existing items will be received. </li></ul></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+
+
+
+
+<div class="pilwrap" id="update%20an%20item%20(update)">
+  <h2>
+    <a href="#update%20an%20item%20(update)" name="update%20an%20item%20(update)" class="pilcrow">&#182;</a>
+    Update an item (UPDATE)
+  </h2>
+</div>
+
+
+<p>update an existing item. <br />
+To remove a attribute you have to set the value to <code>null</code></p>
+
+<p><strong><code>Table.set( id, data, options, fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>id</strong>: <em>( <code>String|Number|Array</code> required )</em> <br />
+The id of an element. If the used table is a range table you have to use an array <code>[hash,range]</code> as combined id. Otherwise you will get an error. </li>
+<li><strong>data</strong>: <em>( <code>Object</code> required )</em> <br />
+The data to update. You can redefine the range key. If you pass the hash key it will be ignored</li>
+<li><strong>options</strong>: <em>( <code>Object</code> optional )</em> <br />
+For update you can define some options.
+<ul><li><strong>fields</strong>: <em>( <code>Array</code> )</em> An array of fields to receive</li>
+<li><strong>conditionals</strong> <em>( <code>Object</code> )</em> A query object to define a conditional. Only <code>{"==": value}</code>, <code>{"==": null}</code>, and <code>{"!=": null}</code> are allowed. How to build? … have a look at <a href="https://github.com/jed/dynamo/wiki/High-level-API#wiki-predicates">Jed's Predicates </a></li></ul></li>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>err</strong>: Usually <code>null</code>. On an error a object with <code>error</code> and <code>msg</code></li>
+<li><strong>item</strong>: the database item as simple object. If not found <code>null</code></li></ul></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="delete%20an%20item%20(delete)">
+  <h2>
+    <a href="#delete%20an%20item%20(delete)" name="delete%20an%20item%20(delete)" class="pilcrow">&#182;</a>
+    Delete an item (DELETE)
+  </h2>
+</div>
+
+
+<p>delete an item by id/hash</p>
+
+<p><strong><code>Table.del( id, fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>id</strong>: <em>( <code>String|Number|Array</code> required )</em> <br />
+The id of an element. If the used table is a range table you have to use an array <code>[hash,range]</code> as combined id. Otherwise you will get an error. </li>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>err</strong>: Usually <code>null</code>. On an error a object with <code>error</code> and <code>msg</code></li></ul></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="query%20a%20table%20(find)">
+  <h2>
+    <a href="#query%20a%20table%20(find)" name="query%20a%20table%20(find)" class="pilcrow">&#182;</a>
+    Query a table (FIND)
+  </h2>
+</div>
+
+
+<p>run a query on a table. The module automatically trys to do a <code>Dynamo.db scan</code> or <code>Dynamo query</code>.</p>
+
+<p><strong><code>Table.find( query, startAt, options, fnCallback )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>query</strong>: <em>( <code>Object</code> : default = <code>{}</code> all )</em> <br />
+A query object. How to build … have a look at <a href="https://github.com/jed/dynamo/wiki/High-level-API#wiki-predicates">Jed's Predicates </a></li>
+<li><strong>startAt</strong>: <em>( <code>String|Number|Array</code> optional )</em> <br />
+To realize a paging you can define a <code>startAt</code>. Usually the last item of a list. If you define <code>startAt</code> with the last item of the previous find you get the next collection of items without the given <code>startAt</code> item. <br />
+If the used table is a range table you have to use an array <code>[hash,range]</code> as combined <code>startAt</code>. Otherwise you will get an error. </li>
+<li><strong>options</strong>: <em>( <code>Object</code> optional )</em> <br />
+<ul><li><strong>fields</strong>: <em>( <code>Array</code> )</em> An array of fields to receive</li>
+<li><strong>limit</strong>: <em>( <code>Number</code> )</em> Define the max. items to return</li>
+<li><strong>forward</strong>: <em>( <code>Boolean</code> default = true  )</em> define the direction <code>acs</code> or <code>desc</code> for range querys. </li></ul></li>
+<li><strong>fnCallback</strong>: <em>( <code>Function</code> required )</em> <br />
+Callback method. <br />
+<strong>Method Arguments</strong> <br />
+<ul><li><strong>err</strong>: Usually <code>null</code>. On an error a object with <code>error</code> and <code>msg</code></li>
+<li><strong>items</strong>: an array of objects found</li></ul></li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+<p><strong>Advanced Examples</strong></p>
+
+
+
+
+
+
+
+
+
+
+<div class="pilwrap" id="working%20with%20sets">
+  <h2>
+    <a href="#working%20with%20sets" name="working%20with%20sets" class="pilcrow">&#182;</a>
+    Working with sets
+  </h2>
+</div>
+
+
+<p>Dynamo has the ability to work with sets. That means you can save a Set of Strings as an Array. <br />
+During an update you have the ability to add or remove a single value out of the set. Or you can reset the whole set.  </p>
+
+<p>But you can only perform one action per key and you only can use the functionality if defined through the table-definition ( <code>type:"array"</code> ).</p>
+
+<p>Existing values will be ignored.</p>
+
+<p>The following key variants are available:</p>
+
+<ul>
+<li><code>"key":[ "a", "b", "c" ]'</code>: Resets the whole value of the key</li>
+<li><code>"key":{ "$add": [ "d", "e" ] }</code>: Add some values to the set</li>
+<li><code>"key":{ "$rem": [ "a", "b" ] }</code>: remove some values</li>
+<li><code>"key":{ "$reset": [ "x", "y" ] }</code>: reset the whole value. Same as <code>"key":[ "x", "y" ]'</code></li>
+<li><code>"key":{ "$add": "d"}</code>: Add a single value to the set</li>
+<li><code>"key":{ "$rem": "a" }</code>: remove a single value</li>
+<li><code>"key":{ "$reset": "y" }</code>: reset the whole set to a single value. Same as <code>"key":[ "y" ]'</code></li>
+</ul>
+
+<p><strong>Examples</strong></p>
+
+
+
+
+
+<p>```</p>
+
+
+<div class="pilwrap" id="source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22">
+  <h1>
+    <a href="#source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22" name="source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22" class="pilcrow">&#182;</a>
+    Source "key: [ "a", "b", "c" ]"
+  </h1>
+</div>
+
+
+<p>data = 
+    key: { "$add": [ "a", "d", "e" ] }</p>
+
+<p>tblSets.set 'mySetsId', data, ( err, setData )->
+    # Result "key: [ "a", "b", "c", "d", "e" ]"
+    console.log( setData )</p>
+
+<div class='highlight'><pre><code language=''>
+</code></pre></div>
+
+
+<div class="pilwrap" id="source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22_1">
+  <h1>
+    <a href="#source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22_1" name="source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22_1" class="pilcrow">&#182;</a>
+    Source "key: [ "a", "b", "c" ]"
+  </h1>
+</div>
+
+
+<p>data = 
+    key: { "$rem": [ "a", "b", "x" ] }</p>
+
+<p>tblSets.set 'mySetsId', data, ( err, setData )->
+    # Result "key: [ "c" ]"
+    console.log( setData )</p>
+
+<div class='highlight'><pre><code language=''>
+</code></pre></div>
+
+
+<div class="pilwrap" id="source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22_2">
+  <h1>
+    <a href="#source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22_2" name="source%20%22key%3A%20%5B%20%22a%22%2C%20%22b%22%2C%20%22c%22%20%5D%22_2" class="pilcrow">&#182;</a>
+    Source "key: [ "a", "b", "c" ]"
+  </h1>
+</div>
+
+
+<p>data = 
+    key: { "$reset": [ "x", "y", "z" ] }</p>
+
+<p>tblSets.set 'mySetsId', data, ( err, setData )->
+    # Result "key: [ "x", "y", "z" ]"
+    console.log( setData )
+```</p>
+
+
+<div class="pilwrap" id="events">
+  <h1>
+    <a href="#events" name="events" class="pilcrow">&#182;</a>
+    Events
+  </h1>
+</div>
+
+
+<p>To provide a API to react on different events you can listen to a bunch of events.</p>
+
+
+<div class="pilwrap" id="manager%20events">
+  <h2>
+    <a href="#manager%20events" name="manager%20events" class="pilcrow">&#182;</a>
+    Manager Events
+  </h2>
+</div>
+
+
+<ul>
+<li><code>new-table</code>: Table object initialized and ready to use. This means only the client model is ready. Eventually you have to create the table first. <br />
+<strong>Event Arguments</strong> <br />
+<ul><li><strong>name</strong>: the name og the table, like you would use with `Manager.get()</li>
+<li><strong>Table</strong>: the <code>Table</code> object</li></ul></li>
+<li><code>table-generated</code>: Fired after all a new tables has been generated.
+<strong>Event Arguments</strong> <br />
+<ul><li><strong>Meta</strong>: the tables meta-data</li></ul></li>
+<li><code>all-tables-generated</code>: Fired after all tables are generated.  </li>
+</ul>
+
+
+<div class="pilwrap" id="table%20events">
+  <h2>
+    <a href="#table%20events" name="table%20events" class="pilcrow">&#182;</a>
+    Table Events
+  </h2>
+</div>
+
+
+<ul>
+<li><code>create-status</code>: fired on table create. <br />
+<strong>Event Arguments</strong> <br />
+<ul><li><strong>status</strong>: describes the state of table creation. Possible values are: <code>already-active</code>, <code>waiting</code>, <code>active</code></li></ul></li>
+<li><code>get</code>: fired after a table.get. <br />
+<strong>Event Arguments</strong> <br />
+<ul><li><strong>item</strong>: the item</li></ul></li>
+<li><code>get-empty</code>: fired after a table.get with an empty result.  </li>
+<li><code>mget</code>: fired after a table.mget. <br />
+<strong>Event Arguments</strong> <br />
+<ul><li><strong>items</strong>: the items</li></ul></li>
+<li><code>mget-empty</code>: fired after a table.mget with no results.  </li>
+<li><code>create</code>: fired after a item has been created. <br />
+<strong>Event Arguments</strong> <br />
+<ul><li><strong>item</strong>: the created item</li></ul></li>
+<li><code>update</code>: fired after a item has been updated. <br />
+<strong>Event Arguments</strong> <br />
+<ul><li><strong>item_new</strong>: the item after the update</li></ul></li>
+<li><code>delete</code>: fired after a item has been deleted. <br />
+<strong>Event Arguments</strong> <br />
+<ul><li><strong>item_old</strong>: the item before the delete</li></ul></li>
+</ul>
+
+
+<div class="pilwrap" id="changelogs">
+  <h2>
+    <a href="#changelogs" name="changelogs" class="pilcrow">&#182;</a>
+    Changelogs
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id="0.1.1">
+  <h3>
+    <a href="#0.1.1" name="0.1.1" class="pilcrow">&#182;</a>
+    0.1.1
+  </h3>
+</div>
+
+
+<ul>
+<li>Added Readme docs</li>
+</ul>
+
+
+<div class="pilwrap" id="todos">
+  <h2>
+    <a href="#todos" name="todos" class="pilcrow">&#182;</a>
+    Todos
+  </h2>
+</div>
+
+
+<ul>
+<li>better validation of the given config-data</li>
+</ul>
+
+
+<div class="pilwrap" id="work%20in%20progress">
+  <h3>
+    <a href="#work%20in%20progress" name="work%20in%20progress" class="pilcrow">&#182;</a>
+    Work in progress
+  </h3>
+</div>
+
+
+<p><code>mysql-dynamo</code> is work in progress. Your ideas, suggestions etc. are very welcome.</p>
+
+
+<div class="pilwrap" id="license">
+  <h2>
+    <a href="#license" name="license" class="pilcrow">&#182;</a>
+    License
+  </h2>
+</div>
+
+
+<p>(The MIT License)</p>
+
+<p>Copyright (c) 2010 TCS &lt;dev (at) tcs.de&gt;</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></div>
+  </div>
+</body>
+</html>

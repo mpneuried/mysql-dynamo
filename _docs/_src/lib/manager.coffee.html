@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>manager.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "_src/lib/manager.coffee", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#mysql%20dynamo%20manager">MySQL Dynamo Manager</a>
+      </div>
+      <div class="heading h3">
+        <a href="#extends%20basic">extends Basic</a>
+      </div>
+      <div class="heading h2">
+        <a href="#constructor">constructor</a>
+      </div>
+      <div class="heading h2">
+        <a href="#initialize">initialize</a>
+      </div>
+      <div class="heading h1">
+        <a href="#public%20methods">Public methods</a>
+      </div>
+      <div class="heading h2">
+        <a href="#sql">sql</a>
+      </div>
+      <div class="heading h2">
+        <a href="#connect">connect</a>
+      </div>
+      <div class="heading h2">
+        <a href="#list">list</a>
+      </div>
+      <div class="heading h2">
+        <a href="#get">get</a>
+      </div>
+      <div class="heading h2">
+        <a href="#has">has</a>
+      </div>
+      <div class="heading h2">
+        <a href="#generateall">generateAll</a>
+      </div>
+      <div class="heading h2">
+        <a href="#generate">generate</a>
+      </div>
+      <div class="heading h1">
+        <a href="#private%20methods">Private methods</a>
+      </div>
+      <div class="heading h2">
+        <a href="#_fetchtables">_fetchTables</a>
+      </div>
+      <div class="heading h2">
+        <a href="#_inittables">_initTables</a>
+      </div>
+      <div class="heading h2">
+        <a href="#_gettablestogenerate">_getTablesToGenerate</a>
+      </div>
+      <div class="heading h1">
+        <a href="#error%20message%20mapping">Error message mapping</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>manager.coffee</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+<p>import the external modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-2" id="line-2">2</a>  <span class="nv">_ = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;lodash&#39;</span><span class="p">).</span><span class="nx">_</span>
+<a class="line-num" href="#line-3" id="line-3">3</a>  <span class="nv">mysql = </span><span class="nx">require</span> <span class="s">&#39;mysql&#39;</span>
+<a class="line-num" href="#line-4" id="line-4">4</a>  
+<a class="line-num" href="#line-5" id="line-5">5</a>  
+<a class="line-num" href="#line-6" id="line-6">6</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>import the internal modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-6" id="line-6">6</a>  
+<a class="line-num" href="#line-7" id="line-7">7</a>  <span class="nv">Table = </span><span class="nx">require</span> <span class="s">&quot;./table&quot;</span>
+<a class="line-num" href="#line-8" id="line-8">8</a>  <span class="nv">utils = </span><span class="nx">require</span><span class="p">(</span> <span class="s">&quot;./utils&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-9" id="line-9">9</a>  
+<a class="line-num" href="#line-10" id="line-10">10</a>  
+<a class="line-num" href="#line-11" id="line-11">11</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="mysql%20dynamo%20manager">
+  <h1>
+    <a href="#mysql%20dynamo%20manager" name="mysql%20dynamo%20manager" class="pilcrow">&#182;</a>
+    MySQL Dynamo Manager
+  </h1>
+</div>
+
+
+
+<div class="pilwrap" id="extends%20basic">
+  <h3>
+    <a href="#extends%20basic" name="extends%20basic" class="pilcrow">&#182;</a>
+    extends <a href="basic.coffee.html">Basic</a>
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-11" id="line-11">11</a>  
+<a class="line-num" href="#line-12" id="line-12">12</a>  
+<a class="line-num" href="#line-13" id="line-13">13</a>  
+<a class="line-num" href="#line-14" id="line-14">14</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>Manager to organize the tables and connections</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-13" id="line-13">13</a>  
+<a class="line-num" href="#line-14" id="line-14">14</a>  <span class="nv">module.exports = </span><span class="k">class</span> <span class="nx">MySQLDynamoManager</span> <span class="k">extends</span> <span class="nx">require</span><span class="p">(</span> <span class="s">&quot;./basic&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-15" id="line-15">15</a>  
+<a class="line-num" href="#line-16" id="line-16">16</a>  
+<a class="line-num" href="#line-17" id="line-17">17</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>define the defaults</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-16" id="line-16">16</a>  
+<a class="line-num" href="#line-17" id="line-17">17</a>    <span class="nv">defaults: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-18" id="line-18">18</a>  
+<a class="line-num" href="#line-19" id="line-19">19</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>extend the parent defaults</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-18" id="line-18">18</a>  
+<a class="line-num" href="#line-19" id="line-19">19</a>      <span class="nx">@extend</span> <span class="k">super</span><span class="p">,</span>
+<a class="line-num" href="#line-20" id="line-20">20</a>  
+<a class="line-num" href="#line-21" id="line-21">21</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>the mysql driver pooling options</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-20" id="line-20">20</a>  
+<a class="line-num" href="#line-21" id="line-21">21</a>        
+<a class="line-num" href="#line-22" id="line-22">22</a>  
+<a class="line-num" href="#line-23" id="line-23">23</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p><strong>host</strong> <em>String</em> MySQL server host</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-22" id="line-22">22</a>  
+<a class="line-num" href="#line-23" id="line-23">23</a>        <span class="nv">host: </span><span class="s">&#39;localhost&#39;</span>
+<a class="line-num" href="#line-24" id="line-24">24</a>  
+<a class="line-num" href="#line-25" id="line-25">25</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p><strong>user</strong> <em>String</em> MySQL server user</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-24" id="line-24">24</a>  
+<a class="line-num" href="#line-25" id="line-25">25</a>        <span class="nv">user: </span><span class="s">&#39;root&#39;</span>
+<a class="line-num" href="#line-26" id="line-26">26</a>  
+<a class="line-num" href="#line-27" id="line-27">27</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p><strong>password</strong> <em>String</em> MySQL server password</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-26" id="line-26">26</a>  
+<a class="line-num" href="#line-27" id="line-27">27</a>        <span class="nv">password: </span><span class="s">&#39;secret&#39;</span>
+<a class="line-num" href="#line-28" id="line-28">28</a>  
+<a class="line-num" href="#line-29" id="line-29">29</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p><strong>database</strong> <em>String</em> MySQL database to work with</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-28" id="line-28">28</a>  
+<a class="line-num" href="#line-29" id="line-29">29</a>        <span class="nv">database: </span><span class="s">&quot;your-database&quot;</span>
+<a class="line-num" href="#line-30" id="line-30">30</a>  
+<a class="line-num" href="#line-31" id="line-31">31</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p><strong>waitForConnections</strong> <em>Boolean</em> Wait for connections if the poolsize has been reached</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-30" id="line-30">30</a>  
+<a class="line-num" href="#line-31" id="line-31">31</a>        <span class="nv">waitForConnections: </span><span class="kc">true</span>
+<a class="line-num" href="#line-32" id="line-32">32</a>  
+<a class="line-num" href="#line-33" id="line-33">33</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p><strong>connectionLimit</strong> <em>Number</em> MySQL Connection poolsize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-32" id="line-32">32</a>  
+<a class="line-num" href="#line-33" id="line-33">33</a>        <span class="nv">connectionLimit: </span><span class="mi">10</span>
+<a class="line-num" href="#line-34" id="line-34">34</a>  
+<a class="line-num" href="#line-35" id="line-35">35</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p><strong>connectionLimit</strong> <em>Number</em> MySQL maximim limit of queued querys if the poolsize has been reached. <code>0</code> = no limit</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-34" id="line-34">34</a>  
+<a class="line-num" href="#line-35" id="line-35">35</a>        <span class="nv">queueLimit: </span><span class="mi">0</span>
+<a class="line-num" href="#line-36" id="line-36">36</a>  
+<a class="line-num" href="#line-37" id="line-37">37</a>  
+<a class="line-num" href="#line-38" id="line-38">38</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="constructor_NaN">
+  <h2>
+    <a href="#constructor_NaN" name="constructor_NaN" class="pilcrow">&#182;</a>
+    constructor
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>new MySQLDynamoManager( options, tableSettings )</code></p>
+
+<p>Define the configuration by options and defaults, and save the table settings.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">options</span>
+      <span class="dox_type">Object</span>
+      <span>Basic config object</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">tableSettings</span>
+      <span class="dox_type">Object</span>
+      <span>Configuration of all tabels. For details see the <a href="http://mpneuried.github.io/mysql-dynamo/">API docs</a></span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-47" id="line-47">47</a>  
+<a class="line-num" href="#line-48" id="line-48">48</a>    <span class="nv">constructor: </span><span class="nf">( options, @tableSettings )-&gt;</span>
+<a class="line-num" href="#line-49" id="line-49">49</a>      <span class="k">super</span>
+<a class="line-num" href="#line-50" id="line-50">50</a>  
+<a class="line-num" href="#line-51" id="line-51">51</a>  
+<a class="line-num" href="#line-52" id="line-52">52</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="initialize">
+  <h2>
+    <a href="#initialize" name="initialize" class="pilcrow">&#182;</a>
+    initialize
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager.initialize()</code></p>
+
+<p>Initialize the MySQL pool</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-59" id="line-59">59</a>  
+<a class="line-num" href="#line-60" id="line-60">60</a>    <span class="nv">initialize: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-61" id="line-61">61</a>  
+<a class="line-num" href="#line-62" id="line-62">62</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p><code>multipleStatements</code> is required so overwrite it hard</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-61" id="line-61">61</a>  
+<a class="line-num" href="#line-62" id="line-62">62</a>      <span class="vi">@pool = </span><span class="nx">mysql</span><span class="p">.</span><span class="nx">createPool</span> <span class="nx">@extend</span><span class="p">(</span> <span class="p">{},</span> <span class="nx">@config</span><span class="p">,</span> <span class="p">{</span> <span class="nv">multipleStatements: </span><span class="kc">true</span> <span class="p">}</span> <span class="p">)</span>
+<a class="line-num" href="#line-63" id="line-63">63</a>      
+<a class="line-num" href="#line-64" id="line-64">64</a>  
+<a class="line-num" href="#line-65" id="line-65">65</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>set the internal flags</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-64" id="line-64">64</a>  
+<a class="line-num" href="#line-65" id="line-65">65</a>      <span class="vi">@connected = </span><span class="kc">false</span>
+<a class="line-num" href="#line-66" id="line-66">66</a>      <span class="vi">@fetched = </span><span class="kc">false</span>
+<a class="line-num" href="#line-67" id="line-67">67</a>      <span class="vi">@_dbTables = </span><span class="p">{}</span>
+<a class="line-num" href="#line-68" id="line-68">68</a>      <span class="vi">@_tables = </span><span class="p">{}</span>
+<a class="line-num" href="#line-69" id="line-69">69</a>  
+<a class="line-num" href="#line-70" id="line-70">70</a>      <span class="nx">@log</span> <span class="s">&quot;debug&quot;</span> <span class="p">,</span> <span class="s">&quot;initialized&quot;</span>
+<a class="line-num" href="#line-71" id="line-71">71</a>      <span class="k">return</span>
+<a class="line-num" href="#line-72" id="line-72">72</a>  
+<a class="line-num" href="#line-73" id="line-73">73</a>  
+<a class="line-num" href="#line-74" id="line-74">74</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="public%20methods">
+  <h1>
+    <a href="#public%20methods" name="public%20methods" class="pilcrow">&#182;</a>
+    Public methods
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-73" id="line-73">73</a>  
+<a class="line-num" href="#line-74" id="line-74">74</a>  
+<a class="line-num" href="#line-75" id="line-75">75</a>  
+<a class="line-num" href="#line-76" id="line-76">76</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="sql">
+  <h2>
+    <a href="#sql" name="sql" class="pilcrow">&#182;</a>
+    sql
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager.sql( statement[, args], cb )</code></p>
+
+<p>Run a sql query by using a connection from the pool</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">statement</span>
+      <span class="dox_type">String</span>
+      <span class="dox_type">Array</span>
+      <span>A MySQL SQL statement or an array of multiple statements</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[args]</span>
+      <span class="dox_type">Array</span>
+      <span class="dox_type">Object</span>
+      <span>Query arguments to auto escape. The arguments will directly passed to the <code>mysql.query()</code> method from <a href="https://github.com/felixge/node-mysql#escaping-query-values">node-mysql</a></span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span class="dox_type">Function</span>
+      <span>Callback function </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">public
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-87" id="line-87">87</a>  
+<a class="line-num" href="#line-88" id="line-88">88</a>    <span class="nv">sql: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-89" id="line-89">89</a>      <span class="p">[</span> <span class="nx">args</span><span class="p">...,</span> <span class="nx">cb</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">arguments</span>
+<a class="line-num" href="#line-90" id="line-90">90</a>  
+<a class="line-num" href="#line-91" id="line-91">91</a>      <span class="nx">@log</span> <span class="s">&quot;info&quot;</span> <span class="p">,</span> <span class="s">&quot;run query&quot;</span><span class="p">,</span> <span class="nx">args</span>
+<a class="line-num" href="#line-92" id="line-92">92</a>  
+<a class="line-num" href="#line-93" id="line-93">93</a>  
+<a class="line-num" href="#line-94" id="line-94">94</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>if statements is an Array concat them to a multi statement</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-93" id="line-93">93</a>  
+<a class="line-num" href="#line-94" id="line-94">94</a>      <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">args</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="p">)</span>
+<a class="line-num" href="#line-95" id="line-95">95</a>        <span class="nx">args</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span> <span class="mi">0</span> <span class="p">].</span><span class="nx">join</span><span class="p">(</span> <span class="s">&quot;;\n&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-96" id="line-96">96</a>      
+<a class="line-num" href="#line-97" id="line-97">97</a>  
+<a class="line-num" href="#line-98" id="line-98">98</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
+<p>get a connection from the pool</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-97" id="line-97">97</a>  
+<a class="line-num" href="#line-98" id="line-98">98</a>      <span class="nx">@pool</span><span class="p">.</span><span class="nx">getConnection</span> <span class="nf">( err, conn )=&gt;</span>
+<a class="line-num" href="#line-99" id="line-99">99</a>        <span class="k">if</span> <span class="nx">err</span>
+<a class="line-num" href="#line-100" id="line-100">100</a>          <span class="nx">cb</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span>
+<a class="line-num" href="#line-101" id="line-101">101</a>          <span class="k">return</span>
+<a class="line-num" href="#line-102" id="line-102">102</a>  
+<a class="line-num" href="#line-103" id="line-103">103</a>  
+<a class="line-num" href="#line-104" id="line-104">104</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+<p>define the return method to release the connection</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-103" id="line-103">103</a>  
+<a class="line-num" href="#line-104" id="line-104">104</a>        <span class="nx">args</span><span class="p">.</span><span class="nx">push</span> <span class="o">=&gt;</span>
+<a class="line-num" href="#line-105" id="line-105">105</a>          <span class="nx">conn</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
+<a class="line-num" href="#line-106" id="line-106">106</a>          <span class="nx">cb</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">@</span><span class="p">,</span> <span class="nx">arguments</span> <span class="p">)</span>
+<a class="line-num" href="#line-107" id="line-107">107</a>          <span class="k">return</span>
+<a class="line-num" href="#line-108" id="line-108">108</a>  
+<a class="line-num" href="#line-109" id="line-109">109</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>run the query with <code>node-mysql</code></p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-108" id="line-108">108</a>  
+<a class="line-num" href="#line-109" id="line-109">109</a>        <span class="nx">conn</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span> <span class="nx">conn</span><span class="p">,</span> <span class="nx">args</span> <span class="p">)</span>
+<a class="line-num" href="#line-110" id="line-110">110</a>        <span class="k">return</span>
+<a class="line-num" href="#line-111" id="line-111">111</a>      <span class="k">return</span>
+<a class="line-num" href="#line-112" id="line-112">112</a>  
+<a class="line-num" href="#line-113" id="line-113">113</a>  
+<a class="line-num" href="#line-114" id="line-114">114</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="connect">
+  <h2>
+    <a href="#connect" name="connect" class="pilcrow">&#182;</a>
+    connect
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager.connect( cb )</code></p>
+
+<p>Connect to the database and check the currently existing tables</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span class="dox_type">Function</span>
+      <span>Callback function </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">public
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-123" id="line-123">123</a>  
+<a class="line-num" href="#line-124" id="line-124">124</a>    <span class="nv">connect: </span><span class="nf">( cb )=&gt;</span>
+<a class="line-num" href="#line-125" id="line-125">125</a>      
+<a class="line-num" href="#line-126" id="line-126">126</a>  
+<a class="line-num" href="#line-127" id="line-127">127</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>fetch the existing tables</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-126" id="line-126">126</a>  
+<a class="line-num" href="#line-127" id="line-127">127</a>      <span class="nx">@_fetchTables</span> <span class="nf">( err )=&gt;</span>
+<a class="line-num" href="#line-128" id="line-128">128</a>        <span class="k">if</span> <span class="nx">err</span>
+<a class="line-num" href="#line-129" id="line-129">129</a>          <span class="nx">cb</span> <span class="nx">err</span>
+<a class="line-num" href="#line-130" id="line-130">130</a>        <span class="k">else</span>
+<a class="line-num" href="#line-131" id="line-131">131</a>  
+<a class="line-num" href="#line-132" id="line-132">132</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>init the defined tables</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-131" id="line-131">131</a>  
+<a class="line-num" href="#line-132" id="line-132">132</a>          <span class="nx">@_initTables</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span> <span class="p">)</span>
+<a class="line-num" href="#line-133" id="line-133">133</a>        <span class="k">return</span>
+<a class="line-num" href="#line-134" id="line-134">134</a>      <span class="k">return</span>
+<a class="line-num" href="#line-135" id="line-135">135</a>  
+<a class="line-num" href="#line-136" id="line-136">136</a>  
+<a class="line-num" href="#line-137" id="line-137">137</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="list">
+  <h2>
+    <a href="#list" name="list" class="pilcrow">&#182;</a>
+    list
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager.list( cb )</code></p>
+
+<p>List all existing db tables</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span class="dox_type">Function</span>
+      <span>Callback function </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">public
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-146" id="line-146">146</a>  
+<a class="line-num" href="#line-147" id="line-147">147</a>    <span class="nv">list: </span><span class="nf">( cb )=&gt;</span>
+<a class="line-num" href="#line-148" id="line-148">148</a>      <span class="nx">@_fetchTables</span> <span class="nf">( err )=&gt;</span>
+<a class="line-num" href="#line-149" id="line-149">149</a>        <span class="k">if</span> <span class="nx">err</span>
+<a class="line-num" href="#line-150" id="line-150">150</a>          <span class="nx">cb</span> <span class="nx">err</span>
+<a class="line-num" href="#line-151" id="line-151">151</a>        <span class="k">else</span>
+<a class="line-num" href="#line-152" id="line-152">152</a>          <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span> <span class="nx">@_tables</span> <span class="p">)</span>
+<a class="line-num" href="#line-153" id="line-153">153</a>        <span class="k">return</span>
+<a class="line-num" href="#line-154" id="line-154">154</a>      <span class="k">return</span>
+<a class="line-num" href="#line-155" id="line-155">155</a>  
+<a class="line-num" href="#line-156" id="line-156">156</a>  
+<a class="line-num" href="#line-157" id="line-157">157</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="get">
+  <h2>
+    <a href="#get" name="get" class="pilcrow">&#182;</a>
+    get
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager.get( tableName )</code></p>
+
+<p>Get a <a href="table.coffee.html">Table</a> by name</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">tableName</span>
+      <span class="dox_type">String</span>
+      <span>Table name to get </span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">Table</span>
+      <span>The found <a href="table.coffee.html">Table</a> object or <code>null</code> </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">public
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-168" id="line-168">168</a>  
+<a class="line-num" href="#line-169" id="line-169">169</a>    <span class="nv">get: </span><span class="nf">( tableName )=&gt;</span>
+<a class="line-num" href="#line-170" id="line-170">170</a>      <span class="nv">tableName = </span><span class="nx">tableName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+<a class="line-num" href="#line-171" id="line-171">171</a>      <span class="k">if</span> <span class="nx">@has</span><span class="p">(</span> <span class="nx">tableName</span> <span class="p">)</span>
+<a class="line-num" href="#line-172" id="line-172">172</a>        <span class="nx">@_tables</span><span class="p">[</span> <span class="nx">tableName</span> <span class="p">]</span>
+<a class="line-num" href="#line-173" id="line-173">173</a>      <span class="k">else</span>
+<a class="line-num" href="#line-174" id="line-174">174</a>        <span class="kc">null</span>
+<a class="line-num" href="#line-175" id="line-175">175</a>  
+<a class="line-num" href="#line-176" id="line-176">176</a>  
+<a class="line-num" href="#line-177" id="line-177">177</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="has">
+  <h2>
+    <a href="#has" name="has" class="pilcrow">&#182;</a>
+    has
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager.has( tableName )</code></p>
+
+<p>Check for a defined table</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">tableName</span>
+      <span class="dox_type">String</span>
+      <span>Table name </span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">Boolean</span>
+      <span>Table exists </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">public
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-188" id="line-188">188</a>  
+<a class="line-num" href="#line-189" id="line-189">189</a>    <span class="nv">has: </span><span class="nf">( tableName )=&gt;</span>
+<a class="line-num" href="#line-190" id="line-190">190</a>      <span class="nv">tableName = </span><span class="nx">tableName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+<a class="line-num" href="#line-191" id="line-191">191</a>      <span class="nx">@_tables</span><span class="p">[</span> <span class="nx">tableName</span> <span class="p">]</span><span class="o">?</span>
+<a class="line-num" href="#line-192" id="line-192">192</a>  
+<a class="line-num" href="#line-193" id="line-193">193</a>  
+<a class="line-num" href="#line-194" id="line-194">194</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="generateall">
+  <h2>
+    <a href="#generateall" name="generateall" class="pilcrow">&#182;</a>
+    generateAll
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager.generateAll( cb )</code></p>
+
+<p>Generate all not exiting tables in the DB</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span class="dox_type">Function</span>
+      <span>Callback function </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">public
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-203" id="line-203">203</a>  
+<a class="line-num" href="#line-204" id="line-204">204</a>    <span class="nv">generateAll: </span><span class="nf">( cb )=&gt;</span>
+<a class="line-num" href="#line-205" id="line-205">205</a>      <span class="nv">aCreate = </span><span class="p">[]</span>
+<a class="line-num" href="#line-206" id="line-206">206</a>      <span class="k">for</span> <span class="nx">_n</span><span class="p">,</span> <span class="nx">table</span> <span class="k">of</span> <span class="nx">@_getTablesToGenerate</span><span class="p">()</span>
+<a class="line-num" href="#line-207" id="line-207">207</a>        <span class="nx">aCreate</span><span class="p">.</span><span class="nx">push</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span> <span class="nf">( tableName, cba )-&gt;</span>
+<a class="line-num" href="#line-208" id="line-208">208</a>          
+<a class="line-num" href="#line-209" id="line-209">209</a>          <span class="nx">@generate</span> <span class="nx">tableName</span><span class="p">,</span> <span class="nf">( err, generated )=&gt;</span>
+<a class="line-num" href="#line-210" id="line-210">210</a>            <span class="nx">cba</span><span class="p">(</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">generated</span> <span class="p">)</span>
+<a class="line-num" href="#line-211" id="line-211">211</a>            <span class="k">return</span>
+<a class="line-num" href="#line-212" id="line-212">212</a>          
+<a class="line-num" href="#line-213" id="line-213">213</a>          <span class="k">return</span>
+<a class="line-num" href="#line-214" id="line-214">214</a>          
+<a class="line-num" href="#line-215" id="line-215">215</a>        <span class="p">,</span> <span class="nx">@</span><span class="p">,</span> <span class="nx">table</span><span class="p">.</span><span class="nx">name</span> <span class="p">)</span>
+<a class="line-num" href="#line-216" id="line-216">216</a>  
+<a class="line-num" href="#line-217" id="line-217">217</a>      <span class="nx">utils</span><span class="p">.</span><span class="nx">runSeries</span> <span class="nx">aCreate</span><span class="p">,</span> <span class="nf">( err, _generated )=&gt;</span>
+<a class="line-num" href="#line-218" id="line-218">218</a>        <span class="k">if</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">checkArray</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span>
+<a class="line-num" href="#line-219" id="line-219">219</a>          <span class="nx">cb</span> <span class="nx">err</span>
+<a class="line-num" href="#line-220" id="line-220">220</a>        <span class="k">else</span>
+<a class="line-num" href="#line-221" id="line-221">221</a>          <span class="nx">@emit</span><span class="p">(</span> <span class="s">&quot;all-tables-generated&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-222" id="line-222">222</a>          <span class="nx">cb</span> <span class="kc">null</span>
+<a class="line-num" href="#line-223" id="line-223">223</a>        <span class="k">return</span>
+<a class="line-num" href="#line-224" id="line-224">224</a>  
+<a class="line-num" href="#line-225" id="line-225">225</a>      <span class="k">return</span>
+<a class="line-num" href="#line-226" id="line-226">226</a>  
+<a class="line-num" href="#line-227" id="line-227">227</a>  
+<a class="line-num" href="#line-228" id="line-228">228</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="generate">
+  <h2>
+    <a href="#generate" name="generate" class="pilcrow">&#182;</a>
+    generate
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager.generate( tableName, cb )</code></p>
+
+<p>Generate a single DB table if not existend</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">tableName</span>
+      <span class="dox_type">String</span>
+      <span>Table name </span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span class="dox_type">Function</span>
+      <span>Callback function </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">public
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-238" id="line-238">238</a>  
+<a class="line-num" href="#line-239" id="line-239">239</a>    <span class="nv">generate: </span><span class="nf">( tableName, cb )=&gt;</span>
+<a class="line-num" href="#line-240" id="line-240">240</a>      <span class="nv">tbl = </span><span class="nx">@get</span> <span class="nx">tableName</span>
+<a class="line-num" href="#line-241" id="line-241">241</a>  
+<a class="line-num" href="#line-242" id="line-242">242</a>      <span class="k">if</span> <span class="o">not</span> <span class="nx">tbl</span>
+<a class="line-num" href="#line-243" id="line-243">243</a>        <span class="nx">@_handeError</span><span class="p">(</span> <span class="nx">cb</span><span class="p">,</span> <span class="s">&quot;table-not-found&quot;</span><span class="p">,</span> <span class="nv">tableName: </span><span class="nx">tableName</span> <span class="p">)</span>
+<a class="line-num" href="#line-244" id="line-244">244</a>      <span class="k">else</span>
+<a class="line-num" href="#line-245" id="line-245">245</a>  
+<a class="line-num" href="#line-246" id="line-246">246</a>        <span class="nx">tbl</span><span class="p">.</span><span class="nx">generate</span> <span class="nf">( err, generated )=&gt;</span>
+<a class="line-num" href="#line-247" id="line-247">247</a>          <span class="k">if</span> <span class="nx">err</span>
+<a class="line-num" href="#line-248" id="line-248">248</a>            <span class="nx">cb</span> <span class="nx">err</span>
+<a class="line-num" href="#line-249" id="line-249">249</a>            <span class="k">return</span> 
+<a class="line-num" href="#line-250" id="line-250">250</a>  
+<a class="line-num" href="#line-251" id="line-251">251</a>          <span class="nx">@emit</span><span class="p">(</span> <span class="s">&quot;table-generated&quot;</span><span class="p">,</span> <span class="nx">generated</span> <span class="p">)</span>
+<a class="line-num" href="#line-252" id="line-252">252</a>  
+<a class="line-num" href="#line-253" id="line-253">253</a>          <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">generated</span> <span class="p">)</span>
+<a class="line-num" href="#line-254" id="line-254">254</a>  
+<a class="line-num" href="#line-255" id="line-255">255</a>          <span class="k">return</span>
+<a class="line-num" href="#line-256" id="line-256">256</a>        <span class="k">return</span>
+<a class="line-num" href="#line-257" id="line-257">257</a>      <span class="k">return</span>
+<a class="line-num" href="#line-258" id="line-258">258</a>  
+<a class="line-num" href="#line-259" id="line-259">259</a>  
+<a class="line-num" href="#line-260" id="line-260">260</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="private%20methods">
+  <h1>
+    <a href="#private%20methods" name="private%20methods" class="pilcrow">&#182;</a>
+    Private methods
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-259" id="line-259">259</a>  
+<a class="line-num" href="#line-260" id="line-260">260</a>  
+<a class="line-num" href="#line-261" id="line-261">261</a>  
+<a class="line-num" href="#line-262" id="line-262">262</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="_fetchtables">
+  <h2>
+    <a href="#_fetchtables" name="_fetchtables" class="pilcrow">&#182;</a>
+    _fetchTables
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager._fetchTables( cb )</code></p>
+
+<p>Fetch the currently existing tables. This is primary done to match the <a href="http://mpneuried.github.io/simple-dynamo/">simple-dynamo API</a></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span class="dox_type">Function</span>
+      <span>Callback function </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-271" id="line-271">271</a>  
+<a class="line-num" href="#line-272" id="line-272">272</a>    <span class="nv">_fetchTables: </span><span class="nf">( cb )=&gt;</span>
+<a class="line-num" href="#line-273" id="line-273">273</a>      <span class="nv">statement = </span><span class="s">&quot;SELECT table_name as name, table_rows as rows FROM information_schema.tables WHERE  table_schema = database()&quot;</span>
+<a class="line-num" href="#line-274" id="line-274">274</a>  
+<a class="line-num" href="#line-275" id="line-275">275</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+</div>
+<p>allways fetch tables on a call</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-274" id="line-274">274</a>  
+<a class="line-num" href="#line-275" id="line-275">275</a>      <span class="nx">@sql</span> <span class="nx">statement</span><span class="p">,</span> <span class="nf">( err, results )=&gt;</span>
+<a class="line-num" href="#line-276" id="line-276">276</a>        <span class="k">if</span> <span class="nx">err</span>
+<a class="line-num" href="#line-277" id="line-277">277</a>          <span class="nx">cb</span><span class="p">(</span> <span class="nx">err</span> <span class="p">)</span>
+<a class="line-num" href="#line-278" id="line-278">278</a>        <span class="k">else</span>
+<a class="line-num" href="#line-279" id="line-279">279</a>          <span class="k">for</span> <span class="nx">table</span> <span class="k">in</span> <span class="nx">results</span>
+<a class="line-num" href="#line-280" id="line-280">280</a>            <span class="nx">@_dbTables</span><span class="p">[</span> <span class="nx">table</span><span class="p">.</span><span class="nx">name</span> <span class="p">]</span> <span class="o">=</span> <span class="nx">table</span>
+<a class="line-num" href="#line-281" id="line-281">281</a>          <span class="nx">@log</span> <span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;fetched db tables&quot;</span><span class="p">,</span> <span class="nx">@_dbTables</span>
+<a class="line-num" href="#line-282" id="line-282">282</a>          <span class="vi">@fetched = </span><span class="kc">true</span>
+<a class="line-num" href="#line-283" id="line-283">283</a>          <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span> <span class="p">)</span>
+<a class="line-num" href="#line-284" id="line-284">284</a>        <span class="k">return</span>
+<a class="line-num" href="#line-285" id="line-285">285</a>      <span class="k">return</span>
+<a class="line-num" href="#line-286" id="line-286">286</a>  
+<a class="line-num" href="#line-287" id="line-287">287</a>  
+<a class="line-num" href="#line-288" id="line-288">288</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="_inittables">
+  <h2>
+    <a href="#_inittables" name="_inittables" class="pilcrow">&#182;</a>
+    _initTables
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager._initTables( tables, cb )</code></p>
+
+<p>Initialize the <a href="table.coffee.html">Table</a> objects defined within the table configuration</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[tables=@tableSettings]</span>
+      <span class="dox_type">Object</span>
+      <span>The Table settings. If <code>null</code> it uses the configured tables </span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">cb</span>
+      <span class="dox_type">Function</span>
+      <span>Callback function </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-298" id="line-298">298</a>  
+<a class="line-num" href="#line-299" id="line-299">299</a>    <span class="nv">_initTables: </span><span class="nf">( tables = @tableSettings, cb )=&gt;</span>
+<a class="line-num" href="#line-300" id="line-300">300</a>      <span class="k">if</span> <span class="nx">@fetched</span>
+<a class="line-num" href="#line-301" id="line-301">301</a>  
+<a class="line-num" href="#line-302" id="line-302">302</a>  
+<a class="line-num" href="#line-303" id="line-303">303</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+</div>
+<p>loop through the tables</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-302" id="line-302">302</a>  
+<a class="line-num" href="#line-303" id="line-303">303</a>        <span class="k">for</span> <span class="nx">tableName</span><span class="p">,</span> <span class="nx">table</span> <span class="k">of</span> <span class="nx">tables</span>
+<a class="line-num" href="#line-304" id="line-304">304</a>  
+<a class="line-num" href="#line-305" id="line-305">305</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+</div>
+<p>convert it to lowercase to handle them not case sensitive</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-304" id="line-304">304</a>  
+<a class="line-num" href="#line-305" id="line-305">305</a>          <span class="nv">tableName = </span><span class="nx">tableName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+<a class="line-num" href="#line-306" id="line-306">306</a>  
+<a class="line-num" href="#line-307" id="line-307">307</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+</div>
+<p>destroy existing table</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-306" id="line-306">306</a>  
+<a class="line-num" href="#line-307" id="line-307">307</a>          <span class="k">if</span> <span class="nx">@_tables</span><span class="p">[</span> <span class="nx">tableName</span> <span class="p">]</span><span class="o">?</span>
+<a class="line-num" href="#line-308" id="line-308">308</a>            <span class="k">delete</span> <span class="nx">@_tables</span><span class="p">[</span> <span class="nx">tableName</span> <span class="p">]</span>
+<a class="line-num" href="#line-309" id="line-309">309</a>          
+<a class="line-num" href="#line-310" id="line-310">310</a>  
+<a class="line-num" href="#line-311" id="line-311">311</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+</div>
+<p>generate a <a href="table.coffee.html">Table</a> object for each table-element out of @tableSettings</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-310" id="line-310">310</a>  
+<a class="line-num" href="#line-311" id="line-311">311</a>          <span class="nv">_ext = </span><span class="nx">@_dbTables</span><span class="p">[</span> <span class="nx">table</span><span class="p">.</span><span class="nx">name</span> <span class="p">]</span>
+<a class="line-num" href="#line-312" id="line-312">312</a>          <span class="nv">_opt = </span>
+<a class="line-num" href="#line-313" id="line-313">313</a>            <span class="nv">manager: </span><span class="nx">@</span>
+<a class="line-num" href="#line-314" id="line-314">314</a>            <span class="nv">external: </span><span class="nx">_ext</span>
+<a class="line-num" href="#line-315" id="line-315">315</a>            <span class="nv">logging: </span><span class="nx">@config</span><span class="p">.</span><span class="nx">logging</span>
+<a class="line-num" href="#line-316" id="line-316">316</a>  
+<a class="line-num" href="#line-317" id="line-317">317</a>          <span class="nx">@_tables</span><span class="p">[</span> <span class="nx">tableName</span> <span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Table</span><span class="p">(</span> <span class="nx">table</span><span class="p">,</span> <span class="nx">_opt</span> <span class="p">)</span>
+<a class="line-num" href="#line-318" id="line-318">318</a>          <span class="nx">@emit</span><span class="p">(</span> <span class="s">&quot;new-table&quot;</span><span class="p">,</span> <span class="nx">tableName</span><span class="p">,</span> <span class="nx">@_tables</span><span class="p">[</span> <span class="nx">tableName</span> <span class="p">]</span> <span class="p">)</span>
+<a class="line-num" href="#line-319" id="line-319">319</a>  
+<a class="line-num" href="#line-320" id="line-320">320</a>        <span class="vi">@connected = </span><span class="kc">true</span>
+<a class="line-num" href="#line-321" id="line-321">321</a>        <span class="nx">cb</span><span class="p">(</span> <span class="kc">null</span> <span class="p">)</span>
+<a class="line-num" href="#line-322" id="line-322">322</a>  
+<a class="line-num" href="#line-323" id="line-323">323</a>      <span class="k">else</span>
+<a class="line-num" href="#line-324" id="line-324">324</a>        <span class="nx">@_handeError</span><span class="p">(</span> <span class="nx">cb</span><span class="p">,</span> <span class="s">&quot;no-tables-fetched&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-325" id="line-325">325</a>  
+<a class="line-num" href="#line-326" id="line-326">326</a>      <span class="k">return</span>
+<a class="line-num" href="#line-327" id="line-327">327</a>  
+<a class="line-num" href="#line-328" id="line-328">328</a>  
+<a class="line-num" href="#line-329" id="line-329">329</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="_gettablestogenerate">
+  <h2>
+    <a href="#_gettablestogenerate" name="_gettablestogenerate" class="pilcrow">&#182;</a>
+    _getTablesToGenerate
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>manager._getTablesToGenerate(  )</code></p>
+
+<p>Calculate the tables that are defined but currently not exits in the DB</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">String</span>
+      <span>Desc </span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">Function</span>
+      <span>Callback function </span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">String</span>
+      <span>Return Desc </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-341" id="line-341">341</a>  
+<a class="line-num" href="#line-342" id="line-342">342</a>    <span class="nv">_getTablesToGenerate: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-343" id="line-343">343</a>      <span class="nv">_ret = </span><span class="p">{}</span>
+<a class="line-num" href="#line-344" id="line-344">344</a>      <span class="k">for</span> <span class="nx">_n</span><span class="p">,</span> <span class="nx">tbl</span> <span class="k">of</span> <span class="nx">@_tables</span>
+<a class="line-num" href="#line-345" id="line-345">345</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">_ret</span><span class="p">[</span> <span class="nx">tbl</span><span class="p">.</span><span class="nx">tableName</span> <span class="p">]</span><span class="o">?</span>
+<a class="line-num" href="#line-346" id="line-346">346</a>          <span class="nx">_ret</span><span class="p">[</span> <span class="nx">tbl</span><span class="p">.</span><span class="nx">tableName</span> <span class="p">]</span> <span class="o">=</span> 
+<a class="line-num" href="#line-347" id="line-347">347</a>            <span class="nv">name: </span><span class="nx">_n</span>
+<a class="line-num" href="#line-348" id="line-348">348</a>            <span class="nv">tableName: </span><span class="nx">tbl</span><span class="p">.</span><span class="nx">tableName</span>
+<a class="line-num" href="#line-349" id="line-349">349</a>  
+<a class="line-num" href="#line-350" id="line-350">350</a>      <span class="nx">_ret</span>
+<a class="line-num" href="#line-351" id="line-351">351</a>  
+<a class="line-num" href="#line-352" id="line-352">352</a>  
+<a class="line-num" href="#line-353" id="line-353">353</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="error%20message%20mapping">
+  <h1>
+    <a href="#error%20message%20mapping" name="error%20message%20mapping" class="pilcrow">&#182;</a>
+    Error message mapping
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-352" id="line-352">352</a>  
+<a class="line-num" href="#line-353" id="line-353">353</a>    <span class="nv">ERRORS: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-354" id="line-354">354</a>      <span class="nx">@extend</span> <span class="k">super</span><span class="p">,</span> 
+<a class="line-num" href="#line-355" id="line-355">355</a>        <span class="s">&quot;no-tables-fetched&quot;</span><span class="o">:</span> <span class="s">&quot;Currently not tables fetched. Please run `Manager.connect()` first.&quot;</span>
+<a class="line-num" href="#line-356" id="line-356">356</a>        <span class="s">&quot;table-not-found&quot;</span><span class="o">:</span> <span class="s">&quot;Table `&lt;%= tableName %&gt;` not found.&quot;</span>
+<a class="line-num" href="#line-357" id="line-357">357</a>  </pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

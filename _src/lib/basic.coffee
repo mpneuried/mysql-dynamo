@@ -1,29 +1,30 @@
+# import the external modules
 _ = require('lodash')._
 extend = require('extend')
 colors = require('colors')
 
 # # Basic Module
-# ### extends [Logger](logger.coffee.html)
+# ### extends [EventEmitter]
 
-# Worker basics to handle errors and initialize modules
-
-module.exports = class Base extends require('events').EventEmitter
+# Basic module to handle errors and initialize modules
+module.exports = class Basic extends require('events').EventEmitter
 	# ## internals
 
+	# make the deep extend availible for all modles
 	extend: extend
 
-	# **defaukt** *Object* basic object to hold config defaults. Will be overwritten by the constructor options
+	# **defaukts** *Function* basic object to hold config defaults. Will be overwritten by the constructor options
 	defaults: =>
 		logging:
-			severity: "info"
+			severity: "warning"
 			severitys: "fatal,error,warning,info,debug".split( "," )
 
 	###	
 	## constructor 
 
-	`new Baisc( {} )`
+	`new Baisc( options )`
 	
-	Basie constriuctor. Define the configuration by options and defaults, init logging and init the error handler
+	Basic constructor. Define the configuration by options and defaults, init logging and init the error handler
 
 	@param {Object} options Basic config object
 
@@ -38,24 +39,72 @@ module.exports = class Base extends require('events').EventEmitter
 
 		return
 
+	###
+	## initialize
+	
+	`basic.initialize()`
+	
+	Overwritible Method to initialize the module
+	
+	@api public
+	###
 	initialize: =>
 		return
 
+	###
+	## define
+	
+	`basic.define( prop, fnGet [, fnSet] )`
+	
+	Helper to define getter and setter methods fot a property
+	
+	@param { String } prop Property name 
+	@param { Function|Object } fnGet Get method or a object with `get` and `set` 
+	@param { Function } [fnSet] Set method
+
+	@api public
+	###
 	define: =>
 		[ prop, fnGet, fnSet ] = arguments
 		if _.isFunction( fnGet )
+			# set the `defineProperty` object
 			_oGetSet = 
 				get: fnGet
 			_oGetSet.set = fnSet if fnSet? and _.isFunction( fnSet )
 			Object.defineProperty @, prop, _oGetSet
 		else
+			# define by object
 			Object.defineProperty @, prop, fnGet
 		return
 
+	###
+	## getter
+	
+	`basic.getter( prop, fnGet )`
+	
+	Shortcut to define a getter
+	
+	@param { String } prop Property name 
+	@param { Function } fnGet Get method 
+	
+	@api public
+	###
 	getter: ( prop, fnGet )=>
 		Object.defineProperty @, prop, get: fnGet
 		return
 
+	###
+	## setter
+	
+	`basic.setter( prop, fnSet )`
+	
+	Shortcut to define a setter
+	
+	@param { String } prop Property name 
+	@param { Function } fnSet Get method 
+	
+	@api public
+	###
 	setter: ( prop, fnGet )=>
 		Object.defineProperty @, prop, set: fnGet
 		return	
@@ -108,16 +157,15 @@ module.exports = class Base extends require('events').EventEmitter
 	###
 	## log
 	
-	`base.log( id, cb )`
+	`base.log( severity, code [, content1, content2, ... ] )`
 	
-	desc
+	write a log to the console if the current severity matches the message severity
 	
-	@param { String } id Desc 
-	@param { Function } cb Callback function 
+	@param { String } severity Message severity
+	@param { String } code Simple code the describe/label the output
+	@param { Any } [contentN] Content to append to the log
 	
-	@return { String } Return Desc 
-	
-	@api private
+	@api public
 	###
 	log: ( severity, code, content... )=>
 
@@ -153,6 +201,19 @@ module.exports = class Base extends require('events').EventEmitter
 	
 		return
 
+	###
+	## _checkLogging
+	
+	`basic._checkLogging( severity )`
+	
+	Helper to check if a log will be written to the console
+	
+	@param { String } severity Message severity
+	
+	@return { Boolean } Flag if the severity is allowed to write to the console
+	
+	@api private
+	###
 	_checkLogging: ( severity )=>
 		if not @_logging_iseverity?
 			@_logging_iseverity = @config.logging.severitys.indexOf( @config.logging.severity )
@@ -183,5 +244,6 @@ module.exports = class Base extends require('events').EventEmitter
 					@_ERRORS[ key ] = _.template( msg )
 		return
 
+	# error message mapping
 	ERRORS: =>
 		"not-implemented": "This function is planed but currently not implemented"

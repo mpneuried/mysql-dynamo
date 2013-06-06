@@ -187,7 +187,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 				throw err if err
 				done()
 
-	describe "#{ testTitle } CRUD Tests", ->
+	describe "CRUD Tests", ->
 
 		_C = _CONFIG.tables[ _basicTable ]
 		_D = _DATA[ _basicTable ]
@@ -492,7 +492,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 		return
 
-	describe "#{ testTitle } Overwrite Tests", ->
+	describe "Overwrite Tests", ->
 
 		table = null
 
@@ -559,7 +559,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 			return
 
 
-	describe "#{ testTitle } Range Tests", ->
+	describe "Range Tests", ->
 
 		table1 = null
 		table2 = null
@@ -607,7 +607,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 				, table1, insert ) 
 
-			_utils.runSeries aFns, ( err )->
+			_utils.runParallel aFns, ( err )->
 				done()
 
 		it "insert #{ _D2.inserts.length } items to range list of table 2", ( done )->
@@ -630,7 +630,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 				, table2, insert ) 
 
-			_utils.runSeries aFns, ( err )->
+			_utils.runParallel aFns, ( err )->
 				done()
 
 
@@ -760,7 +760,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 						cba()
 				, table1, item )
 
-			_utils.runSeries aFns, ( err )->
+			_utils.runParallel aFns, ( err )->
 				done()
 
 		it "delete whole data from table 2", ( done )->
@@ -773,7 +773,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 						cba()
 				, table2, item )
 
-			_utils.runSeries aFns, ( err )->
+			_utils.runParallel aFns, ( err )->
 				done()
 
 		it "check for empty table 1", ( done )->
@@ -794,7 +794,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 				items.length.should.equal( _ItemCount2 )
 				done()
 	
-	describe "#{ testTitle } Set Tests", ->		
+	describe "Set Tests", ->		
 		
 
 		_C = _CONFIG.tables[ _setTable ]
@@ -1043,7 +1043,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 				return
 			return
 
-		it "delete test item. ( Has delay of 250ms to prevent from throughput error )", ( done )->
+		it "delete test item.", ( done )->
 			
 			table.del _G[ "insert1" ].id, ( err )->
 				throw err if err
