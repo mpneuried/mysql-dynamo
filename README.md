@@ -24,9 +24,12 @@ Compared to the `simple-dynamo` module you only have to make a few smears.
 - **Table-Config** `consistent` not existes and will be ignored
 - **Table-Config** `overwriteExistingHash` not exists. It always will NOT overwrite existing hashes
 - **Table-Config** `combineTableTo` not exists. Within MySQL there is no need to save tables
+- **Table-Attribute-Config** `length` The length of a field has to be defined
+- **Table-Attribute-Config** `default` The SQL default of a field could be defined
 - **Item-Method-Options** `consistent` not existes and will be ignored
 - **Item-Method-Options** `overwriteExistingHash` not exists. It always will NOT overwrite existing hashes
-- **Manager-Method** `destroy` Not implemented yet, because usually you can delete tehm manually
+
+**One big difference between the Dynamo and MySQL version is that dynamo can generate undefined attributes on the fly. Th MySQL version will ignore undefined attributes. So all necessary attributes has to be defined within the table definitions**
 
 ## Initialize
 
@@ -58,10 +61,14 @@ Tablename for MySQL
 The hash key name of your ids/hashes
 - **hashKeyType** : *( `String` optional: default = `S` )*  
 The type of the `hashKey`. Possible values are: `S` = String and `N` = Numeric
+- **hashKeyLength** : *( `Number` optional: default = `5` for hashKeyType `N` and `255` for hashKeyType `S` )*  
+The table field length
 - **rangeKey**: *( String optional )*  
 The range key name of your range attribute. If not defined the table will be generated without the range methods
 - **rangeKeyType**: *( `String` optional: default = `N` )*  
 The type of the `rangeKey`. Possible values are: `S` = String and `N` = Numeric
+- **rangeKeyLength** : *( `Number` optional: default = `5` for rangeKeyType `N` and `255` for rangeKeyType `S` )*  
+The table field length
 - **fnCreateHash**: *( `Function` optional: default = `new UUID` )*  
 Method to generate a custom hash key.  
 - **defaultfields**: *( `Array` optional )*  
@@ -83,9 +90,12 @@ An array of attribute Objects. Which will be validated
   Datatype. possible values are `string` = String, `number` = Numeric and `array` = Array/Set of **Strings**
   - **required**: *( `Boolean` optional: default = `false` )*  
   Validate the attribute to be required. *( Not implemented yet ! )*
+  - **length**: *( `Number` optional: default = `255` )*  
+  Lentgh of the MySQL DB Filed. If you combine `type` = `string` with a `length`= `+Infinity` the field will generated as type `TEXT` otherwise as `VARCHAR( length )`. If you define a `number` with a length > 11 a type `BIGINT( length )` will be used. On a length <= 11 a type `INT( length )` will be generated.
+  - **default** *( `String` optional: default = `` )*  
+  The SQL default value
    
-  
-**Example**
+ **Example**
 
 ```coffee
 # import module
