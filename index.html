@@ -57,11 +57,8 @@
 </code></pre>
 
 <h1>
-<a name="connection-and-table" class="anchor" href="#connection-and-table"><span class="octicon octicon-link"></span></a>Connection and Table</h1>
-
-<h2>
 <a name="api-differences-to-simple-dynamo" class="anchor" href="#api-differences-to-simple-dynamo"><span class="octicon octicon-link"></span></a>API differences to <code>simple-dynamo</code>
-</h2>
+</h1>
 
 <p>Compared to the <code>simple-dynamo</code> module you only have to make a few smears.</p>
 
@@ -81,6 +78,9 @@
 <li>
 <strong>Item-Method-Options</strong> <code>overwriteExistingHash</code> not exists. It always will NOT overwrite existing hashes</li>
 </ul><p><strong>One big difference between the Dynamo and MySQL version is that dynamo can generate undefined attributes on the fly. Th MySQL version will ignore undefined attributes. So all necessary attributes has to be defined within the table definitions</strong></p>
+
+<h1>
+<a name="connection-and-table" class="anchor" href="#connection-and-table"><span class="octicon octicon-link"></span></a>Connection and Table</h1>
 
 <h2>
 <a name="initialize" class="anchor" href="#initialize"><span class="octicon octicon-link"></span></a>Initialize</h2>
@@ -769,6 +769,13 @@ tblSets.set 'mySetsId', data, ( err, setData )-&gt;
 <a name="changelogs" class="anchor" href="#changelogs"><span class="octicon octicon-link"></span></a>Changelogs</h2>
 
 <h3>
+<a name="022-7-june-2013" class="anchor" href="#022-7-june-2013"><span class="octicon octicon-link"></span></a>0.2.2 <code>7. June 2013</code>
+</h3>
+
+<ul>
+<li>Updated readme</li>
+<li>generated the code docs</li>
+</ul><h3>
 <a name="021-7-june-2013" class="anchor" href="#021-7-june-2013"><span class="octicon octicon-link"></span></a>0.2.1 <code>7. June 2013</code>
 </h3>
 
