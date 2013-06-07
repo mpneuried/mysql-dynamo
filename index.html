@@ -73,12 +73,16 @@
 <li>
 <strong>Table-Config</strong> <code>combineTableTo</code> not exists. Within MySQL there is no need to save tables</li>
 <li>
+<strong>Table-Attribute-Config</strong> <code>length</code> The length of a field has to be defined</li>
+<li>
+<strong>Table-Attribute-Config</strong> <code>default</code> The SQL default of a field could be defined</li>
+<li>
 <strong>Item-Method-Options</strong> <code>consistent</code> not existes and will be ignored</li>
 <li>
 <strong>Item-Method-Options</strong> <code>overwriteExistingHash</code> not exists. It always will NOT overwrite existing hashes</li>
-<li>
-<strong>Manager-Method</strong> <code>destroy</code> Not implemented yet, because usually you can delete tehm manually</li>
-</ul><h2>
+</ul><p><strong>One big difference between the Dynamo and MySQL version is that dynamo can generate undefined attributes on the fly. Th MySQL version will ignore undefined attributes. So all necessary attributes has to be defined within the table definitions</strong></p>
+
+<h2>
 <a name="initialize" class="anchor" href="#initialize"><span class="octicon octicon-link"></span></a>Initialize</h2>
 
 <p>first you have to define the connection and table attributes and get an instance of the simple-dynamo interface.</p>
@@ -121,11 +125,17 @@ The hash key name of your ids/hashes</li>
 <strong>hashKeyType</strong> : <em>( <code>String</code> optional: default = <code>S</code> )</em><br>
 The type of the <code>hashKey</code>. Possible values are: <code>S</code> = String and <code>N</code> = Numeric</li>
 <li>
+<strong>hashKeyLength</strong> : <em>( <code>Number</code> optional: default = <code>5</code> for hashKeyType <code>N</code> and <code>255</code> for hashKeyType <code>S</code> )</em><br>
+The table field length</li>
+<li>
 <strong>rangeKey</strong>: <em>( String optional )</em><br>
 The range key name of your range attribute. If not defined the table will be generated without the range methods</li>
 <li>
 <strong>rangeKeyType</strong>: <em>( <code>String</code> optional: default = <code>N</code> )</em><br>
 The type of the <code>rangeKey</code>. Possible values are: <code>S</code> = String and <code>N</code> = Numeric</li>
+<li>
+<strong>rangeKeyLength</strong> : <em>( <code>Number</code> optional: default = <code>5</code> for rangeKeyType <code>N</code> and <code>255</code> for rangeKeyType <code>S</code> )</em><br>
+The table field length</li>
 <li>
 <strong>fnCreateHash</strong>: <em>( <code>Function</code> optional: default = <code>new UUID</code> )</em><br>
 Method to generate a custom hash key.<br>
@@ -153,8 +163,8 @@ Method to generate a custom range key.<br><strong>Method Arguments</strong><br><
 </ul>
 </li>
 <li>
-<strong>attributes</strong>: <em>( <code>Array of Objects</code> required )</em><br>
-An array of attribute Objects. Which will be validated<br><strong>Attributes keys</strong>
+<p><strong>attributes</strong>: <em>( <code>Array of Objects</code> required )</em><br>
+An array of attribute Objects. Which will be validated<br><strong>Attributes keys</strong></p>
 
 <ul>
 <li>
@@ -168,11 +178,16 @@ Datatype. possible values are <code>string</code> = String, <code>number</code> 
 <strong>required</strong>: <em>( <code>Boolean</code> optional: default = <code>false</code> )</em><br>
 Validate the attribute to be required. <em>( Not implemented yet ! )</em>
 </li>
+<li>
+<strong>length</strong>: <em>( <code>Number</code> optional: default = <code>255</code> )</em><br>
+Lentgh of the MySQL DB Filed. If you combine <code>type</code> = <code>string</code> with a <code>length</code>= <code>+Infinity</code> the field will generated as type <code>TEXT</code> otherwise as <code>VARCHAR( length )</code>. If you define a <code>number</code> with a length &gt; 11 a type <code>BIGINT( length )</code> will be used. On a length &lt;= 11 a type <code>INT( length )</code> will be generated.</li>
+<li>
+<strong>default</strong> <em>( <code>String</code> optional: default = `` )</em><br>
+The SQL default value</li>
 </ul>
+<p><strong>Example</strong></p>
 </li>
-</ul><p><strong>Example</strong></p>
-
-<div class="highlight"><pre><span class="c1"># import module</span>
+</ul><div class="highlight"><pre><span class="c1"># import module</span>
 <span class="nv">MySQLDynamo = </span><span class="nx">require</span> <span class="s">"mysql-dynamo"</span>
 
 <span class="c1"># define connection settings</span>
