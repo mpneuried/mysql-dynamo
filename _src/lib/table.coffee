@@ -311,6 +311,11 @@ If the used table is a range table you have to use an array `[hash,range]` as co
 			# clone the SqlBuilder Instance
 			sql = @builder.clone()
 
+			# set the options
+			sql.fields = options.fields if options.fields?
+			sql.forward = if options.forward? then options.forward else true
+			sql.limit = if options.limit? then options.limit else 1000
+
 			# check the startAt argument and create a predicate like query
 			if startAt?
 				# abort if start at is used for a hash table
@@ -331,14 +336,10 @@ If the used table is a range table you have to use an array `[hash,range]` as co
 					return
 
 				# generate the start at predicate
-				query[ @rangeKey ] = { ">": startAt[ @rangeKey ] }
+				query[ @rangeKey ] = {}
+				query[ @rangeKey ][ if sql.forward then ">" else "<" ] = startAt[ @rangeKey ]
 
 			@log "debug", "find", query, startAt, options
-
-			# set the options
-			sql.fields = options.fields if options.fields?
-			sql.forward = if options.forward? then options.forward else true
-			sql.limit = if options.limit? then options.limit else 1000
 
 			# execute the query
 			sql.filter( query )

@@ -566,6 +566,10 @@ To provide a API to react on different events you can listen to a bunch of event
 
 ### 0.2.2 `7. June 2013`
 
+- Bugfix: order by field and startAt for reverse order
+
+### 0.2.2 `7. June 2013`
+
 - Updated readme
 - generated the code docs
 

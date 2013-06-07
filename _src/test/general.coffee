@@ -567,6 +567,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 		last = null
 		pre_last = null
+		_reverseFirst = null
 		
 		it "get table 1", ( done )->
 			table1 = dynDB.get( _logTable1 )
@@ -654,16 +655,10 @@ describe "----- #{ testTitle } TESTS -----", ->
 			return
 
 		it "get a range of table 1", ( done )->
-			if _logTable1.slice( 0,2 ) is "C_"
-				_q = 
-					id: { "==": "#{ _C1.name }A" }
-					t: { ">=": 5 }
-			else
-				_q = 
-					id: { "==": "A" }
-					t: { ">=": 5 }
+			_q = 
+				id: { "==": "A" }
+				t: { ">=": 5 }
 			
-
 			table1.find _q, ( err, items )->
 				throw err if err
 
@@ -671,14 +666,9 @@ describe "----- #{ testTitle } TESTS -----", ->
 				done()
 
 		it "get a range of table 2", ( done )->
-			if _logTable2.slice( 0,2 ) is "C_"
-				_q = 
-					id: { "==": "#{ _C2.name }D" }
-					t: { ">=": 3 }
-			else
-				_q = 
-					id: { "==": "D" }
-					t: { ">=": 3 }
+			_q = 
+				id: { "==": "D" }
+				t: { ">=": 3 }
 
 			table2.find _q, ( err, items )->
 				throw err if err
@@ -697,21 +687,16 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 		it "should return only 3 items", (done) ->
 			_count = 3
-			if _logTable2.slice( 0,2 ) is "C_"
-				_q = 
-					id: { "==": "#{ _C2.name }A" }
-					t: { ">=": 0 }
-			else
-				_q = 
-					id: { "==": "A" }
-					t: { ">=": 0 }
+			_q = 
+				id: { "==": "A" }
+				t: { ">=": 0 }
 
 			_o = 
 				limit: _count
 
 			table2.find _q, _o, ( err, items )->
 				throw err if err
-
+				_reverseFirst = items[0]
 				should.exist items
 				items.length.should.equal _count
 				last = items[_count - 1]
@@ -720,14 +705,9 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 		it "should return the next 3 by `startAt`", (done) ->
 			_count = 3
-			if _logTable2.slice( 0,2 ) is "C_"
-				_q = 
-					id: { "==": "#{ _C2.name }A" }
-					t: { ">=": 0 }
-			else
-				_q = 
-					id: { "==": "A" }
-					t: { ">=": 0 }
+			_q = 
+				id: { "==": "A" }
+				t: { ">=": 0 }
 			_o = 
 				limit: _count
 
@@ -735,12 +715,30 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 			table2.find _q, _c, _o, ( err, items )->
 				throw err if err
-
 				predicted_first = items[0]
 				predicted_first.should.eql last
 				items.length.should.equal _count
 				last = items[_count - 1]
 				pre_last = items[_count - 2]
+				done()
+
+		it "should return the next 3 by reverse `startAt`", (done) ->
+			_count = 3
+			_q = 
+				id: { "==": "A" }
+				t: { ">=": 0 }
+			_o = 
+				limit: _count
+				forward: false
+
+			_c = [ pre_last.id, pre_last.t ]
+			
+			table2.find _q, _c, _o, ( err, items )->
+				throw err if err
+
+				predicted_last = _.last( items )
+				predicted_last.should.eql _reverseFirst
+				items.length.should.equal _count
 				done()
 
 		it "delete whole data from table 1", ( done )->

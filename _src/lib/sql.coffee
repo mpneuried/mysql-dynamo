@@ -570,7 +570,7 @@ module.exports = ( options )->
 		@api private
 		###
 		getRangeKey: =>
-			if @isrange
+			if @isRange
 				@range.key
 			else
 				null
