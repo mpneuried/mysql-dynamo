@@ -65,13 +65,17 @@ describe "----- #{ testTitle } TESTS -----", ->
 	describe "Create tables", ->
 
 		it 'drop all existing test tables', ( done )->
-			_dropStatements = []
+
+			aFns = []
 			dynDB.each ( _k, tbl )=>  
-				_dropStatements.push( "DROP TABLE IF EXISTS #{ tbl.tableName }" )
-				return
-			
-			dynDB.sql _dropStatements.join( ";" ), ( err, results )->
-				throw err if err
+				aFns.push _.bind( ( cba )->
+					tbl.destroy ( err )->
+						throw err if err
+						cba()
+						return
+				)
+
+			_utils.runParallel aFns, ( err )->
 				done()
 				return
 			return
@@ -175,19 +179,6 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 				done()
 			return
-
-		return
-
-	describe "Create tables", ->
-		it "create a single table", ( done )->
-			dynDB.generate _CONFIG.test.singleCreateTableTest, ( err )->
-				throw err if err
-				done()
-
-		it "create all missing tables", ( done )->
-			dynDB.generateAll ( err )->
-				throw err if err
-				done()
 
 	describe "CRUD Tests", ->
 

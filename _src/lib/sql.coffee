@@ -383,7 +383,7 @@ module.exports = ( options )->
 		###
 		create: =>
 			statement = []
-			statement.push "CREATE TABLE #{ @table } ("
+			statement.push "CREATE TABLE IF NOT EXISTS #{ @table } ("
 
 			defs = []
 
@@ -400,6 +400,20 @@ module.exports = ( options )->
 			statement.push "\n) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
 
 			statement.join( " " )
+
+		###
+		## drop
+		
+		`sql.drop( attributes )`
+		
+		Create a table drop statement
+		
+		@return { String } Drop table statement 
+		
+		@api public
+		###
+		drop: =>
+			"DROP TABLE IF EXISTS #{ @table }"
 		
 		
 		###

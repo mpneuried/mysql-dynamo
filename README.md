@@ -205,7 +205,7 @@ Manager.each ( tableKey, tableObj )=>
 	return
 ```
 
-## Destroy a table *( not implemented yet )*
+## Destroy a table
 
 destroy table in MySQL. This drops a table from MySQL will all the data
 
@@ -554,11 +554,13 @@ To provide a API to react on different events you can listen to a bunch of event
 	
 ## Changelogs
 
+### 0.2.1 `7. June 2013`
+
 ### 0.2.0 `7. June 2013`
 
-- added manager/table option `tablePrefix` to prefix the sql table names
+- Added manager/table option `tablePrefix` to prefix the sql table names
 - added manager method `.each()`
-- changed tests to drop the tables before test
+- Changed tests to drop the tables before test
 
 ### 0.1.4 `6. June 2013`
 

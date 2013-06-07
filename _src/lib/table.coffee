@@ -559,8 +559,35 @@ If the used table is a range table you have to use an array `[hash,range]` as co
 					@emit( "del-empty" )
 					cb( null, null )
 				return
+		return
 
+	###
+	## destroy
+	
+	`table.destroy( cb )`
+	
+	Destroy this table with all data
+	
+	@param { Function } cb Callback function 
+	
+	@api public
+	###
+	destroy: ( cb )=>
+		if @_isExistend()
 
+			# clone the SqlBuilder Instance
+			sql = @builder.clone()
+
+			@sql sql.drop(), ( err, meta )=>
+				if err
+					cb( err )
+					return
+				@emit( "destroy", @ )
+				@external = null
+				cb( null, meta )
+				return
+		else
+			cb( null, null )
 		return
 
 	# # Private methods
@@ -582,14 +609,14 @@ If the used table is a range table you have to use an array `[hash,range]` as co
 		statement = @builder.create()
 
 		@sql statement, ( err, result )=>
-			@log "debug", "table generated", statement, err, result 
+			@log "warning", "table `#{ @tableName }` generated"
 			if err
 				cb( err )
 				return
 
 			# set the default table infos
 			@external = 
-				name: @name
+				name: @tableName
 				rows: 0
 
 			cb( null, @external )

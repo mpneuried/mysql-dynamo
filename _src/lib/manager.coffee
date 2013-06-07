@@ -325,15 +325,23 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 					delete @_tables[ tableName ]
 				
 				# generate a [Table](table.coffee.html) object for each table-element out of @tableSettings
-				_ext = @_dbTables[ table.name ]
+				_ext = @_dbTables[ ( @config.tablePrefix or "" ) + table.name ]
 				_opt = 
 					manager: @
 					external: _ext
 					logging: @config.logging
 					tablePrefix: @config.tablePrefix
 
-				@_tables[ tableName ] = new Table( table, _opt )
-				@emit( "new-table", tableName, @_tables[ tableName ] )
+				_tblObj = new Table( table, _opt )
+
+				@_tables[ tableName ] = _tblObj
+				@emit( "new-table", tableName, _tblObj )
+
+				# handle the destroy of a table
+				_tblObj.on "destroy", ( tbl )=>
+					@log "warning", "table `#{ tbl.tableName }` dropped"
+					_.omit( @_dbTables, tbl.tableName )
+					return
 
 			@connected = true
 			cb( null )

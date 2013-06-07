@@ -13,7 +13,7 @@ module.exports = class Basic extends require('events').EventEmitter
 	# make the deep extend availible for all modles
 	extend: extend
 
-	# **defaukts** *Function* basic object to hold config defaults. Will be overwritten by the constructor options
+	# **defaults** *Function* basic object to hold config defaults. Will be overwritten by the constructor options
 	defaults: =>
 		logging:
 			severity: "warning"
