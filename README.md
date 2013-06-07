@@ -15,9 +15,7 @@ A solution to use the **[simple-dynamo](http://mpneuried.github.io/simple-dynamo
   npm install mysql-dynamo
 ```
 
-# Connection and Table
-
-## API differences to `simple-dynamo`
+# API differences to `simple-dynamo`
 
 Compared to the `simple-dynamo` module you only have to make a few smears.
 
@@ -30,6 +28,8 @@ Compared to the `simple-dynamo` module you only have to make a few smears.
 - **Item-Method-Options** `overwriteExistingHash` not exists. It always will NOT overwrite existing hashes
 
 **One big difference between the Dynamo and MySQL version is that dynamo can generate undefined attributes on the fly. Th MySQL version will ignore undefined attributes. So all necessary attributes has to be defined within the table definitions**
+
+# Connection and Table
 
 ## Initialize
 
