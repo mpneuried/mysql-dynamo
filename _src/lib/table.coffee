@@ -8,6 +8,13 @@ _ = require('lodash')._
 # Work with the data of a table
 module.exports = class MySQLDynamoTable extends require( "./basic" )
 
+	# define the defaults
+	defaults: =>
+		# extend the parent defaults
+		@extend super,
+			# **tablePrefix** *String* Option to prefix all generating tables
+			tablePrefix: null
+
 	###	
 	## constructor 
 
@@ -30,7 +37,7 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 			@_model_settings.name
 
 		@getter "tableName", =>
-			@_model_settings.name
+			( options.tablePrefix or "" ) + @_model_settings.name
 
 		@getter "existend", =>
 			@external?
@@ -98,7 +105,7 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 
 		@builder = new SQLBuilder()
 			
-		@builder.table = @name
+		@builder.table = @tableName
 		
 		@builder.hash =
 			key: @hashKey

@@ -6,6 +6,7 @@ module.exports  =
 		user: if _envVars.MYSQLDYN_TEST_USER? then _envVars.MYSQLDYN_TEST_USER else 'root'
 		password : if _envVars.MYSQLDYN_TEST_PW? then _envVars.MYSQLDYN_TEST_PW else 'never'
 		database: if _envVars.MYSQLDYN_TEST_DB? then _envVars.MYSQLDYN_TEST_DB else "simple-dynamo-offline"
+		tablePrefix: "test_"
 		#logging: 
 		#	severity: "info"
 
@@ -14,7 +15,7 @@ module.exports  =
 
 	tables: 
 		"Employees":
-			name: "test_employees"
+			name: "employees"
 			hashKey:  "id"
 
 			attributes: [
@@ -25,7 +26,7 @@ module.exports  =
 			]
 
 		"Rooms":
-			name: "test_rooms"
+			name: "rooms"
 			hashKey:  "id"
 			hashKeyType: "S"
 
@@ -35,7 +36,7 @@ module.exports  =
 			]
 
 		"Todos":
-			name: "test_todos"
+			name: "todos"
 			hashKey:  "id"
 			hashKeyType: "S"
 
@@ -49,7 +50,7 @@ module.exports  =
 			]
 
 		"Logs1":
-			name: "test_log1"
+			name: "log1"
 			hashKey:  "id"
 			hashKeyType: "S"
 
@@ -68,7 +69,7 @@ module.exports  =
 			]
 
 		"Logs2":
-			name: "test_log2"
+			name: "log2"
 			hashKey:  "id"
 			hashKeyType: "S"
 

@@ -63,6 +63,19 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 
 	describe "Create tables", ->
+
+		it 'drop all existing test tables', ( done )->
+			_dropStatements = []
+			dynDB.each ( _k, tbl )=>  
+				_dropStatements.push( "DROP TABLE IF EXISTS #{ tbl.tableName }" )
+				return
+			
+			dynDB.sql _dropStatements.join( ";" ), ( err, results )->
+				throw err if err
+				done()
+				return
+			return
+
 		it "create a single table", ( done )->
 			dynDB.generate _CONFIG.test.singleCreateTableTest, ( err )->
 				throw err if err
@@ -161,17 +174,6 @@ describe "----- #{ testTitle } TESTS -----", ->
 				tables.should.eql( tbls )
 
 				done()
-			return
-
-		it 'clear all test tables', ( done )->
-			_clearStatements = []
-			for _name, _tbl of _CONFIG.tables when dynDB
-				_clearStatements.push( "DELETE FROM #{ _tbl.name.toLowerCase() }" )
-			
-			dynDB.sql _clearStatements.join( ";" ), ( err, results )->
-				throw err if err
-				done()
-				return
 			return
 
 		return

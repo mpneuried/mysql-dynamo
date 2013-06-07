@@ -16,8 +16,10 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 	defaults: =>
 		# extend the parent defaults
 		@extend super,
-			# the mysql driver pooling options
-			
+			# **tablePrefix** *String* Option to prefix all generating tables
+			tablePrefix: null
+
+			# **the mysql driver pooling options**
 			# **host** *String* MySQL server host
 			host: 'localhost'
 			# **user** *String* MySQL server user
@@ -150,6 +152,22 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 			else
 				cb null, Object.keys( @_tables )
 			return
+		return
+
+	###
+	## each
+	
+	`manager.each( fn )`
+	
+	Loop troug all tables
+	
+	@param { Function } fn Method called for every table. Looks like `.each ( key, tableObj )=>`
+	
+	@api public
+	###
+	each: ( fn )=>
+		for _tblKey, _tbl of @_tables
+			fn( _tblKey, _tbl )
 		return
 
 	###
@@ -312,6 +330,7 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 					manager: @
 					external: _ext
 					logging: @config.logging
+					tablePrefix: @config.tablePrefix
 
 				@_tables[ tableName ] = new Table( table, _opt )
 				@emit( "new-table", tableName, @_tables[ tableName ] )

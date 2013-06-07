@@ -36,6 +36,10 @@ first you have to define the connection and table attributes and get an instance
 
 ###connection Settings
 
+****
+- **tablePrefix** : *( `String` optional )* Option to prefix all generating tables
+
+**MySQL connection settings** 
 - **host** : *( `String` required )* MySQL host
 - **user** : *( `String` optional: default = `root` )* MySQL user
 - **password** : *( `String` optional: default = `secret` )* MySQL password
@@ -182,6 +186,23 @@ Method to retrieve the instance of a table object.
 
 ```coffee
 tblTodos = sqldManager.get( 'Todos' )
+```
+
+## Loop through all tables
+
+Loop trough all table objects
+
+**`Manager.each( eachFn )` Arguments** : 
+
+- **eachFn**: *( `Function` required )*  
+Loop method call for every table object
+
+**Example**
+
+```coffee
+Manager.each ( tableKey, tableObj )=>
+	console.log( "SQL table name", tableObj.tableName )
+	return
 ```
 
 ## Destroy a table *( not implemented yet )*
@@ -533,22 +554,32 @@ To provide a API to react on different events you can listen to a bunch of event
 	
 ## Changelogs
 
-### 0.1.4
+### 0.2.0 `7. June 2013`
+
+- added manager/table option `tablePrefix` to prefix the sql table names
+- added manager method `.each()`
+- changed tests to drop the tables before test
+
+### 0.1.4 `6. June 2013`
 
 - Print out a warning if attributes are removed by the validation
 
-### 0.1.3
+### 0.1.3 `6. June 2013`
 
 - Fixed package json to use the correct `mysql-node` version if an older version is already used within the project
 
-### 0.1.2
+### 0.1.2 `6. June 2013`
 
 - Added code docs with docker
 - Some small code improvements
 
-### 0.1.1
+### 0.1.1 `6. June 2013`
 
 - Added Readme
+
+### 0.1.0 `5. June 2013`
+
+- Initial version
 
 ## Todos
 
