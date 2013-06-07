@@ -556,6 +556,9 @@ To provide a API to react on different events you can listen to a bunch of event
 
 ### 0.2.1 `7. June 2013`
 
+- Added missing destroy table
+- Print a a warning on table destroy and table create
+
 ### 0.2.0 `7. June 2013`
 
 - Added manager/table option `tablePrefix` to prefix the sql table names
