@@ -64,6 +64,9 @@
         <a href="#create">create</a>
       </div>
       <div class="heading h2">
+        <a href="#drop">drop</a>
+      </div>
+      <div class="heading h2">
         <a href="#settoarray">setToArray</a>
       </div>
       <div class="heading h1">
@@ -1178,7 +1181,7 @@
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-384" id="line-384">384</a>  
 <a class="line-num" href="#line-385" id="line-385">385</a>      <span class="nv">create: </span><span class="o">=&gt;</span>
 <a class="line-num" href="#line-386" id="line-386">386</a>        <span class="nv">statement = </span><span class="p">[]</span>
-<a class="line-num" href="#line-387" id="line-387">387</a>        <span class="nx">statement</span><span class="p">.</span><span class="nx">push</span> <span class="s">&quot;CREATE TABLE </span><span class="si">#{</span> <span class="nx">@table</span> <span class="si">}</span><span class="s"> (&quot;</span>
+<a class="line-num" href="#line-387" id="line-387">387</a>        <span class="nx">statement</span><span class="p">.</span><span class="nx">push</span> <span class="s">&quot;CREATE TABLE IF NOT EXISTS </span><span class="si">#{</span> <span class="nx">@table</span> <span class="si">}</span><span class="s"> (&quot;</span>
 <a class="line-num" href="#line-388" id="line-388">388</a>  
 <a class="line-num" href="#line-389" id="line-389">389</a>        <span class="nv">defs = </span><span class="p">[]</span>
 <a class="line-num" href="#line-390" id="line-390">390</a>  
@@ -1195,10 +1198,48 @@
 <a class="line-num" href="#line-401" id="line-401">401</a>        <span class="nx">statement</span><span class="p">.</span><span class="nx">push</span> <span class="s">&quot;\n) ENGINE=InnoDB DEFAULT CHARSET=utf8;&quot;</span>
 <a class="line-num" href="#line-402" id="line-402">402</a>  
 <a class="line-num" href="#line-403" id="line-403">403</a>        <span class="nx">statement</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="s">&quot; &quot;</span> <span class="p">)</span>
-<a class="line-num" href="#line-404" id="line-404">404</a>      
-<a class="line-num" href="#line-405" id="line-405">405</a>      
-<a class="line-num" href="#line-406" id="line-406">406</a>  
-<a class="line-num" href="#line-407" id="line-407">407</a>  </pre></div>
+<a class="line-num" href="#line-404" id="line-404">404</a>  
+<a class="line-num" href="#line-405" id="line-405">405</a>  
+<a class="line-num" href="#line-406" id="line-406">406</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="drop">
+  <h2>
+    <a href="#drop" name="drop" class="pilcrow">&#182;</a>
+    drop
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>sql.drop( attributes )</code></p>
+
+<p>Create a table drop statement</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">String</span>
+      <span>Drop table statement </span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">public
+</span>
+    </span>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-415" id="line-415">415</a>  
+<a class="line-num" href="#line-416" id="line-416">416</a>      <span class="nv">drop: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-417" id="line-417">417</a>        <span class="s">&quot;DROP TABLE IF EXISTS </span><span class="si">#{</span> <span class="nx">@table</span> <span class="si">}</span><span class="s">&quot;</span>
+<a class="line-num" href="#line-418" id="line-418">418</a>      
+<a class="line-num" href="#line-419" id="line-419">419</a>      
+<a class="line-num" href="#line-420" id="line-420">420</a>  
+<a class="line-num" href="#line-421" id="line-421">421</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1237,27 +1278,27 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-418" id="line-418">418</a>  
-<a class="line-num" href="#line-419" id="line-419">419</a>      <span class="nv">setToArray: </span><span class="nf">( value )=&gt;</span>
-<a class="line-num" href="#line-420" id="line-420">420</a>        <span class="nv">_lDlm = </span><span class="nx">@config</span><span class="p">.</span><span class="nx">sqlSetDelimiter</span><span class="p">.</span><span class="nx">length</span>
-<a class="line-num" href="#line-421" id="line-421">421</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">value</span><span class="o">?</span> <span class="o">or</span> <span class="nx">value</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;=</span> <span class="nx">_lDlm</span>
-<a class="line-num" href="#line-422" id="line-422">422</a>          <span class="k">return</span> <span class="kc">null</span>
-<a class="line-num" href="#line-423" id="line-423">423</a>  
-<a class="line-num" href="#line-424" id="line-424">424</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-432" id="line-432">432</a>  
+<a class="line-num" href="#line-433" id="line-433">433</a>      <span class="nv">setToArray: </span><span class="nf">( value )=&gt;</span>
+<a class="line-num" href="#line-434" id="line-434">434</a>        <span class="nv">_lDlm = </span><span class="nx">@config</span><span class="p">.</span><span class="nx">sqlSetDelimiter</span><span class="p">.</span><span class="nx">length</span>
+<a class="line-num" href="#line-435" id="line-435">435</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">value</span><span class="o">?</span> <span class="o">or</span> <span class="nx">value</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;=</span> <span class="nx">_lDlm</span>
+<a class="line-num" href="#line-436" id="line-436">436</a>          <span class="k">return</span> <span class="kc">null</span>
+<a class="line-num" href="#line-437" id="line-437">437</a>  
+<a class="line-num" href="#line-438" id="line-438">438</a>  </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
 </div>
 <p>remove the first and last delimiter and slipt the set into an array</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-423" id="line-423">423</a>  
-<a class="line-num" href="#line-424" id="line-424">424</a>        <span class="nx">value</span><span class="p">[</span> <span class="nx">_lDlm</span><span class="p">..</span><span class="o">-</span><span class="p">(</span> <span class="nx">_lDlm</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">].</span><span class="nx">split</span><span class="p">(</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">sqlSetDelimiter</span> <span class="p">)</span>
-<a class="line-num" href="#line-425" id="line-425">425</a>  
-<a class="line-num" href="#line-426" id="line-426">426</a>  
-<a class="line-num" href="#line-427" id="line-427">427</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-437" id="line-437">437</a>  
+<a class="line-num" href="#line-438" id="line-438">438</a>        <span class="nx">value</span><span class="p">[</span> <span class="nx">_lDlm</span><span class="p">..</span><span class="o">-</span><span class="p">(</span> <span class="nx">_lDlm</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">].</span><span class="nx">split</span><span class="p">(</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">sqlSetDelimiter</span> <span class="p">)</span>
+<a class="line-num" href="#line-439" id="line-439">439</a>  
+<a class="line-num" href="#line-440" id="line-440">440</a>  
+<a class="line-num" href="#line-441" id="line-441">441</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1270,10 +1311,10 @@
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-426" id="line-426">426</a>  
-<a class="line-num" href="#line-427" id="line-427">427</a>      
-<a class="line-num" href="#line-428" id="line-428">428</a>  
-<a class="line-num" href="#line-429" id="line-429">429</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-440" id="line-440">440</a>  
+<a class="line-num" href="#line-441" id="line-441">441</a>      
+<a class="line-num" href="#line-442" id="line-442">442</a>  
+<a class="line-num" href="#line-443" id="line-443">443</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1306,13 +1347,13 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-438" id="line-438">438</a>  
-<a class="line-num" href="#line-439" id="line-439">439</a>      <span class="nv">setTable: </span><span class="nf">( tbl )=&gt;</span>
-<a class="line-num" href="#line-440" id="line-440">440</a>        <span class="vi">@_c.table = </span><span class="nx">tbl</span>
-<a class="line-num" href="#line-441" id="line-441">441</a>        <span class="k">return</span>
-<a class="line-num" href="#line-442" id="line-442">442</a>  
-<a class="line-num" href="#line-443" id="line-443">443</a>  
-<a class="line-num" href="#line-444" id="line-444">444</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-452" id="line-452">452</a>  
+<a class="line-num" href="#line-453" id="line-453">453</a>      <span class="nv">setTable: </span><span class="nf">( tbl )=&gt;</span>
+<a class="line-num" href="#line-454" id="line-454">454</a>        <span class="vi">@_c.table = </span><span class="nx">tbl</span>
+<a class="line-num" href="#line-455" id="line-455">455</a>        <span class="k">return</span>
+<a class="line-num" href="#line-456" id="line-456">456</a>  
+<a class="line-num" href="#line-457" id="line-457">457</a>  
+<a class="line-num" href="#line-458" id="line-458">458</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1345,15 +1386,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-453" id="line-453">453</a>  
-<a class="line-num" href="#line-454" id="line-454">454</a>      <span class="nv">getTable: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-455" id="line-455">455</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">table</span><span class="o">?</span>
-<a class="line-num" href="#line-456" id="line-456">456</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">table</span>
-<a class="line-num" href="#line-457" id="line-457">457</a>        <span class="k">else</span>
-<a class="line-num" href="#line-458" id="line-458">458</a>          <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;no-table&quot;</span> <span class="p">)</span>
-<a class="line-num" href="#line-459" id="line-459">459</a>  
-<a class="line-num" href="#line-460" id="line-460">460</a>  
-<a class="line-num" href="#line-461" id="line-461">461</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-467" id="line-467">467</a>  
+<a class="line-num" href="#line-468" id="line-468">468</a>      <span class="nv">getTable: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-469" id="line-469">469</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">table</span><span class="o">?</span>
+<a class="line-num" href="#line-470" id="line-470">470</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">table</span>
+<a class="line-num" href="#line-471" id="line-471">471</a>        <span class="k">else</span>
+<a class="line-num" href="#line-472" id="line-472">472</a>          <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;no-table&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-473" id="line-473">473</a>  
+<a class="line-num" href="#line-474" id="line-474">474</a>  
+<a class="line-num" href="#line-475" id="line-475">475</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1386,28 +1427,28 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-470" id="line-470">470</a>  
-<a class="line-num" href="#line-471" id="line-471">471</a>      <span class="nv">setHash: </span><span class="nf">( _h )=&gt;</span>
-<a class="line-num" href="#line-472" id="line-472">472</a>        <span class="vi">@_c.hash = </span><span class="p">{}</span>
-<a class="line-num" href="#line-473" id="line-473">473</a>        <span class="nx">@extend</span><span class="p">(</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">hash</span><span class="p">,</span> <span class="nx">_h</span> <span class="p">)</span>
-<a class="line-num" href="#line-474" id="line-474">474</a>  
-<a class="line-num" href="#line-475" id="line-475">475</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-484" id="line-484">484</a>  
+<a class="line-num" href="#line-485" id="line-485">485</a>      <span class="nv">setHash: </span><span class="nf">( _h )=&gt;</span>
+<a class="line-num" href="#line-486" id="line-486">486</a>        <span class="vi">@_c.hash = </span><span class="p">{}</span>
+<a class="line-num" href="#line-487" id="line-487">487</a>        <span class="nx">@extend</span><span class="p">(</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">hash</span><span class="p">,</span> <span class="nx">_h</span> <span class="p">)</span>
+<a class="line-num" href="#line-488" id="line-488">488</a>  
+<a class="line-num" href="#line-489" id="line-489">489</a>  </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>add the hash to the attributes</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-474" id="line-474">474</a>  
-<a class="line-num" href="#line-475" id="line-475">475</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span>
-<a class="line-num" href="#line-476" id="line-476">476</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">key</span>
-<a class="line-num" href="#line-477" id="line-477">477</a>        <span class="k">return</span>
-<a class="line-num" href="#line-478" id="line-478">478</a>  
-<a class="line-num" href="#line-479" id="line-479">479</a>  
-<a class="line-num" href="#line-480" id="line-480">480</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-488" id="line-488">488</a>  
+<a class="line-num" href="#line-489" id="line-489">489</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span>
+<a class="line-num" href="#line-490" id="line-490">490</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">key</span>
+<a class="line-num" href="#line-491" id="line-491">491</a>        <span class="k">return</span>
+<a class="line-num" href="#line-492" id="line-492">492</a>  
+<a class="line-num" href="#line-493" id="line-493">493</a>  
+<a class="line-num" href="#line-494" id="line-494">494</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1440,15 +1481,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-489" id="line-489">489</a>  
-<a class="line-num" href="#line-490" id="line-490">490</a>      <span class="nv">getHash: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-491" id="line-491">491</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span><span class="o">?</span>
-<a class="line-num" href="#line-492" id="line-492">492</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span>
-<a class="line-num" href="#line-493" id="line-493">493</a>        <span class="k">else</span>
-<a class="line-num" href="#line-494" id="line-494">494</a>          <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;no-hash&quot;</span> <span class="p">)</span>
-<a class="line-num" href="#line-495" id="line-495">495</a>  
-<a class="line-num" href="#line-496" id="line-496">496</a>  
-<a class="line-num" href="#line-497" id="line-497">497</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-503" id="line-503">503</a>  
+<a class="line-num" href="#line-504" id="line-504">504</a>      <span class="nv">getHash: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-505" id="line-505">505</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span><span class="o">?</span>
+<a class="line-num" href="#line-506" id="line-506">506</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">hash</span>
+<a class="line-num" href="#line-507" id="line-507">507</a>        <span class="k">else</span>
+<a class="line-num" href="#line-508" id="line-508">508</a>          <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;no-hash&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-509" id="line-509">509</a>  
+<a class="line-num" href="#line-510" id="line-510">510</a>  
+<a class="line-num" href="#line-511" id="line-511">511</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1481,12 +1522,12 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-506" id="line-506">506</a>  
-<a class="line-num" href="#line-507" id="line-507">507</a>      <span class="nv">getHashKey: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-508" id="line-508">508</a>        <span class="nx">@hash</span><span class="p">.</span><span class="nx">key</span>
-<a class="line-num" href="#line-509" id="line-509">509</a>  
-<a class="line-num" href="#line-510" id="line-510">510</a>  
-<a class="line-num" href="#line-511" id="line-511">511</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-520" id="line-520">520</a>  
+<a class="line-num" href="#line-521" id="line-521">521</a>      <span class="nv">getHashKey: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-522" id="line-522">522</a>        <span class="nx">@hash</span><span class="p">.</span><span class="nx">key</span>
+<a class="line-num" href="#line-523" id="line-523">523</a>  
+<a class="line-num" href="#line-524" id="line-524">524</a>  
+<a class="line-num" href="#line-525" id="line-525">525</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1519,33 +1560,33 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-520" id="line-520">520</a>  
-<a class="line-num" href="#line-521" id="line-521">521</a>      <span class="nv">setRange: </span><span class="nf">( _r )=&gt;</span>
-<a class="line-num" href="#line-522" id="line-522">522</a>        <span class="k">if</span> <span class="nx">_r</span><span class="o">?</span>
-<a class="line-num" href="#line-523" id="line-523">523</a>          <span class="vi">@_c.isRange = </span><span class="kc">true</span>
-<a class="line-num" href="#line-524" id="line-524">524</a>          <span class="vi">@_c.range = </span><span class="p">{}</span>
-<a class="line-num" href="#line-525" id="line-525">525</a>          <span class="nx">@extend</span><span class="p">(</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">range</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">range</span><span class="p">,</span> <span class="nx">_r</span> <span class="p">)</span>
-<a class="line-num" href="#line-526" id="line-526">526</a>  
-<a class="line-num" href="#line-527" id="line-527">527</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-534" id="line-534">534</a>  
+<a class="line-num" href="#line-535" id="line-535">535</a>      <span class="nv">setRange: </span><span class="nf">( _r )=&gt;</span>
+<a class="line-num" href="#line-536" id="line-536">536</a>        <span class="k">if</span> <span class="nx">_r</span><span class="o">?</span>
+<a class="line-num" href="#line-537" id="line-537">537</a>          <span class="vi">@_c.isRange = </span><span class="kc">true</span>
+<a class="line-num" href="#line-538" id="line-538">538</a>          <span class="vi">@_c.range = </span><span class="p">{}</span>
+<a class="line-num" href="#line-539" id="line-539">539</a>          <span class="nx">@extend</span><span class="p">(</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">range</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">range</span><span class="p">,</span> <span class="nx">_r</span> <span class="p">)</span>
+<a class="line-num" href="#line-540" id="line-540">540</a>  
+<a class="line-num" href="#line-541" id="line-541">541</a>  </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
+  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
 </div>
 <p>add the range to the attributes</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-526" id="line-526">526</a>  
-<a class="line-num" href="#line-527" id="line-527">527</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">range</span>
-<a class="line-num" href="#line-528" id="line-528">528</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">range</span><span class="p">.</span><span class="nx">key</span>
-<a class="line-num" href="#line-529" id="line-529">529</a>        <span class="k">else</span>
-<a class="line-num" href="#line-530" id="line-530">530</a>          <span class="vi">@_c.isRange = </span><span class="kc">false</span>
-<a class="line-num" href="#line-531" id="line-531">531</a>          <span class="nx">_</span><span class="p">.</span><span class="nx">omit</span><span class="p">(</span> <span class="nx">@_c</span><span class="p">,</span> <span class="s">&quot;range&quot;</span> <span class="p">)</span>
-<a class="line-num" href="#line-532" id="line-532">532</a>        <span class="k">return</span>
-<a class="line-num" href="#line-533" id="line-533">533</a>  
-<a class="line-num" href="#line-534" id="line-534">534</a>  
-<a class="line-num" href="#line-535" id="line-535">535</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-540" id="line-540">540</a>  
+<a class="line-num" href="#line-541" id="line-541">541</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">range</span>
+<a class="line-num" href="#line-542" id="line-542">542</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">range</span><span class="p">.</span><span class="nx">key</span>
+<a class="line-num" href="#line-543" id="line-543">543</a>        <span class="k">else</span>
+<a class="line-num" href="#line-544" id="line-544">544</a>          <span class="vi">@_c.isRange = </span><span class="kc">false</span>
+<a class="line-num" href="#line-545" id="line-545">545</a>          <span class="nx">_</span><span class="p">.</span><span class="nx">omit</span><span class="p">(</span> <span class="nx">@_c</span><span class="p">,</span> <span class="s">&quot;range&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-546" id="line-546">546</a>        <span class="k">return</span>
+<a class="line-num" href="#line-547" id="line-547">547</a>  
+<a class="line-num" href="#line-548" id="line-548">548</a>  
+<a class="line-num" href="#line-549" id="line-549">549</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1578,12 +1619,12 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-544" id="line-544">544</a>  
-<a class="line-num" href="#line-545" id="line-545">545</a>      <span class="nv">getRange: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-546" id="line-546">546</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">range</span>
-<a class="line-num" href="#line-547" id="line-547">547</a>  
-<a class="line-num" href="#line-548" id="line-548">548</a>  
-<a class="line-num" href="#line-549" id="line-549">549</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-558" id="line-558">558</a>  
+<a class="line-num" href="#line-559" id="line-559">559</a>      <span class="nv">getRange: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-560" id="line-560">560</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">range</span>
+<a class="line-num" href="#line-561" id="line-561">561</a>  
+<a class="line-num" href="#line-562" id="line-562">562</a>  
+<a class="line-num" href="#line-563" id="line-563">563</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1616,15 +1657,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-558" id="line-558">558</a>  
-<a class="line-num" href="#line-559" id="line-559">559</a>      <span class="nv">getRangeKey: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-560" id="line-560">560</a>        <span class="k">if</span> <span class="nx">@isrange</span>
-<a class="line-num" href="#line-561" id="line-561">561</a>          <span class="nx">@range</span><span class="p">.</span><span class="nx">key</span>
-<a class="line-num" href="#line-562" id="line-562">562</a>        <span class="k">else</span>
-<a class="line-num" href="#line-563" id="line-563">563</a>          <span class="kc">null</span>
-<a class="line-num" href="#line-564" id="line-564">564</a>  
-<a class="line-num" href="#line-565" id="line-565">565</a>  
-<a class="line-num" href="#line-566" id="line-566">566</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-572" id="line-572">572</a>  
+<a class="line-num" href="#line-573" id="line-573">573</a>      <span class="nv">getRangeKey: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-574" id="line-574">574</a>        <span class="k">if</span> <span class="nx">@isrange</span>
+<a class="line-num" href="#line-575" id="line-575">575</a>          <span class="nx">@range</span><span class="p">.</span><span class="nx">key</span>
+<a class="line-num" href="#line-576" id="line-576">576</a>        <span class="k">else</span>
+<a class="line-num" href="#line-577" id="line-577">577</a>          <span class="kc">null</span>
+<a class="line-num" href="#line-578" id="line-578">578</a>  
+<a class="line-num" href="#line-579" id="line-579">579</a>  
+<a class="line-num" href="#line-580" id="line-580">580</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1657,12 +1698,12 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-575" id="line-575">575</a>  
-<a class="line-num" href="#line-576" id="line-576">576</a>      <span class="nv">_isRange: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-577" id="line-577">577</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">isRange</span><span class="o">?</span> <span class="k">then</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">isRange</span> <span class="o">or</span> <span class="kc">false</span>
-<a class="line-num" href="#line-578" id="line-578">578</a>  
-<a class="line-num" href="#line-579" id="line-579">579</a>  
-<a class="line-num" href="#line-580" id="line-580">580</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-589" id="line-589">589</a>  
+<a class="line-num" href="#line-590" id="line-590">590</a>      <span class="nv">_isRange: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-591" id="line-591">591</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">isRange</span><span class="o">?</span> <span class="k">then</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">isRange</span> <span class="o">or</span> <span class="kc">false</span>
+<a class="line-num" href="#line-592" id="line-592">592</a>  
+<a class="line-num" href="#line-593" id="line-593">593</a>  
+<a class="line-num" href="#line-594" id="line-594">594</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1695,26 +1736,13 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-589" id="line-589">589</a>  
-<a class="line-num" href="#line-590" id="line-590">590</a>      <span class="nv">setAttrs: </span><span class="nf">( _attrs )=&gt;</span>
-<a class="line-num" href="#line-591" id="line-591">591</a>        <span class="nv">_defAttrCnf = </span><span class="nx">@config</span><span class="p">.</span><span class="nx">attr</span>
-<a class="line-num" href="#line-592" id="line-592">592</a>        <span class="k">for</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">_attrs</span>
-<a class="line-num" href="#line-593" id="line-593">593</a>          <span class="k">if</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">key</span><span class="o">?</span>
-<a class="line-num" href="#line-594" id="line-594">594</a>  
-<a class="line-num" href="#line-595" id="line-595">595</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
-</div>
-<p>collect the attribute keys</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-594" id="line-594">594</a>  
-<a class="line-num" href="#line-595" id="line-595">595</a>            <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">key</span>
-<a class="line-num" href="#line-596" id="line-596">596</a>  
-<a class="line-num" href="#line-597" id="line-597">597</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-603" id="line-603">603</a>  
+<a class="line-num" href="#line-604" id="line-604">604</a>      <span class="nv">setAttrs: </span><span class="nf">( _attrs )=&gt;</span>
+<a class="line-num" href="#line-605" id="line-605">605</a>        <span class="nv">_defAttrCnf = </span><span class="nx">@config</span><span class="p">.</span><span class="nx">attr</span>
+<a class="line-num" href="#line-606" id="line-606">606</a>        <span class="k">for</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">_attrs</span>
+<a class="line-num" href="#line-607" id="line-607">607</a>          <span class="k">if</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">key</span><span class="o">?</span>
+<a class="line-num" href="#line-608" id="line-608">608</a>  
+<a class="line-num" href="#line-609" id="line-609">609</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1722,12 +1750,12 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-57" id="section-57">&#182;</a>
 </div>
-<p>set the attribute configuration and extend it with the defauts</p>
+<p>collect the attribute keys</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-596" id="line-596">596</a>  
-<a class="line-num" href="#line-597" id="line-597">597</a>            <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@extend</span><span class="p">(</span> <span class="p">{},</span> <span class="nx">_defAttrCnf</span><span class="p">,</span> <span class="nx">attr</span> <span class="p">)</span>
-<a class="line-num" href="#line-598" id="line-598">598</a>  
-<a class="line-num" href="#line-599" id="line-599">599</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-608" id="line-608">608</a>  
+<a class="line-num" href="#line-609" id="line-609">609</a>            <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">key</span>
+<a class="line-num" href="#line-610" id="line-610">610</a>  
+<a class="line-num" href="#line-611" id="line-611">611</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1735,15 +1763,28 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
 </div>
+<p>set the attribute configuration and extend it with the defauts</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-610" id="line-610">610</a>  
+<a class="line-num" href="#line-611" id="line-611">611</a>            <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@extend</span><span class="p">(</span> <span class="p">{},</span> <span class="nx">_defAttrCnf</span><span class="p">,</span> <span class="nx">attr</span> <span class="p">)</span>
+<a class="line-num" href="#line-612" id="line-612">612</a>  
+<a class="line-num" href="#line-613" id="line-613">613</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
+</div>
 <p>collect the set type keys</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-598" id="line-598">598</a>  
-<a class="line-num" href="#line-599" id="line-599">599</a>            <span class="k">if</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">type</span> <span class="k">in</span> <span class="p">[</span> <span class="s">&quot;A&quot;</span><span class="p">,</span> <span class="s">&quot;array&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-600" id="line-600">600</a>              <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrsArrayKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">key</span>
-<a class="line-num" href="#line-601" id="line-601">601</a>        <span class="k">return</span>
-<a class="line-num" href="#line-602" id="line-602">602</a>  
-<a class="line-num" href="#line-603" id="line-603">603</a>  
-<a class="line-num" href="#line-604" id="line-604">604</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-612" id="line-612">612</a>  
+<a class="line-num" href="#line-613" id="line-613">613</a>            <span class="k">if</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">type</span> <span class="k">in</span> <span class="p">[</span> <span class="s">&quot;A&quot;</span><span class="p">,</span> <span class="s">&quot;array&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-614" id="line-614">614</a>              <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrsArrayKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">key</span>
+<a class="line-num" href="#line-615" id="line-615">615</a>        <span class="k">return</span>
+<a class="line-num" href="#line-616" id="line-616">616</a>  
+<a class="line-num" href="#line-617" id="line-617">617</a>  
+<a class="line-num" href="#line-618" id="line-618">618</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1776,15 +1817,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-613" id="line-613">613</a>  
-<a class="line-num" href="#line-614" id="line-614">614</a>      <span class="nv">getAttrs: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-615" id="line-615">615</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span><span class="o">?</span>
-<a class="line-num" href="#line-616" id="line-616">616</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span>
-<a class="line-num" href="#line-617" id="line-617">617</a>        <span class="k">else</span>
-<a class="line-num" href="#line-618" id="line-618">618</a>          <span class="p">[]</span>
-<a class="line-num" href="#line-619" id="line-619">619</a>  
-<a class="line-num" href="#line-620" id="line-620">620</a>  
-<a class="line-num" href="#line-621" id="line-621">621</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-627" id="line-627">627</a>  
+<a class="line-num" href="#line-628" id="line-628">628</a>      <span class="nv">getAttrs: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-629" id="line-629">629</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span><span class="o">?</span>
+<a class="line-num" href="#line-630" id="line-630">630</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrs</span>
+<a class="line-num" href="#line-631" id="line-631">631</a>        <span class="k">else</span>
+<a class="line-num" href="#line-632" id="line-632">632</a>          <span class="p">[]</span>
+<a class="line-num" href="#line-633" id="line-633">633</a>  
+<a class="line-num" href="#line-634" id="line-634">634</a>  
+<a class="line-num" href="#line-635" id="line-635">635</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1817,12 +1858,12 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-630" id="line-630">630</a>  
-<a class="line-num" href="#line-631" id="line-631">631</a>      <span class="nv">getAttrKeys: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-632" id="line-632">632</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrKeys</span> <span class="o">or</span> <span class="p">[]</span>
-<a class="line-num" href="#line-633" id="line-633">633</a>  
-<a class="line-num" href="#line-634" id="line-634">634</a>  
-<a class="line-num" href="#line-635" id="line-635">635</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-644" id="line-644">644</a>  
+<a class="line-num" href="#line-645" id="line-645">645</a>      <span class="nv">getAttrKeys: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-646" id="line-646">646</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrKeys</span> <span class="o">or</span> <span class="p">[]</span>
+<a class="line-num" href="#line-647" id="line-647">647</a>  
+<a class="line-num" href="#line-648" id="line-648">648</a>  
+<a class="line-num" href="#line-649" id="line-649">649</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1855,12 +1896,12 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-644" id="line-644">644</a>  
-<a class="line-num" href="#line-645" id="line-645">645</a>      <span class="nv">getArrayAttrKeys: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-646" id="line-646">646</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrsArrayKeys</span> <span class="o">or</span> <span class="p">[]</span>
-<a class="line-num" href="#line-647" id="line-647">647</a>  
-<a class="line-num" href="#line-648" id="line-648">648</a>  
-<a class="line-num" href="#line-649" id="line-649">649</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-658" id="line-658">658</a>  
+<a class="line-num" href="#line-659" id="line-659">659</a>      <span class="nv">getArrayAttrKeys: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-660" id="line-660">660</a>        <span class="nx">@_c</span><span class="p">.</span><span class="nx">attrsArrayKeys</span> <span class="o">or</span> <span class="p">[]</span>
+<a class="line-num" href="#line-661" id="line-661">661</a>  
+<a class="line-num" href="#line-662" id="line-662">662</a>  
+<a class="line-num" href="#line-663" id="line-663">663</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1893,16 +1934,16 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-658" id="line-658">658</a>  
-<a class="line-num" href="#line-659" id="line-659">659</a>      <span class="nv">setForward: </span><span class="nf">( _forward = true )=&gt;</span>
-<a class="line-num" href="#line-660" id="line-660">660</a>        <span class="k">if</span> <span class="nx">_forward</span>
-<a class="line-num" href="#line-661" id="line-661">661</a>          <span class="vi">@_c.forward = </span><span class="kc">true</span>
-<a class="line-num" href="#line-662" id="line-662">662</a>        <span class="k">else</span>
-<a class="line-num" href="#line-663" id="line-663">663</a>          <span class="vi">@_c.forward = </span><span class="kc">false</span>
-<a class="line-num" href="#line-664" id="line-664">664</a>        <span class="k">return</span>
-<a class="line-num" href="#line-665" id="line-665">665</a>  
-<a class="line-num" href="#line-666" id="line-666">666</a>  
-<a class="line-num" href="#line-667" id="line-667">667</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-672" id="line-672">672</a>  
+<a class="line-num" href="#line-673" id="line-673">673</a>      <span class="nv">setForward: </span><span class="nf">( _forward = true )=&gt;</span>
+<a class="line-num" href="#line-674" id="line-674">674</a>        <span class="k">if</span> <span class="nx">_forward</span>
+<a class="line-num" href="#line-675" id="line-675">675</a>          <span class="vi">@_c.forward = </span><span class="kc">true</span>
+<a class="line-num" href="#line-676" id="line-676">676</a>        <span class="k">else</span>
+<a class="line-num" href="#line-677" id="line-677">677</a>          <span class="vi">@_c.forward = </span><span class="kc">false</span>
+<a class="line-num" href="#line-678" id="line-678">678</a>        <span class="k">return</span>
+<a class="line-num" href="#line-679" id="line-679">679</a>  
+<a class="line-num" href="#line-680" id="line-680">680</a>  
+<a class="line-num" href="#line-681" id="line-681">681</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1935,15 +1976,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-676" id="line-676">676</a>  
-<a class="line-num" href="#line-677" id="line-677">677</a>      <span class="nv">getForward: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-678" id="line-678">678</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">forward</span><span class="o">?</span>
-<a class="line-num" href="#line-679" id="line-679">679</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">forward</span>
-<a class="line-num" href="#line-680" id="line-680">680</a>        <span class="k">else</span>
-<a class="line-num" href="#line-681" id="line-681">681</a>          <span class="kc">true</span>
-<a class="line-num" href="#line-682" id="line-682">682</a>  
-<a class="line-num" href="#line-683" id="line-683">683</a>  
-<a class="line-num" href="#line-684" id="line-684">684</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-690" id="line-690">690</a>  
+<a class="line-num" href="#line-691" id="line-691">691</a>      <span class="nv">getForward: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-692" id="line-692">692</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">forward</span><span class="o">?</span>
+<a class="line-num" href="#line-693" id="line-693">693</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">forward</span>
+<a class="line-num" href="#line-694" id="line-694">694</a>        <span class="k">else</span>
+<a class="line-num" href="#line-695" id="line-695">695</a>          <span class="kc">true</span>
+<a class="line-num" href="#line-696" id="line-696">696</a>  
+<a class="line-num" href="#line-697" id="line-697">697</a>  
+<a class="line-num" href="#line-698" id="line-698">698</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1976,15 +2017,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-693" id="line-693">693</a>  
-<a class="line-num" href="#line-694" id="line-694">694</a>      <span class="nv">getOrderField: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-695" id="line-695">695</a>        <span class="k">if</span> <span class="nx">@isRange</span>
-<a class="line-num" href="#line-696" id="line-696">696</a>          <span class="nx">@rangekey</span>
-<a class="line-num" href="#line-697" id="line-697">697</a>        <span class="k">else</span>
-<a class="line-num" href="#line-698" id="line-698">698</a>          <span class="nx">@hashkey</span>
-<a class="line-num" href="#line-699" id="line-699">699</a>  
-<a class="line-num" href="#line-700" id="line-700">700</a>  
-<a class="line-num" href="#line-701" id="line-701">701</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-707" id="line-707">707</a>  
+<a class="line-num" href="#line-708" id="line-708">708</a>      <span class="nv">getOrderField: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-709" id="line-709">709</a>        <span class="k">if</span> <span class="nx">@isRange</span>
+<a class="line-num" href="#line-710" id="line-710">710</a>          <span class="nx">@rangekey</span>
+<a class="line-num" href="#line-711" id="line-711">711</a>        <span class="k">else</span>
+<a class="line-num" href="#line-712" id="line-712">712</a>          <span class="nx">@hashkey</span>
+<a class="line-num" href="#line-713" id="line-713">713</a>  
+<a class="line-num" href="#line-714" id="line-714">714</a>  
+<a class="line-num" href="#line-715" id="line-715">715</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2017,15 +2058,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-710" id="line-710">710</a>  
-<a class="line-num" href="#line-711" id="line-711">711</a>      <span class="nv">getOrderBy: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-712" id="line-712">712</a>        <span class="k">if</span> <span class="nx">@forward</span>
-<a class="line-num" href="#line-713" id="line-713">713</a>          <span class="s">&quot;ORDER BY </span><span class="si">#{</span> <span class="nx">@orderfield</span> <span class="si">}</span><span class="s"> ASC&quot;</span>
-<a class="line-num" href="#line-714" id="line-714">714</a>        <span class="k">else</span>
-<a class="line-num" href="#line-715" id="line-715">715</a>          <span class="s">&quot;ORDER BY </span><span class="si">#{</span> <span class="nx">@orderfield</span> <span class="si">}</span><span class="s"> DESC&quot;</span>  
-<a class="line-num" href="#line-716" id="line-716">716</a>  
-<a class="line-num" href="#line-717" id="line-717">717</a>  
-<a class="line-num" href="#line-718" id="line-718">718</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-724" id="line-724">724</a>  
+<a class="line-num" href="#line-725" id="line-725">725</a>      <span class="nv">getOrderBy: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-726" id="line-726">726</a>        <span class="k">if</span> <span class="nx">@forward</span>
+<a class="line-num" href="#line-727" id="line-727">727</a>          <span class="s">&quot;ORDER BY </span><span class="si">#{</span> <span class="nx">@orderfield</span> <span class="si">}</span><span class="s"> ASC&quot;</span>
+<a class="line-num" href="#line-728" id="line-728">728</a>        <span class="k">else</span>
+<a class="line-num" href="#line-729" id="line-729">729</a>          <span class="s">&quot;ORDER BY </span><span class="si">#{</span> <span class="nx">@orderfield</span> <span class="si">}</span><span class="s"> DESC&quot;</span>  
+<a class="line-num" href="#line-730" id="line-730">730</a>  
+<a class="line-num" href="#line-731" id="line-731">731</a>  
+<a class="line-num" href="#line-732" id="line-732">732</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2058,18 +2099,18 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-727" id="line-727">727</a>  
-<a class="line-num" href="#line-728" id="line-728">728</a>      <span class="nv">getWhere: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-729" id="line-729">729</a>        <span class="nv">_filters = </span><span class="nx">@_c</span><span class="p">.</span><span class="nx">filters</span> <span class="o">or</span> <span class="p">[]</span>
-<a class="line-num" href="#line-730" id="line-730">730</a>        <span class="k">if</span> <span class="nx">_filters</span><span class="p">.</span><span class="nx">length</span>
-<a class="line-num" href="#line-731" id="line-731">731</a>          
-<a class="line-num" href="#line-732" id="line-732">732</a>          <span class="nx">@filterGroup</span><span class="p">(</span> <span class="kc">false</span> <span class="p">)</span>
-<a class="line-num" href="#line-733" id="line-733">733</a>          <span class="s">&quot;WHERE </span><span class="si">#{</span> <span class="nx">_filters</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="s">&quot;\n&quot;</span> <span class="p">)</span> <span class="si">}</span><span class="s">&quot;</span>
-<a class="line-num" href="#line-734" id="line-734">734</a>        <span class="k">else</span>
-<a class="line-num" href="#line-735" id="line-735">735</a>          <span class="kc">null</span>
-<a class="line-num" href="#line-736" id="line-736">736</a>  
-<a class="line-num" href="#line-737" id="line-737">737</a>  
-<a class="line-num" href="#line-738" id="line-738">738</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-741" id="line-741">741</a>  
+<a class="line-num" href="#line-742" id="line-742">742</a>      <span class="nv">getWhere: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-743" id="line-743">743</a>        <span class="nv">_filters = </span><span class="nx">@_c</span><span class="p">.</span><span class="nx">filters</span> <span class="o">or</span> <span class="p">[]</span>
+<a class="line-num" href="#line-744" id="line-744">744</a>        <span class="k">if</span> <span class="nx">_filters</span><span class="p">.</span><span class="nx">length</span>
+<a class="line-num" href="#line-745" id="line-745">745</a>          
+<a class="line-num" href="#line-746" id="line-746">746</a>          <span class="nx">@filterGroup</span><span class="p">(</span> <span class="kc">false</span> <span class="p">)</span>
+<a class="line-num" href="#line-747" id="line-747">747</a>          <span class="s">&quot;WHERE </span><span class="si">#{</span> <span class="nx">_filters</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="s">&quot;\n&quot;</span> <span class="p">)</span> <span class="si">}</span><span class="s">&quot;</span>
+<a class="line-num" href="#line-748" id="line-748">748</a>        <span class="k">else</span>
+<a class="line-num" href="#line-749" id="line-749">749</a>          <span class="kc">null</span>
+<a class="line-num" href="#line-750" id="line-750">750</a>  
+<a class="line-num" href="#line-751" id="line-751">751</a>  
+<a class="line-num" href="#line-752" id="line-752">752</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2103,16 +2144,16 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-747" id="line-747">747</a>  
-<a class="line-num" href="#line-748" id="line-748">748</a>      <span class="nv">setFields: </span><span class="nf">( _fields = @config.fields )=&gt;</span>
-<a class="line-num" href="#line-749" id="line-749">749</a>        <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">_fields</span> <span class="p">)</span>
-<a class="line-num" href="#line-750" id="line-750">750</a>          <span class="vi">@_c.fields = </span><span class="nx">_fields</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="s">&quot;, &quot;</span> <span class="p">)</span>
-<a class="line-num" href="#line-751" id="line-751">751</a>        <span class="k">else</span>
-<a class="line-num" href="#line-752" id="line-752">752</a>          <span class="vi">@_c.fields = </span><span class="nx">_fields</span>
-<a class="line-num" href="#line-753" id="line-753">753</a>        <span class="k">return</span>
-<a class="line-num" href="#line-754" id="line-754">754</a>  
-<a class="line-num" href="#line-755" id="line-755">755</a>  
-<a class="line-num" href="#line-756" id="line-756">756</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-761" id="line-761">761</a>  
+<a class="line-num" href="#line-762" id="line-762">762</a>      <span class="nv">setFields: </span><span class="nf">( _fields = @config.fields )=&gt;</span>
+<a class="line-num" href="#line-763" id="line-763">763</a>        <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">_fields</span> <span class="p">)</span>
+<a class="line-num" href="#line-764" id="line-764">764</a>          <span class="vi">@_c.fields = </span><span class="nx">_fields</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="s">&quot;, &quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-765" id="line-765">765</a>        <span class="k">else</span>
+<a class="line-num" href="#line-766" id="line-766">766</a>          <span class="vi">@_c.fields = </span><span class="nx">_fields</span>
+<a class="line-num" href="#line-767" id="line-767">767</a>        <span class="k">return</span>
+<a class="line-num" href="#line-768" id="line-768">768</a>  
+<a class="line-num" href="#line-769" id="line-769">769</a>  
+<a class="line-num" href="#line-770" id="line-770">770</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2145,15 +2186,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-765" id="line-765">765</a>  
-<a class="line-num" href="#line-766" id="line-766">766</a>      <span class="nv">getFields: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-767" id="line-767">767</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">fields</span><span class="o">?</span>
-<a class="line-num" href="#line-768" id="line-768">768</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">fields</span>
-<a class="line-num" href="#line-769" id="line-769">769</a>        <span class="k">else</span>
-<a class="line-num" href="#line-770" id="line-770">770</a>          <span class="nx">@config</span><span class="p">.</span><span class="nx">fields</span>
-<a class="line-num" href="#line-771" id="line-771">771</a>  
-<a class="line-num" href="#line-772" id="line-772">772</a>  
-<a class="line-num" href="#line-773" id="line-773">773</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-779" id="line-779">779</a>  
+<a class="line-num" href="#line-780" id="line-780">780</a>      <span class="nv">getFields: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-781" id="line-781">781</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">fields</span><span class="o">?</span>
+<a class="line-num" href="#line-782" id="line-782">782</a>          <span class="nx">@_c</span><span class="p">.</span><span class="nx">fields</span>
+<a class="line-num" href="#line-783" id="line-783">783</a>        <span class="k">else</span>
+<a class="line-num" href="#line-784" id="line-784">784</a>          <span class="nx">@config</span><span class="p">.</span><span class="nx">fields</span>
+<a class="line-num" href="#line-785" id="line-785">785</a>  
+<a class="line-num" href="#line-786" id="line-786">786</a>  
+<a class="line-num" href="#line-787" id="line-787">787</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2186,14 +2227,14 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-782" id="line-782">782</a>  
-<a class="line-num" href="#line-783" id="line-783">783</a>      <span class="nv">setLimit: </span><span class="nf">( _limit = @config.limit )=&gt;</span>
-<a class="line-num" href="#line-784" id="line-784">784</a>        <span class="vi">@_c.limit = </span><span class="nx">_limit</span>
-<a class="line-num" href="#line-785" id="line-785">785</a>        <span class="k">return</span>
-<a class="line-num" href="#line-786" id="line-786">786</a>  
-<a class="line-num" href="#line-787" id="line-787">787</a>  
-<a class="line-num" href="#line-788" id="line-788">788</a>  
-<a class="line-num" href="#line-789" id="line-789">789</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-796" id="line-796">796</a>  
+<a class="line-num" href="#line-797" id="line-797">797</a>      <span class="nv">setLimit: </span><span class="nf">( _limit = @config.limit )=&gt;</span>
+<a class="line-num" href="#line-798" id="line-798">798</a>        <span class="vi">@_c.limit = </span><span class="nx">_limit</span>
+<a class="line-num" href="#line-799" id="line-799">799</a>        <span class="k">return</span>
+<a class="line-num" href="#line-800" id="line-800">800</a>  
+<a class="line-num" href="#line-801" id="line-801">801</a>  
+<a class="line-num" href="#line-802" id="line-802">802</a>  
+<a class="line-num" href="#line-803" id="line-803">803</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2226,20 +2267,20 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-798" id="line-798">798</a>  
-<a class="line-num" href="#line-799" id="line-799">799</a>      <span class="nv">getLimit: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-800" id="line-800">800</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">limit</span><span class="o">?</span>
-<a class="line-num" href="#line-801" id="line-801">801</a>          <span class="k">if</span> <span class="vi">@_c.limit = </span><span class="mi">0</span>
-<a class="line-num" href="#line-802" id="line-802">802</a>            <span class="kc">null</span>
-<a class="line-num" href="#line-803" id="line-803">803</a>          <span class="k">else</span>
-<a class="line-num" href="#line-804" id="line-804">804</a>            <span class="s">&quot;LIMIT </span><span class="si">#{</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">limit</span> <span class="si">}</span><span class="s">&quot;</span>
-<a class="line-num" href="#line-805" id="line-805">805</a>        <span class="k">else</span>
-<a class="line-num" href="#line-806" id="line-806">806</a>          <span class="s">&quot;LIMIT </span><span class="si">#{</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">limit</span> <span class="si">}</span><span class="s">&quot;</span>
-<a class="line-num" href="#line-807" id="line-807">807</a>  
-<a class="line-num" href="#line-808" id="line-808">808</a>      
-<a class="line-num" href="#line-809" id="line-809">809</a>  
-<a class="line-num" href="#line-810" id="line-810">810</a>  
-<a class="line-num" href="#line-811" id="line-811">811</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-812" id="line-812">812</a>  
+<a class="line-num" href="#line-813" id="line-813">813</a>      <span class="nv">getLimit: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-814" id="line-814">814</a>        <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">limit</span><span class="o">?</span>
+<a class="line-num" href="#line-815" id="line-815">815</a>          <span class="k">if</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">limit</span> <span class="o">is</span> <span class="mi">0</span>
+<a class="line-num" href="#line-816" id="line-816">816</a>            <span class="kc">null</span>
+<a class="line-num" href="#line-817" id="line-817">817</a>          <span class="k">else</span>
+<a class="line-num" href="#line-818" id="line-818">818</a>            <span class="s">&quot;LIMIT </span><span class="si">#{</span> <span class="nx">@_c</span><span class="p">.</span><span class="nx">limit</span> <span class="si">}</span><span class="s">&quot;</span>
+<a class="line-num" href="#line-819" id="line-819">819</a>        <span class="k">else</span>
+<a class="line-num" href="#line-820" id="line-820">820</a>          <span class="s">&quot;LIMIT </span><span class="si">#{</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">limit</span> <span class="si">}</span><span class="s">&quot;</span>
+<a class="line-num" href="#line-821" id="line-821">821</a>  
+<a class="line-num" href="#line-822" id="line-822">822</a>      
+<a class="line-num" href="#line-823" id="line-823">823</a>  
+<a class="line-num" href="#line-824" id="line-824">824</a>  
+<a class="line-num" href="#line-825" id="line-825">825</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2252,10 +2293,10 @@
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-810" id="line-810">810</a>  
-<a class="line-num" href="#line-811" id="line-811">811</a>      
-<a class="line-num" href="#line-812" id="line-812">812</a>  
-<a class="line-num" href="#line-813" id="line-813">813</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-824" id="line-824">824</a>  
+<a class="line-num" href="#line-825" id="line-825">825</a>      
+<a class="line-num" href="#line-826" id="line-826">826</a>  
+<a class="line-num" href="#line-827" id="line-827">827</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2294,43 +2335,43 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-824" id="line-824">824</a>  
-<a class="line-num" href="#line-825" id="line-825">825</a>      <span class="nv">_genRowCreate: </span><span class="nf">( opt )=&gt;</span>
-<a class="line-num" href="#line-826" id="line-826">826</a>  
-<a class="line-num" href="#line-827" id="line-827">827</a>        <span class="nv">_opt = </span><span class="nx">@extend</span><span class="p">(</span> <span class="p">{},</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">attr</span><span class="p">,</span> <span class="nx">opt</span> <span class="p">)</span>
-<a class="line-num" href="#line-828" id="line-828">828</a>        <span class="nv">stmt = </span><span class="s">&quot;\n`</span><span class="si">#{</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">key</span> <span class="si">}</span><span class="s">` &quot;</span>
-<a class="line-num" href="#line-829" id="line-829">829</a>        <span class="nv">isString = </span><span class="kc">false</span>
-<a class="line-num" href="#line-830" id="line-830">830</a>        <span class="nv">isSet = </span><span class="kc">false</span>
-<a class="line-num" href="#line-831" id="line-831">831</a>  
-<a class="line-num" href="#line-832" id="line-832">832</a>        <span class="k">if</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&quot;A&quot;</span> <span class="o">or</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&quot;array&quot;</span>
-<a class="line-num" href="#line-833" id="line-833">833</a>          <span class="nv">isSet = </span><span class="kc">true</span>
-<a class="line-num" href="#line-834" id="line-834">834</a>          <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;text&quot;</span>
-<a class="line-num" href="#line-835" id="line-835">835</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&quot;S&quot;</span> <span class="o">or</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&quot;string&quot;</span>
-<a class="line-num" href="#line-836" id="line-836">836</a>          <span class="nv">isString = </span><span class="kc">true</span>
-<a class="line-num" href="#line-837" id="line-837">837</a>          <span class="k">if</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="o">+</span><span class="kc">Infinity</span>
-<a class="line-num" href="#line-838" id="line-838">838</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;text &quot;</span>
-<a class="line-num" href="#line-839" id="line-839">839</a>          <span class="k">else</span>
-<a class="line-num" href="#line-840" id="line-840">840</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;varchar(</span><span class="si">#{</span><span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="s">) &quot;</span>
-<a class="line-num" href="#line-841" id="line-841">841</a>        <span class="k">else</span>
-<a class="line-num" href="#line-842" id="line-842">842</a>          <span class="k">if</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">11</span>
-<a class="line-num" href="#line-843" id="line-843">843</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;bigint(</span><span class="si">#{</span><span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="s">) &quot;</span>
-<a class="line-num" href="#line-844" id="line-844">844</a>          <span class="k">else</span>
-<a class="line-num" href="#line-845" id="line-845">845</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;int(</span><span class="si">#{</span><span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="s">) &quot;</span>
-<a class="line-num" href="#line-846" id="line-846">846</a>  
-<a class="line-num" href="#line-847" id="line-847">847</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">isSet</span> <span class="o">and</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">required</span>
-<a class="line-num" href="#line-848" id="line-848">848</a>          <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;NOT NULL &quot;</span>
-<a class="line-num" href="#line-849" id="line-849">849</a>  
-<a class="line-num" href="#line-850" id="line-850">850</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">isSet</span> <span class="o">and</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">default</span><span class="o">?</span>
-<a class="line-num" href="#line-851" id="line-851">851</a>          <span class="k">if</span> <span class="nx">isString</span>
-<a class="line-num" href="#line-852" id="line-852">852</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;DEFAULT &#39;</span><span class="si">#{</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">default</span> <span class="si">}</span><span class="s">&#39;&quot;</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-838" id="line-838">838</a>  
+<a class="line-num" href="#line-839" id="line-839">839</a>      <span class="nv">_genRowCreate: </span><span class="nf">( opt )=&gt;</span>
+<a class="line-num" href="#line-840" id="line-840">840</a>  
+<a class="line-num" href="#line-841" id="line-841">841</a>        <span class="nv">_opt = </span><span class="nx">@extend</span><span class="p">(</span> <span class="p">{},</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">attr</span><span class="p">,</span> <span class="nx">opt</span> <span class="p">)</span>
+<a class="line-num" href="#line-842" id="line-842">842</a>        <span class="nv">stmt = </span><span class="s">&quot;\n`</span><span class="si">#{</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">key</span> <span class="si">}</span><span class="s">` &quot;</span>
+<a class="line-num" href="#line-843" id="line-843">843</a>        <span class="nv">isString = </span><span class="kc">false</span>
+<a class="line-num" href="#line-844" id="line-844">844</a>        <span class="nv">isSet = </span><span class="kc">false</span>
+<a class="line-num" href="#line-845" id="line-845">845</a>  
+<a class="line-num" href="#line-846" id="line-846">846</a>        <span class="k">if</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&quot;A&quot;</span> <span class="o">or</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&quot;array&quot;</span>
+<a class="line-num" href="#line-847" id="line-847">847</a>          <span class="nv">isSet = </span><span class="kc">true</span>
+<a class="line-num" href="#line-848" id="line-848">848</a>          <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;text&quot;</span>
+<a class="line-num" href="#line-849" id="line-849">849</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&quot;S&quot;</span> <span class="o">or</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&quot;string&quot;</span>
+<a class="line-num" href="#line-850" id="line-850">850</a>          <span class="nv">isString = </span><span class="kc">true</span>
+<a class="line-num" href="#line-851" id="line-851">851</a>          <span class="k">if</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="o">+</span><span class="kc">Infinity</span>
+<a class="line-num" href="#line-852" id="line-852">852</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;text &quot;</span>
 <a class="line-num" href="#line-853" id="line-853">853</a>          <span class="k">else</span>
-<a class="line-num" href="#line-854" id="line-854">854</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;DEFAULT </span><span class="si">#{</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">default</span> <span class="si">}</span><span class="s">&quot;</span>
-<a class="line-num" href="#line-855" id="line-855">855</a>  
-<a class="line-num" href="#line-856" id="line-856">856</a>        <span class="k">return</span> <span class="nx">stmt</span>
-<a class="line-num" href="#line-857" id="line-857">857</a>  
-<a class="line-num" href="#line-858" id="line-858">858</a>  
-<a class="line-num" href="#line-859" id="line-859">859</a>  
-<a class="line-num" href="#line-860" id="line-860">860</a>  </pre></div>
+<a class="line-num" href="#line-854" id="line-854">854</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;varchar(</span><span class="si">#{</span><span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="s">) &quot;</span>
+<a class="line-num" href="#line-855" id="line-855">855</a>        <span class="k">else</span>
+<a class="line-num" href="#line-856" id="line-856">856</a>          <span class="k">if</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">11</span>
+<a class="line-num" href="#line-857" id="line-857">857</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;bigint(</span><span class="si">#{</span><span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="s">) &quot;</span>
+<a class="line-num" href="#line-858" id="line-858">858</a>          <span class="k">else</span>
+<a class="line-num" href="#line-859" id="line-859">859</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;int(</span><span class="si">#{</span><span class="nx">_opt</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="s">) &quot;</span>
+<a class="line-num" href="#line-860" id="line-860">860</a>  
+<a class="line-num" href="#line-861" id="line-861">861</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">isSet</span> <span class="o">and</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">required</span>
+<a class="line-num" href="#line-862" id="line-862">862</a>          <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;NOT NULL &quot;</span>
+<a class="line-num" href="#line-863" id="line-863">863</a>  
+<a class="line-num" href="#line-864" id="line-864">864</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">isSet</span> <span class="o">and</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">default</span><span class="o">?</span>
+<a class="line-num" href="#line-865" id="line-865">865</a>          <span class="k">if</span> <span class="nx">isString</span>
+<a class="line-num" href="#line-866" id="line-866">866</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;DEFAULT &#39;</span><span class="si">#{</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">default</span> <span class="si">}</span><span class="s">&#39;&quot;</span>
+<a class="line-num" href="#line-867" id="line-867">867</a>          <span class="k">else</span>
+<a class="line-num" href="#line-868" id="line-868">868</a>            <span class="nx">stmt</span> <span class="o">+=</span> <span class="s">&quot;DEFAULT </span><span class="si">#{</span> <span class="nx">_opt</span><span class="p">.</span><span class="nx">default</span> <span class="si">}</span><span class="s">&quot;</span>
+<a class="line-num" href="#line-869" id="line-869">869</a>  
+<a class="line-num" href="#line-870" id="line-870">870</a>        <span class="k">return</span> <span class="nx">stmt</span>
+<a class="line-num" href="#line-871" id="line-871">871</a>  
+<a class="line-num" href="#line-872" id="line-872">872</a>  
+<a class="line-num" href="#line-873" id="line-873">873</a>  
+<a class="line-num" href="#line-874" id="line-874">874</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2374,14 +2415,19 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-872" id="line-872">872</a>  
-<a class="line-num" href="#line-873" id="line-873">873</a>      <span class="nv">_validateAttributes: </span><span class="nf">( isCreate, attrs )=&gt;</span>
-<a class="line-num" href="#line-874" id="line-874">874</a>        <span class="nv">attrs = </span><span class="nx">_</span><span class="p">.</span><span class="nx">pick</span><span class="p">(</span> <span class="nx">attrs</span><span class="p">,</span> <span class="nx">@attrKeys</span> <span class="p">)</span>
-<a class="line-num" href="#line-875" id="line-875">875</a>        <span class="nx">@log</span> <span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;validateAttributes&quot;</span><span class="p">,</span> <span class="nx">attrs</span>
-<a class="line-num" href="#line-876" id="line-876">876</a>        <span class="k">return</span> <span class="nx">attrs</span>
-<a class="line-num" href="#line-877" id="line-877">877</a>  
-<a class="line-num" href="#line-878" id="line-878">878</a>  
-<a class="line-num" href="#line-879" id="line-879">879</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-886" id="line-886">886</a>  
+<a class="line-num" href="#line-887" id="line-887">887</a>      <span class="nv">_validateAttributes: </span><span class="nf">( isCreate, attrs )=&gt;</span>
+<a class="line-num" href="#line-888" id="line-888">888</a>        <span class="nv">_keys = </span><span class="nx">@attrKeys</span>
+<a class="line-num" href="#line-889" id="line-889">889</a>        <span class="nv">_omited = </span><span class="nx">_</span><span class="p">.</span><span class="nx">difference</span><span class="p">(</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span> <span class="nx">attrs</span> <span class="p">),</span><span class="nx">_keys</span> <span class="p">)</span>
+<a class="line-num" href="#line-890" id="line-890">890</a>        <span class="nv">attrs = </span><span class="nx">_</span><span class="p">.</span><span class="nx">pick</span><span class="p">(</span> <span class="nx">attrs</span><span class="p">,</span> <span class="nx">_keys</span> <span class="p">)</span>
+<a class="line-num" href="#line-891" id="line-891">891</a>        <span class="k">if</span> <span class="nx">_omited</span><span class="p">.</span><span class="nx">length</span>
+<a class="line-num" href="#line-892" id="line-892">892</a>          <span class="nx">@log</span> <span class="s">&quot;warning&quot;</span><span class="p">,</span> <span class="s">&quot;validateAttributes&quot;</span><span class="p">,</span> <span class="s">&quot;You tried to save to attributed not defined in the model config&quot;</span><span class="p">,</span> <span class="nx">_omited</span><span class="p">,</span> <span class="nx">attrs</span>
+<a class="line-num" href="#line-893" id="line-893">893</a>        <span class="k">else</span>
+<a class="line-num" href="#line-894" id="line-894">894</a>          <span class="nx">@log</span> <span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;validateAttributes&quot;</span><span class="p">,</span> <span class="nx">attrs</span>
+<a class="line-num" href="#line-895" id="line-895">895</a>        <span class="k">return</span> <span class="nx">attrs</span>
+<a class="line-num" href="#line-896" id="line-896">896</a>  
+<a class="line-num" href="#line-897" id="line-897">897</a>  
+<a class="line-num" href="#line-898" id="line-898">898</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2420,13 +2466,13 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-890" id="line-890">890</a>  
-<a class="line-num" href="#line-891" id="line-891">891</a>      <span class="nv">_getAttrConfig: </span><span class="nf">( key )=&gt;</span>
-<a class="line-num" href="#line-892" id="line-892">892</a>        <span class="k">for</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">@attrs</span>
-<a class="line-num" href="#line-893" id="line-893">893</a>          <span class="k">return</span> <span class="nx">attr</span> <span class="k">if</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">key</span> <span class="o">is</span> <span class="nx">key</span>
-<a class="line-num" href="#line-894" id="line-894">894</a>  
-<a class="line-num" href="#line-895" id="line-895">895</a>  
-<a class="line-num" href="#line-896" id="line-896">896</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-909" id="line-909">909</a>  
+<a class="line-num" href="#line-910" id="line-910">910</a>      <span class="nv">_getAttrConfig: </span><span class="nf">( key )=&gt;</span>
+<a class="line-num" href="#line-911" id="line-911">911</a>        <span class="k">for</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">@attrs</span>
+<a class="line-num" href="#line-912" id="line-912">912</a>          <span class="k">return</span> <span class="nx">attr</span> <span class="k">if</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">key</span> <span class="o">is</span> <span class="nx">key</span>
+<a class="line-num" href="#line-913" id="line-913">913</a>  
+<a class="line-num" href="#line-914" id="line-914">914</a>  
+<a class="line-num" href="#line-915" id="line-915">915</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2466,62 +2512,10 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-907" id="line-907">907</a>  
-<a class="line-num" href="#line-908" id="line-908">908</a>      <span class="nv">_getSaveVariables: </span><span class="nf">( attributes )=&gt;</span> 
-<a class="line-num" href="#line-909" id="line-909">909</a>        <span class="nv">_keys = </span><span class="p">[]</span>
-<a class="line-num" href="#line-910" id="line-910">910</a>        <span class="nv">_vals = </span><span class="p">[]</span>
-<a class="line-num" href="#line-911" id="line-911">911</a>  
-<a class="line-num" href="#line-912" id="line-912">912</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-76" id="section-76">&#182;</a>
-</div>
-<p>loop through all attributes</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-911" id="line-911">911</a>  
-<a class="line-num" href="#line-912" id="line-912">912</a>        <span class="k">for</span> <span class="nx">_key</span><span class="p">,</span> <span class="nx">_val</span> <span class="k">of</span> <span class="nx">attributes</span>
-<a class="line-num" href="#line-913" id="line-913">913</a>          <span class="nv">_cnf = </span><span class="nx">@_getAttrConfig</span><span class="p">(</span> <span class="nx">_key</span> <span class="p">)</span>
-<a class="line-num" href="#line-914" id="line-914">914</a>          <span class="k">if</span> <span class="nx">_cnf</span>
-<a class="line-num" href="#line-915" id="line-915">915</a>            <span class="k">switch</span> <span class="nx">_cnf</span><span class="p">.</span><span class="nx">type</span>
-<a class="line-num" href="#line-916" id="line-916">916</a>              <span class="k">when</span> <span class="s">&quot;string&quot;</span><span class="p">,</span> <span class="s">&quot;number&quot;</span><span class="p">,</span> <span class="s">&quot;S&quot;</span><span class="p">,</span> <span class="s">&quot;N&quot;</span>
-<a class="line-num" href="#line-917" id="line-917">917</a>  
-<a class="line-num" href="#line-918" id="line-918">918</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-77" id="section-77">&#182;</a>
-</div>
-<p>create regular values</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-917" id="line-917">917</a>  
-<a class="line-num" href="#line-918" id="line-918">918</a>                <span class="nx">_keys</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_key</span> <span class="p">)</span>
-<a class="line-num" href="#line-919" id="line-919">919</a>                <span class="nx">_vals</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">_val</span> <span class="p">)</span> <span class="p">)</span>
-<a class="line-num" href="#line-920" id="line-920">920</a>              <span class="k">when</span> <span class="s">&quot;array&quot;</span><span class="p">,</span> <span class="s">&quot;A&quot;</span>
-<a class="line-num" href="#line-921" id="line-921">921</a>  
-<a class="line-num" href="#line-922" id="line-922">922</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-78" id="section-78">&#182;</a>
-</div>
-<p>create values with the set functions.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-921" id="line-921">921</a>  
-<a class="line-num" href="#line-922" id="line-922">922</a>                <span class="nv">_setval = </span><span class="nx">@_generateSetCommand</span><span class="p">(</span> <span class="nx">_key</span><span class="p">,</span> <span class="nx">_val</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">sqlSetDelimiter</span> <span class="p">)</span>
-<a class="line-num" href="#line-923" id="line-923">923</a>                <span class="k">if</span> <span class="nx">_setval</span><span class="o">?</span>
-<a class="line-num" href="#line-924" id="line-924">924</a>                  <span class="nx">_keys</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_key</span> <span class="p">)</span>
-<a class="line-num" href="#line-925" id="line-925">925</a>                  <span class="nx">_vals</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_setval</span> <span class="p">)</span>
-<a class="line-num" href="#line-926" id="line-926">926</a>                <span class="nx">@log</span> <span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;setCommand&quot;</span><span class="p">,</span> <span class="nx">_setval</span><span class="p">,</span> <span class="nx">_val</span><span class="p">,</span> <span class="nx">_key</span>
-<a class="line-num" href="#line-927" id="line-927">927</a>        <span class="k">return</span> <span class="p">[</span> <span class="nx">_keys</span><span class="p">,</span> <span class="nx">_vals</span> <span class="p">]</span>
-<a class="line-num" href="#line-928" id="line-928">928</a>        <span class="k">return</span> <span class="kc">null</span>
-<a class="line-num" href="#line-929" id="line-929">929</a>  
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-926" id="line-926">926</a>  
+<a class="line-num" href="#line-927" id="line-927">927</a>      <span class="nv">_getSaveVariables: </span><span class="nf">( attributes )=&gt;</span> 
+<a class="line-num" href="#line-928" id="line-928">928</a>        <span class="nv">_keys = </span><span class="p">[]</span>
+<a class="line-num" href="#line-929" id="line-929">929</a>        <span class="nv">_vals = </span><span class="p">[]</span>
 <a class="line-num" href="#line-930" id="line-930">930</a>  
 <a class="line-num" href="#line-931" id="line-931">931</a>  </pre></div>
         </td>
@@ -2529,18 +2523,70 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
+  <a class="pilcrow" href="#section-77" id="section-77">&#182;</a>
+</div>
+<p>loop through all attributes</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-930" id="line-930">930</a>  
+<a class="line-num" href="#line-931" id="line-931">931</a>        <span class="k">for</span> <span class="nx">_key</span><span class="p">,</span> <span class="nx">_val</span> <span class="k">of</span> <span class="nx">attributes</span>
+<a class="line-num" href="#line-932" id="line-932">932</a>          <span class="nv">_cnf = </span><span class="nx">@_getAttrConfig</span><span class="p">(</span> <span class="nx">_key</span> <span class="p">)</span>
+<a class="line-num" href="#line-933" id="line-933">933</a>          <span class="k">if</span> <span class="nx">_cnf</span>
+<a class="line-num" href="#line-934" id="line-934">934</a>            <span class="k">switch</span> <span class="nx">_cnf</span><span class="p">.</span><span class="nx">type</span>
+<a class="line-num" href="#line-935" id="line-935">935</a>              <span class="k">when</span> <span class="s">&quot;string&quot;</span><span class="p">,</span> <span class="s">&quot;number&quot;</span><span class="p">,</span> <span class="s">&quot;S&quot;</span><span class="p">,</span> <span class="s">&quot;N&quot;</span>
+<a class="line-num" href="#line-936" id="line-936">936</a>  
+<a class="line-num" href="#line-937" id="line-937">937</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-78" id="section-78">&#182;</a>
+</div>
+<p>create regular values</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-936" id="line-936">936</a>  
+<a class="line-num" href="#line-937" id="line-937">937</a>                <span class="nx">_keys</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_key</span> <span class="p">)</span>
+<a class="line-num" href="#line-938" id="line-938">938</a>                <span class="nx">_vals</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">_val</span> <span class="p">)</span> <span class="p">)</span>
+<a class="line-num" href="#line-939" id="line-939">939</a>              <span class="k">when</span> <span class="s">&quot;array&quot;</span><span class="p">,</span> <span class="s">&quot;A&quot;</span>
+<a class="line-num" href="#line-940" id="line-940">940</a>  
+<a class="line-num" href="#line-941" id="line-941">941</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
   <a class="pilcrow" href="#section-79" id="section-79">&#182;</a>
+</div>
+<p>create values with the set functions.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-940" id="line-940">940</a>  
+<a class="line-num" href="#line-941" id="line-941">941</a>                <span class="nv">_setval = </span><span class="nx">@_generateSetCommand</span><span class="p">(</span> <span class="nx">_key</span><span class="p">,</span> <span class="nx">_val</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">sqlSetDelimiter</span> <span class="p">)</span>
+<a class="line-num" href="#line-942" id="line-942">942</a>                <span class="k">if</span> <span class="nx">_setval</span><span class="o">?</span>
+<a class="line-num" href="#line-943" id="line-943">943</a>                  <span class="nx">_keys</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_key</span> <span class="p">)</span>
+<a class="line-num" href="#line-944" id="line-944">944</a>                  <span class="nx">_vals</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_setval</span> <span class="p">)</span>
+<a class="line-num" href="#line-945" id="line-945">945</a>                <span class="nx">@log</span> <span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;setCommand&quot;</span><span class="p">,</span> <span class="nx">_setval</span><span class="p">,</span> <span class="nx">_val</span><span class="p">,</span> <span class="nx">_key</span>
+<a class="line-num" href="#line-946" id="line-946">946</a>        <span class="k">return</span> <span class="p">[</span> <span class="nx">_keys</span><span class="p">,</span> <span class="nx">_vals</span> <span class="p">]</span>
+<a class="line-num" href="#line-947" id="line-947">947</a>        <span class="k">return</span> <span class="kc">null</span>
+<a class="line-num" href="#line-948" id="line-948">948</a>  
+<a class="line-num" href="#line-949" id="line-949">949</a>  
+<a class="line-num" href="#line-950" id="line-950">950</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-80" id="section-80">&#182;</a>
 </div>
 <p><strong>_generateSetCommandTmpls</strong> <em>Object</em> Underscore templates for the set sql commands. Used by the method <code>_generateSetCommand</code></p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-930" id="line-930">930</a>  
-<a class="line-num" href="#line-931" id="line-931">931</a>      <span class="nv">_generateSetCommandTmpls:</span>
-<a class="line-num" href="#line-932" id="line-932">932</a>        <span class="nv">add: </span><span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="s">&#39;IF( INSTR( &lt;%= set %&gt;,&quot;&lt;%= val %&gt;&lt;%= dlm %&gt;&quot;) = 0, &quot;&lt;%= val %&gt;&lt;%= dlm %&gt;&quot;, &quot;&quot; )&#39;</span> <span class="p">)</span>
-<a class="line-num" href="#line-933" id="line-933">933</a>        <span class="nv">rem: </span><span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="s">&#39;REPLACE( &lt;%= set %&gt;, &quot;&lt;%= dlm %&gt;&lt;%= val %&gt;&lt;%= dlm %&gt;&quot;, &quot;&lt;%= dlm %&gt;&quot;)&#39;</span> <span class="p">)</span>
-<a class="line-num" href="#line-934" id="line-934">934</a>        <span class="nv">set: </span><span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="s">&#39;IF( &lt;%= key %&gt; is NULL,&quot;&lt;%= dlm %&gt;&quot;, &lt;%= key %&gt;)&#39;</span> <span class="p">)</span>
-<a class="line-num" href="#line-935" id="line-935">935</a>  
-<a class="line-num" href="#line-936" id="line-936">936</a>  
-<a class="line-num" href="#line-937" id="line-937">937</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-949" id="line-949">949</a>  
+<a class="line-num" href="#line-950" id="line-950">950</a>      <span class="nv">_generateSetCommandTmpls:</span>
+<a class="line-num" href="#line-951" id="line-951">951</a>        <span class="nv">add: </span><span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="s">&#39;IF( INSTR( &lt;%= set %&gt;,&quot;&lt;%= val %&gt;&lt;%= dlm %&gt;&quot;) = 0, &quot;&lt;%= val %&gt;&lt;%= dlm %&gt;&quot;, &quot;&quot; )&#39;</span> <span class="p">)</span>
+<a class="line-num" href="#line-952" id="line-952">952</a>        <span class="nv">rem: </span><span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="s">&#39;REPLACE( &lt;%= set %&gt;, &quot;&lt;%= dlm %&gt;&lt;%= val %&gt;&lt;%= dlm %&gt;&quot;, &quot;&lt;%= dlm %&gt;&quot;)&#39;</span> <span class="p">)</span>
+<a class="line-num" href="#line-953" id="line-953">953</a>        <span class="nv">set: </span><span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="s">&#39;IF( &lt;%= key %&gt; is NULL,&quot;&lt;%= dlm %&gt;&quot;, &lt;%= key %&gt;)&#39;</span> <span class="p">)</span>
+<a class="line-num" href="#line-954" id="line-954">954</a>  
+<a class="line-num" href="#line-955" id="line-955">955</a>  
+<a class="line-num" href="#line-956" id="line-956">956</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2592,27 +2638,12 @@ How to handle set within a sql field is described by this <a href="https://gist.
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-951" id="line-951">951</a>  
-<a class="line-num" href="#line-952" id="line-952">952</a>      <span class="nv">_generateSetCommand: </span><span class="nf">( key, inp, dlm )=&gt;</span>
-<a class="line-num" href="#line-953" id="line-953">953</a>        <span class="nx">@log</span> <span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;_generateSetCommand&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">inp</span>
-<a class="line-num" href="#line-954" id="line-954">954</a>        
-<a class="line-num" href="#line-955" id="line-955">955</a>  
-<a class="line-num" href="#line-956" id="line-956">956</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-81" id="section-81">&#182;</a>
-</div>
-<p>set empty</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-955" id="line-955">955</a>  
-<a class="line-num" href="#line-956" id="line-956">956</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">inp</span><span class="o">?</span>
-<a class="line-num" href="#line-957" id="line-957">957</a>          <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="p">)</span>
-<a class="line-num" href="#line-958" id="line-958">958</a>        
-<a class="line-num" href="#line-959" id="line-959">959</a>  
-<a class="line-num" href="#line-960" id="line-960">960</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-970" id="line-970">970</a>  
+<a class="line-num" href="#line-971" id="line-971">971</a>      <span class="nv">_generateSetCommand: </span><span class="nf">( key, inp, dlm )=&gt;</span>
+<a class="line-num" href="#line-972" id="line-972">972</a>        <span class="nx">@log</span> <span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;_generateSetCommand&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">inp</span>
+<a class="line-num" href="#line-973" id="line-973">973</a>        
+<a class="line-num" href="#line-974" id="line-974">974</a>  
+<a class="line-num" href="#line-975" id="line-975">975</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2620,82 +2651,12 @@ How to handle set within a sql field is described by this <a href="https://gist.
 <div class="pilwrap">
   <a class="pilcrow" href="#section-82" id="section-82">&#182;</a>
 </div>
-<p>set by array</p>
+<p>set empty</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-959" id="line-959">959</a>  
-<a class="line-num" href="#line-960" id="line-960">960</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">inp</span> <span class="p">)</span>
-<a class="line-num" href="#line-961" id="line-961">961</a>          <span class="k">if</span> <span class="o">not</span> <span class="nx">inp</span><span class="p">.</span><span class="nx">length</span> 
-<a class="line-num" href="#line-962" id="line-962">962</a>  
-<a class="line-num" href="#line-963" id="line-963">963</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-83" id="section-83">&#182;</a>
-</div>
-<p>set empty by empty array</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-962" id="line-962">962</a>  
-<a class="line-num" href="#line-963" id="line-963">963</a>            <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="p">)</span>
-<a class="line-num" href="#line-964" id="line-964">964</a>          <span class="k">else</span>
-<a class="line-num" href="#line-965" id="line-965">965</a>  
-<a class="line-num" href="#line-966" id="line-966">966</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-84" id="section-84">&#182;</a>
-</div>
-<p>reset by array</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-965" id="line-965">965</a>  
-<a class="line-num" href="#line-966" id="line-966">966</a>            <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="o">+</span> <span class="nx">inp</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="nx">dlm</span> <span class="p">)</span> <span class="o">+</span> <span class="nx">dlm</span> <span class="p">)</span>
-<a class="line-num" href="#line-967" id="line-967">967</a>  
-<a class="line-num" href="#line-968" id="line-968">968</a>  
-<a class="line-num" href="#line-969" id="line-969">969</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-85" id="section-85">&#182;</a>
-</div>
-<p>set by object</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-968" id="line-968">968</a>  
-<a class="line-num" href="#line-969" id="line-969">969</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span> <span class="nx">inp</span> <span class="p">)</span>
-<a class="line-num" href="#line-970" id="line-970">970</a>          <span class="k">if</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$reset&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-971" id="line-971">971</a>            <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$reset&quot;</span> <span class="p">]</span> <span class="p">)</span>
-<a class="line-num" href="#line-972" id="line-972">972</a>  
-<a class="line-num" href="#line-973" id="line-973">973</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-86" id="section-86">&#182;</a>
-</div>
-<p>reset by $reset with an array</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-972" id="line-972">972</a>  
-<a class="line-num" href="#line-973" id="line-973">973</a>              <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="o">+</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$reset&quot;</span> <span class="p">].</span><span class="nx">join</span><span class="p">(</span> <span class="nx">dlm</span> <span class="p">)</span> <span class="o">+</span> <span class="nx">dlm</span> <span class="p">)</span>
-<a class="line-num" href="#line-974" id="line-974">974</a>            <span class="k">else</span>
-<a class="line-num" href="#line-975" id="line-975">975</a>  
-<a class="line-num" href="#line-976" id="line-976">976</a>  </pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-87" id="section-87">&#182;</a>
-</div>
-<p>reset by $reset with a single value</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-975" id="line-975">975</a>  
-<a class="line-num" href="#line-976" id="line-976">976</a>              <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="o">+</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$reset&quot;</span> <span class="p">]</span> <span class="o">+</span> <span class="nx">dlm</span> <span class="p">)</span>
-<a class="line-num" href="#line-977" id="line-977">977</a>          <span class="k">else</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-974" id="line-974">974</a>  
+<a class="line-num" href="#line-975" id="line-975">975</a>        <span class="k">if</span> <span class="o">not</span> <span class="nx">inp</span><span class="o">?</span>
+<a class="line-num" href="#line-976" id="line-976">976</a>          <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-977" id="line-977">977</a>        
 <a class="line-num" href="#line-978" id="line-978">978</a>  
 <a class="line-num" href="#line-979" id="line-979">979</a>  </pre></div>
         </td>
@@ -2703,27 +2664,27 @@ How to handle set within a sql field is described by this <a href="https://gist.
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-88" id="section-88">&#182;</a>
+  <a class="pilcrow" href="#section-83" id="section-83">&#182;</a>
 </div>
-<p>run $add or $rem command</p>
+<p>set by array</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-978" id="line-978">978</a>  
-<a class="line-num" href="#line-979" id="line-979">979</a>            
-<a class="line-num" href="#line-980" id="line-980">980</a>  
-<a class="line-num" href="#line-981" id="line-981">981</a>  </pre></div>
+<a class="line-num" href="#line-979" id="line-979">979</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">inp</span> <span class="p">)</span>
+<a class="line-num" href="#line-980" id="line-980">980</a>          <span class="k">if</span> <span class="o">not</span> <span class="nx">inp</span><span class="p">.</span><span class="nx">length</span> 
+<a class="line-num" href="#line-981" id="line-981">981</a>  
+<a class="line-num" href="#line-982" id="line-982">982</a>  </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-89" id="section-89">&#182;</a>
+  <a class="pilcrow" href="#section-84" id="section-84">&#182;</a>
 </div>
-<p>define some vars</p>
+<p>set empty by empty array</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-980" id="line-980">980</a>  
-<a class="line-num" href="#line-981" id="line-981">981</a>            <span class="nv">added = </span><span class="p">[]</span>
-<a class="line-num" href="#line-982" id="line-982">982</a>            <span class="nv">usedRem = </span><span class="kc">false</span>
-<a class="line-num" href="#line-983" id="line-983">983</a>  
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-981" id="line-981">981</a>  
+<a class="line-num" href="#line-982" id="line-982">982</a>            <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-983" id="line-983">983</a>          <span class="k">else</span>
 <a class="line-num" href="#line-984" id="line-984">984</a>  
 <a class="line-num" href="#line-985" id="line-985">985</a>  </pre></div>
         </td>
@@ -2731,12 +2692,12 @@ How to handle set within a sql field is described by this <a href="https://gist.
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-90" id="section-90">&#182;</a>
+  <a class="pilcrow" href="#section-85" id="section-85">&#182;</a>
 </div>
-<p>convert the key to a expression with the check for an empty field, because a field of type TEXT cannot have a default</p>
+<p>reset by array</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-984" id="line-984">984</a>  
-<a class="line-num" href="#line-985" id="line-985">985</a>            <span class="nv">_set = </span><span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span> <span class="nx">key</span><span class="o">:</span><span class="nx">key</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-985" id="line-985">985</a>            <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="o">+</span> <span class="nx">inp</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="nx">dlm</span> <span class="p">)</span> <span class="o">+</span> <span class="nx">dlm</span> <span class="p">)</span>
 <a class="line-num" href="#line-986" id="line-986">986</a>  
 <a class="line-num" href="#line-987" id="line-987">987</a>  
 <a class="line-num" href="#line-988" id="line-988">988</a>  </pre></div>
@@ -2745,55 +2706,55 @@ How to handle set within a sql field is described by this <a href="https://gist.
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-91" id="section-91">&#182;</a>
+  <a class="pilcrow" href="#section-86" id="section-86">&#182;</a>
 </div>
-<p>prefix CONCAT content with the current value</p>
+<p>set by object</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-987" id="line-987">987</a>  
-<a class="line-num" href="#line-988" id="line-988">988</a>            <span class="nv">_add = </span><span class="p">[</span> <span class="nx">_set</span> <span class="p">]</span>
-<a class="line-num" href="#line-989" id="line-989">989</a>            
-<a class="line-num" href="#line-990" id="line-990">990</a>  
-<a class="line-num" href="#line-991" id="line-991">991</a>  </pre></div>
+<a class="line-num" href="#line-988" id="line-988">988</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span> <span class="nx">inp</span> <span class="p">)</span>
+<a class="line-num" href="#line-989" id="line-989">989</a>          <span class="k">if</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$reset&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-990" id="line-990">990</a>            <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$reset&quot;</span> <span class="p">]</span> <span class="p">)</span>
+<a class="line-num" href="#line-991" id="line-991">991</a>  
+<a class="line-num" href="#line-992" id="line-992">992</a>  </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-92" id="section-92">&#182;</a>
+  <a class="pilcrow" href="#section-87" id="section-87">&#182;</a>
 </div>
-<p>$add command by concat the current value with the new value expressions</p>
+<p>reset by $reset with an array</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-990" id="line-990">990</a>  
-<a class="line-num" href="#line-991" id="line-991">991</a>            <span class="k">if</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">]</span><span class="o">?</span>
-<a class="line-num" href="#line-992" id="line-992">992</a>  
-<a class="line-num" href="#line-993" id="line-993">993</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-991" id="line-991">991</a>  
+<a class="line-num" href="#line-992" id="line-992">992</a>              <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="o">+</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$reset&quot;</span> <span class="p">].</span><span class="nx">join</span><span class="p">(</span> <span class="nx">dlm</span> <span class="p">)</span> <span class="o">+</span> <span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-993" id="line-993">993</a>            <span class="k">else</span>
+<a class="line-num" href="#line-994" id="line-994">994</a>  
+<a class="line-num" href="#line-995" id="line-995">995</a>  </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-93" id="section-93">&#182;</a>
+  <a class="pilcrow" href="#section-88" id="section-88">&#182;</a>
 </div>
-<p>if the content is an array generate multiple add statements</p>
+<p>reset by $reset with a single value</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-992" id="line-992">992</a>  
-<a class="line-num" href="#line-993" id="line-993">993</a>              <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">]</span> <span class="p">)</span>
-<a class="line-num" href="#line-994" id="line-994">994</a>                <span class="k">for</span> <span class="nx">_inp</span> <span class="k">in</span> <span class="nx">_</span><span class="p">.</span><span class="nx">uniq</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">]</span> <span class="p">)</span>
-<a class="line-num" href="#line-995" id="line-995">995</a>  
-<a class="line-num" href="#line-996" id="line-996">996</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-994" id="line-994">994</a>  
+<a class="line-num" href="#line-995" id="line-995">995</a>              <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="o">+</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$reset&quot;</span> <span class="p">]</span> <span class="o">+</span> <span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-996" id="line-996">996</a>          <span class="k">else</span>
+<a class="line-num" href="#line-997" id="line-997">997</a>  
+<a class="line-num" href="#line-998" id="line-998">998</a>  </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-94" id="section-94">&#182;</a>
+  <a class="pilcrow" href="#section-89" id="section-89">&#182;</a>
 </div>
-<p>set added flag to detect any changes</p>
+<p>run $add or $rem command</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-995" id="line-995">995</a>  
-<a class="line-num" href="#line-996" id="line-996">996</a>                  <span class="nx">added</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_inp</span> <span class="p">)</span>
-<a class="line-num" href="#line-997" id="line-997">997</a>                  <span class="nx">_add</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span> <span class="nx">val</span><span class="o">:</span><span class="nx">_inp</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span><span class="nx">_set</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span> <span class="p">)</span>
-<a class="line-num" href="#line-998" id="line-998">998</a>              <span class="k">else</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-997" id="line-997">997</a>  
+<a class="line-num" href="#line-998" id="line-998">998</a>            
 <a class="line-num" href="#line-999" id="line-999">999</a>  
 <a class="line-num" href="#line-1000" id="line-1000">1000</a>  </pre></div>
         </td>
@@ -2801,14 +2762,14 @@ How to handle set within a sql field is described by this <a href="https://gist.
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-95" id="section-95">&#182;</a>
+  <a class="pilcrow" href="#section-90" id="section-90">&#182;</a>
 </div>
-<p>set added to detect any changes</p>
+<p>define some vars</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-999" id="line-999">999</a>  
-<a class="line-num" href="#line-1000" id="line-1000">1000</a>                <span class="nx">added</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">]</span> <span class="p">)</span>
-<a class="line-num" href="#line-1001" id="line-1001">1001</a>                <span class="nx">_add</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span> <span class="nx">val</span><span class="o">:</span><span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">],</span> <span class="nx">set</span><span class="o">:</span><span class="nx">_set</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span> <span class="p">)</span>
-<a class="line-num" href="#line-1002" id="line-1002">1002</a>              
+<a class="line-num" href="#line-1000" id="line-1000">1000</a>            <span class="nv">added = </span><span class="p">[]</span>
+<a class="line-num" href="#line-1001" id="line-1001">1001</a>            <span class="nv">usedRem = </span><span class="kc">false</span>
+<a class="line-num" href="#line-1002" id="line-1002">1002</a>  
 <a class="line-num" href="#line-1003" id="line-1003">1003</a>  
 <a class="line-num" href="#line-1004" id="line-1004">1004</a>  </pre></div>
         </td>
@@ -2816,13 +2777,13 @@ How to handle set within a sql field is described by this <a href="https://gist.
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-96" id="section-96">&#182;</a>
+  <a class="pilcrow" href="#section-91" id="section-91">&#182;</a>
 </div>
-<p>if any add has been generated overwritethe new set command</p>
+<p>convert the key to a expression with the check for an empty field, because a field of type TEXT cannot have a default</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1003" id="line-1003">1003</a>  
-<a class="line-num" href="#line-1004" id="line-1004">1004</a>              <span class="nv">_set = </span><span class="s">&quot;CONCAT( </span><span class="si">#{</span> <span class="nx">_add</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="s">&quot;, &quot;</span> <span class="p">)</span> <span class="si">}</span><span class="s"> )&quot;</span> <span class="k">if</span> <span class="nx">_add</span><span class="p">.</span><span class="nx">length</span>
-<a class="line-num" href="#line-1005" id="line-1005">1005</a>            
+<a class="line-num" href="#line-1004" id="line-1004">1004</a>            <span class="nv">_set = </span><span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span> <span class="nx">key</span><span class="o">:</span><span class="nx">key</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-1005" id="line-1005">1005</a>  
 <a class="line-num" href="#line-1006" id="line-1006">1006</a>  
 <a class="line-num" href="#line-1007" id="line-1007">1007</a>  </pre></div>
         </td>
@@ -2830,26 +2791,26 @@ How to handle set within a sql field is described by this <a href="https://gist.
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-97" id="section-97">&#182;</a>
+  <a class="pilcrow" href="#section-92" id="section-92">&#182;</a>
 </div>
-<p>$rem command by nesting replace commands</p>
+<p>prefix CONCAT content with the current value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1006" id="line-1006">1006</a>  
-<a class="line-num" href="#line-1007" id="line-1007">1007</a>            <span class="k">if</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$rem&quot;</span> <span class="p">]</span><span class="o">?</span>
-<a class="line-num" href="#line-1008" id="line-1008">1008</a>  
-<a class="line-num" href="#line-1009" id="line-1009">1009</a>  </pre></div>
+<a class="line-num" href="#line-1007" id="line-1007">1007</a>            <span class="nv">_add = </span><span class="p">[</span> <span class="nx">_set</span> <span class="p">]</span>
+<a class="line-num" href="#line-1008" id="line-1008">1008</a>            
+<a class="line-num" href="#line-1009" id="line-1009">1009</a>  
+<a class="line-num" href="#line-1010" id="line-1010">1010</a>  </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-98" id="section-98">&#182;</a>
+  <a class="pilcrow" href="#section-93" id="section-93">&#182;</a>
 </div>
-<p>if the content is an array generate multiple rem statements</p>
+<p>$add command by concat the current value with the new value expressions</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1008" id="line-1008">1008</a>  
-<a class="line-num" href="#line-1009" id="line-1009">1009</a>              <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$rem&quot;</span> <span class="p">]</span> <span class="p">)</span>
-<a class="line-num" href="#line-1010" id="line-1010">1010</a>                <span class="k">for</span> <span class="nx">_inp</span> <span class="k">in</span> <span class="nx">_</span><span class="p">.</span><span class="nx">difference</span><span class="p">(</span> <span class="nx">_</span><span class="p">.</span><span class="nx">uniq</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$rem&quot;</span> <span class="p">]</span> <span class="p">),</span> <span class="nx">added</span> <span class="p">)</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1009" id="line-1009">1009</a>  
+<a class="line-num" href="#line-1010" id="line-1010">1010</a>            <span class="k">if</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">]</span><span class="o">?</span>
 <a class="line-num" href="#line-1011" id="line-1011">1011</a>  
 <a class="line-num" href="#line-1012" id="line-1012">1012</a>  </pre></div>
         </td>
@@ -2857,16 +2818,86 @@ How to handle set within a sql field is described by this <a href="https://gist.
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-99" id="section-99">&#182;</a>
+  <a class="pilcrow" href="#section-94" id="section-94">&#182;</a>
 </div>
-<p>set usedRem to detect any removes</p>
+<p>if the content is an array generate multiple add statements</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1011" id="line-1011">1011</a>  
-<a class="line-num" href="#line-1012" id="line-1012">1012</a>                  <span class="nv">usedRem = </span><span class="kc">true</span>
-<a class="line-num" href="#line-1013" id="line-1013">1013</a>                  <span class="nv">_set = </span><span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">rem</span><span class="p">(</span> <span class="nx">val</span><span class="o">:</span><span class="nx">_inp</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span><span class="nx">_set</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span>
-<a class="line-num" href="#line-1014" id="line-1014">1014</a>              <span class="k">else</span>
-<a class="line-num" href="#line-1015" id="line-1015">1015</a>  
-<a class="line-num" href="#line-1016" id="line-1016">1016</a>  </pre></div>
+<a class="line-num" href="#line-1012" id="line-1012">1012</a>              <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">]</span> <span class="p">)</span>
+<a class="line-num" href="#line-1013" id="line-1013">1013</a>                <span class="k">for</span> <span class="nx">_inp</span> <span class="k">in</span> <span class="nx">_</span><span class="p">.</span><span class="nx">uniq</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">]</span> <span class="p">)</span>
+<a class="line-num" href="#line-1014" id="line-1014">1014</a>  
+<a class="line-num" href="#line-1015" id="line-1015">1015</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-95" id="section-95">&#182;</a>
+</div>
+<p>set added flag to detect any changes</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1014" id="line-1014">1014</a>  
+<a class="line-num" href="#line-1015" id="line-1015">1015</a>                  <span class="nx">added</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">_inp</span> <span class="p">)</span>
+<a class="line-num" href="#line-1016" id="line-1016">1016</a>                  <span class="nx">_add</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span> <span class="nx">val</span><span class="o">:</span><span class="nx">_inp</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span><span class="nx">_set</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span> <span class="p">)</span>
+<a class="line-num" href="#line-1017" id="line-1017">1017</a>              <span class="k">else</span>
+<a class="line-num" href="#line-1018" id="line-1018">1018</a>  
+<a class="line-num" href="#line-1019" id="line-1019">1019</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-96" id="section-96">&#182;</a>
+</div>
+<p>set added to detect any changes</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1018" id="line-1018">1018</a>  
+<a class="line-num" href="#line-1019" id="line-1019">1019</a>                <span class="nx">added</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">]</span> <span class="p">)</span>
+<a class="line-num" href="#line-1020" id="line-1020">1020</a>                <span class="nx">_add</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span> <span class="nx">val</span><span class="o">:</span><span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$add&quot;</span> <span class="p">],</span> <span class="nx">set</span><span class="o">:</span><span class="nx">_set</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span> <span class="p">)</span>
+<a class="line-num" href="#line-1021" id="line-1021">1021</a>              
+<a class="line-num" href="#line-1022" id="line-1022">1022</a>  
+<a class="line-num" href="#line-1023" id="line-1023">1023</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-97" id="section-97">&#182;</a>
+</div>
+<p>if any add has been generated overwritethe new set command</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1022" id="line-1022">1022</a>  
+<a class="line-num" href="#line-1023" id="line-1023">1023</a>              <span class="nv">_set = </span><span class="s">&quot;CONCAT( </span><span class="si">#{</span> <span class="nx">_add</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span> <span class="s">&quot;, &quot;</span> <span class="p">)</span> <span class="si">}</span><span class="s"> )&quot;</span> <span class="k">if</span> <span class="nx">_add</span><span class="p">.</span><span class="nx">length</span>
+<a class="line-num" href="#line-1024" id="line-1024">1024</a>            
+<a class="line-num" href="#line-1025" id="line-1025">1025</a>  
+<a class="line-num" href="#line-1026" id="line-1026">1026</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-98" id="section-98">&#182;</a>
+</div>
+<p>$rem command by nesting replace commands</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1025" id="line-1025">1025</a>  
+<a class="line-num" href="#line-1026" id="line-1026">1026</a>            <span class="k">if</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$rem&quot;</span> <span class="p">]</span><span class="o">?</span>
+<a class="line-num" href="#line-1027" id="line-1027">1027</a>  
+<a class="line-num" href="#line-1028" id="line-1028">1028</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-99" id="section-99">&#182;</a>
+</div>
+<p>if the content is an array generate multiple rem statements</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1027" id="line-1027">1027</a>  
+<a class="line-num" href="#line-1028" id="line-1028">1028</a>              <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$rem&quot;</span> <span class="p">]</span> <span class="p">)</span>
+<a class="line-num" href="#line-1029" id="line-1029">1029</a>                <span class="k">for</span> <span class="nx">_inp</span> <span class="k">in</span> <span class="nx">_</span><span class="p">.</span><span class="nx">difference</span><span class="p">(</span> <span class="nx">_</span><span class="p">.</span><span class="nx">uniq</span><span class="p">(</span> <span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$rem&quot;</span> <span class="p">]</span> <span class="p">),</span> <span class="nx">added</span> <span class="p">)</span>
+<a class="line-num" href="#line-1030" id="line-1030">1030</a>  
+<a class="line-num" href="#line-1031" id="line-1031">1031</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2876,12 +2907,12 @@ How to handle set within a sql field is described by this <a href="https://gist.
 </div>
 <p>set usedRem to detect any removes</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1015" id="line-1015">1015</a>  
-<a class="line-num" href="#line-1016" id="line-1016">1016</a>                <span class="nv">usedRem = </span><span class="kc">true</span>
-<a class="line-num" href="#line-1017" id="line-1017">1017</a>                <span class="nv">_set = </span><span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">rem</span><span class="p">(</span> <span class="nx">val</span><span class="o">:</span><span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$rem&quot;</span> <span class="p">],</span> <span class="nx">set</span><span class="o">:</span><span class="nx">_set</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span>
-<a class="line-num" href="#line-1018" id="line-1018">1018</a>            
-<a class="line-num" href="#line-1019" id="line-1019">1019</a>  
-<a class="line-num" href="#line-1020" id="line-1020">1020</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1030" id="line-1030">1030</a>  
+<a class="line-num" href="#line-1031" id="line-1031">1031</a>                  <span class="nv">usedRem = </span><span class="kc">true</span>
+<a class="line-num" href="#line-1032" id="line-1032">1032</a>                  <span class="nv">_set = </span><span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">rem</span><span class="p">(</span> <span class="nx">val</span><span class="o">:</span><span class="nx">_inp</span><span class="p">,</span> <span class="nx">set</span><span class="o">:</span><span class="nx">_set</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-1033" id="line-1033">1033</a>              <span class="k">else</span>
+<a class="line-num" href="#line-1034" id="line-1034">1034</a>  
+<a class="line-num" href="#line-1035" id="line-1035">1035</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2889,15 +2920,14 @@ How to handle set within a sql field is described by this <a href="https://gist.
 <div class="pilwrap">
   <a class="pilcrow" href="#section-101" id="section-101">&#182;</a>
 </div>
-<p>return <code>null</code> if nothing has to be changed</p>
+<p>set usedRem to detect any removes</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1019" id="line-1019">1019</a>  
-<a class="line-num" href="#line-1020" id="line-1020">1020</a>            <span class="k">if</span> <span class="nx">added</span><span class="p">.</span><span class="nx">length</span> <span class="o">or</span> <span class="nx">usedRem</span>
-<a class="line-num" href="#line-1021" id="line-1021">1021</a>              <span class="nx">_set</span>
-<a class="line-num" href="#line-1022" id="line-1022">1022</a>            <span class="k">else</span> 
-<a class="line-num" href="#line-1023" id="line-1023">1023</a>              <span class="kc">null</span>
-<a class="line-num" href="#line-1024" id="line-1024">1024</a>  
-<a class="line-num" href="#line-1025" id="line-1025">1025</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1034" id="line-1034">1034</a>  
+<a class="line-num" href="#line-1035" id="line-1035">1035</a>                <span class="nv">usedRem = </span><span class="kc">true</span>
+<a class="line-num" href="#line-1036" id="line-1036">1036</a>                <span class="nv">_set = </span><span class="nx">@_generateSetCommandTmpls</span><span class="p">.</span><span class="nx">rem</span><span class="p">(</span> <span class="nx">val</span><span class="o">:</span><span class="nx">inp</span><span class="p">[</span> <span class="s">&quot;$rem&quot;</span> <span class="p">],</span> <span class="nx">set</span><span class="o">:</span><span class="nx">_set</span><span class="p">,</span> <span class="nx">dlm</span><span class="o">:</span><span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-1037" id="line-1037">1037</a>            
+<a class="line-num" href="#line-1038" id="line-1038">1038</a>  
+<a class="line-num" href="#line-1039" id="line-1039">1039</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2905,14 +2935,15 @@ How to handle set within a sql field is described by this <a href="https://gist.
 <div class="pilwrap">
   <a class="pilcrow" href="#section-102" id="section-102">&#182;</a>
 </div>
-<p>set by string or number</p>
+<p>return <code>null</code> if nothing has to be changed</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1024" id="line-1024">1024</a>  
-<a class="line-num" href="#line-1025" id="line-1025">1025</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">inp</span><span class="o">?</span>
-<a class="line-num" href="#line-1026" id="line-1026">1026</a>           <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="o">+</span> <span class="nx">inp</span> <span class="o">+</span> <span class="nx">dlm</span> <span class="p">)</span>
-<a class="line-num" href="#line-1027" id="line-1027">1027</a>  
-<a class="line-num" href="#line-1028" id="line-1028">1028</a>  
-<a class="line-num" href="#line-1029" id="line-1029">1029</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1038" id="line-1038">1038</a>  
+<a class="line-num" href="#line-1039" id="line-1039">1039</a>            <span class="k">if</span> <span class="nx">added</span><span class="p">.</span><span class="nx">length</span> <span class="o">or</span> <span class="nx">usedRem</span>
+<a class="line-num" href="#line-1040" id="line-1040">1040</a>              <span class="nx">_set</span>
+<a class="line-num" href="#line-1041" id="line-1041">1041</a>            <span class="k">else</span> 
+<a class="line-num" href="#line-1042" id="line-1042">1042</a>              <span class="kc">null</span>
+<a class="line-num" href="#line-1043" id="line-1043">1043</a>  
+<a class="line-num" href="#line-1044" id="line-1044">1044</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2920,15 +2951,30 @@ How to handle set within a sql field is described by this <a href="https://gist.
 <div class="pilwrap">
   <a class="pilcrow" href="#section-103" id="section-103">&#182;</a>
 </div>
+<p>set by string or number</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1043" id="line-1043">1043</a>  
+<a class="line-num" href="#line-1044" id="line-1044">1044</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">inp</span><span class="o">?</span>
+<a class="line-num" href="#line-1045" id="line-1045">1045</a>           <span class="nx">mysql</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span> <span class="nx">dlm</span> <span class="o">+</span> <span class="nx">inp</span> <span class="o">+</span> <span class="nx">dlm</span> <span class="p">)</span>
+<a class="line-num" href="#line-1046" id="line-1046">1046</a>  
+<a class="line-num" href="#line-1047" id="line-1047">1047</a>  
+<a class="line-num" href="#line-1048" id="line-1048">1048</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-104" id="section-104">&#182;</a>
+</div>
 <p>noting to set</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1028" id="line-1028">1028</a>  
-<a class="line-num" href="#line-1029" id="line-1029">1029</a>        <span class="k">else</span>
-<a class="line-num" href="#line-1030" id="line-1030">1030</a>          <span class="kc">null</span>
-<a class="line-num" href="#line-1031" id="line-1031">1031</a>  
-<a class="line-num" href="#line-1032" id="line-1032">1032</a>  
-<a class="line-num" href="#line-1033" id="line-1033">1033</a>  
-<a class="line-num" href="#line-1034" id="line-1034">1034</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1047" id="line-1047">1047</a>  
+<a class="line-num" href="#line-1048" id="line-1048">1048</a>        <span class="k">else</span>
+<a class="line-num" href="#line-1049" id="line-1049">1049</a>          <span class="kc">null</span>
+<a class="line-num" href="#line-1050" id="line-1050">1050</a>  
+<a class="line-num" href="#line-1051" id="line-1051">1051</a>  
+<a class="line-num" href="#line-1052" id="line-1052">1052</a>  
+<a class="line-num" href="#line-1053" id="line-1053">1053</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -2941,12 +2987,12 @@ How to handle set within a sql field is described by this <a href="https://gist.
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1033" id="line-1033">1033</a>  
-<a class="line-num" href="#line-1034" id="line-1034">1034</a>      <span class="nv">ERRORS: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-1035" id="line-1035">1035</a>        <span class="nx">@extend</span> <span class="k">super</span><span class="p">,</span> 
-<a class="line-num" href="#line-1036" id="line-1036">1036</a>          <span class="s">&quot;no-tables&quot;</span><span class="o">:</span> <span class="s">&quot;No table defined&quot;</span>
-<a class="line-num" href="#line-1037" id="line-1037">1037</a>          <span class="s">&quot;no-hash&quot;</span><span class="o">:</span> <span class="s">&quot;No hash defined&quot;</span>
-<a class="line-num" href="#line-1038" id="line-1038">1038</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-1052" id="line-1052">1052</a>  
+<a class="line-num" href="#line-1053" id="line-1053">1053</a>      <span class="nv">ERRORS: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-1054" id="line-1054">1054</a>        <span class="nx">@extend</span> <span class="k">super</span><span class="p">,</span> 
+<a class="line-num" href="#line-1055" id="line-1055">1055</a>          <span class="s">&quot;no-tables&quot;</span><span class="o">:</span> <span class="s">&quot;No table defined&quot;</span>
+<a class="line-num" href="#line-1056" id="line-1056">1056</a>          <span class="s">&quot;no-hash&quot;</span><span class="o">:</span> <span class="s">&quot;No hash defined&quot;</span>
+<a class="line-num" href="#line-1057" id="line-1057">1057</a>  </pre></div>
         </td>
       </tr>
   </tbody>

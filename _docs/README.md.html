@@ -49,7 +49,10 @@
         <a href="#get%20a%20table%20instance">Get a table instance</a>
       </div>
       <div class="heading h2">
-        <a href="#destroy%20a%20table%20(%20not%20implemented%20yet%20)">Destroy a table ( not implemented yet )</a>
+        <a href="#loop%20through%20all%20tables">Loop through all tables</a>
+      </div>
+      <div class="heading h2">
+        <a href="#destroy%20a%20table">Destroy a table</a>
       </div>
       <div class="heading h1">
         <a href="#item%20handling">Item handling</a>
@@ -97,7 +100,25 @@
         <a href="#changelogs">Changelogs</a>
       </div>
       <div class="heading h3">
-        <a href="#0.1.1">0.1.1</a>
+        <a href="#0.2.1%207.%20june%202013">0.2.1 7. June 2013</a>
+      </div>
+      <div class="heading h3">
+        <a href="#0.2.0%207.%20june%202013">0.2.0 7. June 2013</a>
+      </div>
+      <div class="heading h3">
+        <a href="#0.1.4%206.%20june%202013">0.1.4 6. June 2013</a>
+      </div>
+      <div class="heading h3">
+        <a href="#0.1.3%206.%20june%202013">0.1.3 6. June 2013</a>
+      </div>
+      <div class="heading h3">
+        <a href="#0.1.2%206.%20june%202013">0.1.2 6. June 2013</a>
+      </div>
+      <div class="heading h3">
+        <a href="#0.1.1%206.%20june%202013">0.1.1 6. June 2013</a>
+      </div>
+      <div class="heading h3">
+        <a href="#0.1.0%205.%20june%202013">0.1.0 5. June 2013</a>
       </div>
       <div class="heading h2">
         <a href="#todos">Todos</a>
@@ -164,10 +185,13 @@
 <li><strong>Table-Config</strong> <code>consistent</code> not existes and will be ignored</li>
 <li><strong>Table-Config</strong> <code>overwriteExistingHash</code> not exists. It always will NOT overwrite existing hashes</li>
 <li><strong>Table-Config</strong> <code>combineTableTo</code> not exists. Within MySQL there is no need to save tables</li>
+<li><strong>Table-Attribute-Config</strong> <code>length</code> The length of a field has to be defined</li>
+<li><strong>Table-Attribute-Config</strong> <code>default</code> The SQL default of a field could be defined</li>
 <li><strong>Item-Method-Options</strong> <code>consistent</code> not existes and will be ignored</li>
 <li><strong>Item-Method-Options</strong> <code>overwriteExistingHash</code> not exists. It always will NOT overwrite existing hashes</li>
-<li><strong>Manager-Method</strong> <code>destroy</code> Not implemented yet, because usually you can delete tehm manually</li>
 </ul>
+
+<p><strong>One big difference between the Dynamo and MySQL version is that dynamo can generate undefined attributes on the fly. Th MySQL version will ignore undefined attributes. So all necessary attributes has to be defined within the table definitions</strong></p>
 
 
 <div class="pilwrap" id="initialize">
@@ -191,12 +215,17 @@
 </div>
 
 
+<hr />
+
 <ul>
-<li><strong>host</strong> : <em>( <code>String</code> required )</em> MySQL host</li>
-<li><strong>user</strong> : <em>( <code>String</code> optional: default = <code>root</code> )</em> MySQL user</li>
-<li><strong>password</strong> : <em>( <code>String</code> optional: default = <code>secret</code> )</em> MySQL password</li>
-<li><strong>database</strong> : <em>( <code>String</code> optional: default = <code>database</code> )</em> Database name</li>
+<li><strong>tablePrefix</strong> : <em>( <code>String</code> optional )</em> Option to prefix all generating tables</li>
 </ul>
+
+<p><strong>MySQL connection settings</strong> 
+- <strong>host</strong> : <em>( <code>String</code> required )</em> MySQL host
+- <strong>user</strong> : <em>( <code>String</code> optional: default = <code>root</code> )</em> MySQL user
+- <strong>password</strong> : <em>( <code>String</code> optional: default = <code>secret</code> )</em> MySQL password
+- <strong>database</strong> : <em>( <code>String</code> optional: default = <code>database</code> )</em> Database name</p>
 
 
 <div class="pilwrap" id="table%20definition">
@@ -219,10 +248,14 @@ Tablename for MySQL</li>
 The hash key name of your ids/hashes</li>
 <li><strong>hashKeyType</strong> : <em>( <code>String</code> optional: default = <code>S</code> )</em> <br />
 The type of the <code>hashKey</code>. Possible values are: <code>S</code> = String and <code>N</code> = Numeric</li>
+<li><strong>hashKeyLength</strong> : <em>( <code>Number</code> optional: default = <code>5</code> for hashKeyType <code>N</code> and <code>255</code> for hashKeyType <code>S</code> )</em> <br />
+The table field length</li>
 <li><strong>rangeKey</strong>: <em>( String optional )</em> <br />
 The range key name of your range attribute. If not defined the table will be generated without the range methods</li>
 <li><strong>rangeKeyType</strong>: <em>( <code>String</code> optional: default = <code>N</code> )</em> <br />
 The type of the <code>rangeKey</code>. Possible values are: <code>S</code> = String and <code>N</code> = Numeric</li>
+<li><strong>rangeKeyLength</strong> : <em>( <code>Number</code> optional: default = <code>5</code> for rangeKeyType <code>N</code> and <code>255</code> for rangeKeyType <code>S</code> )</em> <br />
+The table field length</li>
 <li><strong>fnCreateHash</strong>: <em>( <code>Function</code> optional: default = <code>new UUID</code> )</em> <br />
 Method to generate a custom hash key.  </li>
 <li><strong>defaultfields</strong>: <em>( <code>Array</code> optional )</em> <br />
@@ -235,18 +268,23 @@ Method to generate a custom range key. <br />
 <strong>Method Arguments</strong> <br />
 <ul><li><strong>attributes</strong>: The given attributes on create  </li>
 <li><strong>cb</strong>: Callback method to pass the custom generates id/hash. <code>cb( "my-special-range" )</code></li></ul></li>
-<li><strong>attributes</strong>: <em>( <code>Array of Objects</code> required )</em> <br />
+<li><p><strong>attributes</strong>: <em>( <code>Array of Objects</code> required )</em> <br />
 An array of attribute Objects. Which will be validated <br />
-<strong>Attributes keys</strong>
+<strong>Attributes keys</strong></p>
+
 <ul><li><strong>key</strong>: <em>( <code>String</code> required )</em> <br />
 Column/Attribute name/key</li>
 <li><strong>type</strong>: <em>( <code>String</code> required )</em> <br />
 Datatype. possible values are <code>string</code> = String, <code>number</code> = Numeric and <code>array</code> = Array/Set of <strong>Strings</strong></li>
 <li><strong>required</strong>: <em>( <code>Boolean</code> optional: default = <code>false</code> )</em> <br />
-Validate the attribute to be required. <em>( Not implemented yet ! )</em></li></ul></li>
-</ul>
+Validate the attribute to be required. <em>( Not implemented yet ! )</em></li>
+<li><strong>length</strong>: <em>( <code>Number</code> optional: default = <code>255</code> )</em> <br />
+Lentgh of the MySQL DB Filed. If you combine <code>type</code> = <code>string</code> with a <code>length</code>= <code>+Infinity</code> the field will generated as type <code>TEXT</code> otherwise as <code>VARCHAR( length )</code>. If you define a <code>number</code> with a length > 11 a type <code>BIGINT( length )</code> will be used. On a length &lt;= 11 a type <code>INT( length )</code> will be generated.</li>
+<li><strong>default</strong> <em>( <code>String</code> optional: default = `` )</em> <br />
+The SQL default value</li></ul>
 
-<p><strong>Example</strong></p>
+<p><strong>Example</strong></p></li>
+</ul>
 
 
 
@@ -328,10 +366,34 @@ Method to retrieve the instance of a table object.</li>
 
 
 
-<div class="pilwrap" id="destroy%20a%20table%20(%20not%20implemented%20yet%20)">
+<div class="pilwrap" id="loop%20through%20all%20tables">
   <h2>
-    <a href="#destroy%20a%20table%20(%20not%20implemented%20yet%20)" name="destroy%20a%20table%20(%20not%20implemented%20yet%20)" class="pilcrow">&#182;</a>
-    Destroy a table <em>( not implemented yet )</em>
+    <a href="#loop%20through%20all%20tables" name="loop%20through%20all%20tables" class="pilcrow">&#182;</a>
+    Loop through all tables
+  </h2>
+</div>
+
+
+<p>Loop trough all table objects</p>
+
+<p><strong><code>Manager.each( eachFn )</code> Arguments</strong> : </p>
+
+<ul>
+<li><strong>eachFn</strong>: <em>( <code>Function</code> required )</em> <br />
+Loop method call for every table object</li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+
+
+
+
+
+<div class="pilwrap" id="destroy%20a%20table">
+  <h2>
+    <a href="#destroy%20a%20table" name="destroy%20a%20table" class="pilcrow">&#182;</a>
+    Destroy a table
   </h2>
 </div>
 
@@ -738,16 +800,98 @@ During an update you have the ability to add or remove a single value out of the
 
 
 
-<div class="pilwrap" id="0.1.1">
+<div class="pilwrap" id="0.2.1%207.%20june%202013">
   <h3>
-    <a href="#0.1.1" name="0.1.1" class="pilcrow">&#182;</a>
-    0.1.1
+    <a href="#0.2.1%207.%20june%202013" name="0.2.1%207.%20june%202013" class="pilcrow">&#182;</a>
+    0.2.1 <code>7. June 2013</code>
   </h3>
 </div>
 
 
 <ul>
-<li>Added Readme docs</li>
+<li>Added missing destroy table</li>
+<li>Print a a warning on table destroy and table create</li>
+</ul>
+
+
+<div class="pilwrap" id="0.2.0%207.%20june%202013">
+  <h3>
+    <a href="#0.2.0%207.%20june%202013" name="0.2.0%207.%20june%202013" class="pilcrow">&#182;</a>
+    0.2.0 <code>7. June 2013</code>
+  </h3>
+</div>
+
+
+<ul>
+<li>Added manager/table option <code>tablePrefix</code> to prefix the sql table names</li>
+<li>added manager method <code>.each()</code></li>
+<li>Changed tests to drop the tables before test</li>
+</ul>
+
+
+<div class="pilwrap" id="0.1.4%206.%20june%202013">
+  <h3>
+    <a href="#0.1.4%206.%20june%202013" name="0.1.4%206.%20june%202013" class="pilcrow">&#182;</a>
+    0.1.4 <code>6. June 2013</code>
+  </h3>
+</div>
+
+
+<ul>
+<li>Print out a warning if attributes are removed by the validation</li>
+</ul>
+
+
+<div class="pilwrap" id="0.1.3%206.%20june%202013">
+  <h3>
+    <a href="#0.1.3%206.%20june%202013" name="0.1.3%206.%20june%202013" class="pilcrow">&#182;</a>
+    0.1.3 <code>6. June 2013</code>
+  </h3>
+</div>
+
+
+<ul>
+<li>Fixed package json to use the correct <code>mysql-node</code> version if an older version is already used within the project</li>
+</ul>
+
+
+<div class="pilwrap" id="0.1.2%206.%20june%202013">
+  <h3>
+    <a href="#0.1.2%206.%20june%202013" name="0.1.2%206.%20june%202013" class="pilcrow">&#182;</a>
+    0.1.2 <code>6. June 2013</code>
+  </h3>
+</div>
+
+
+<ul>
+<li>Added code docs with docker</li>
+<li>Some small code improvements</li>
+</ul>
+
+
+<div class="pilwrap" id="0.1.1%206.%20june%202013">
+  <h3>
+    <a href="#0.1.1%206.%20june%202013" name="0.1.1%206.%20june%202013" class="pilcrow">&#182;</a>
+    0.1.1 <code>6. June 2013</code>
+  </h3>
+</div>
+
+
+<ul>
+<li>Added Readme</li>
+</ul>
+
+
+<div class="pilwrap" id="0.1.0%205.%20june%202013">
+  <h3>
+    <a href="#0.1.0%205.%20june%202013" name="0.1.0%205.%20june%202013" class="pilcrow">&#182;</a>
+    0.1.0 <code>5. June 2013</code>
+  </h3>
+</div>
+
+
+<ul>
+<li>Initial version</li>
 </ul>
 
 
