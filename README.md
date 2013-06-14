@@ -2,6 +2,8 @@ mysql-dynamo
 ============
 
 [![Build Status](https://secure.travis-ci.org/mpneuried/mysql-dynamo.png?branch=master)](http://travis-ci.org/mpneuried/mysql-dynamo)
+[![Build Status](https://david-dm.org/mpneuried/mysql-dynamo.png)](https://david-dm.org/mpneuried/mysql-dynamo)
+[![NPM version](https://badge.fury.io/js/mysql-dynamo.png)](http://badge.fury.io/js/mysql-dynamo)
 
 A solution to use the **[simple-dynamo](http://mpneuried.github.io/simple-dynamo/)** interface with a MySQL database. So you can create a offline version of a AWS-DynamoDB project.
 
