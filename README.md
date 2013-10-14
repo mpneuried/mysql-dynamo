@@ -462,6 +462,15 @@ tblTodos.find _query, _startAt, _options, ( err, items )->
 		console.log( "4 found items", items )
 ```
 
+## Numeric functions
+
+If a field is defined as number you can run simple operations like increase and decrese the value.
+
+To do this you can pass the value of a number as
+
+* `"key": { "$add": 1 }` to increase the number by 1
+* `"key": { "$rem": 1 }` to decrease the number by 1
+* `"key": { "$reset": 1 }` to set the number by 1
 
 ## Working with sets
 
@@ -565,6 +574,10 @@ To provide a API to react on different events you can listen to a bunch of event
 	- **item_old**: the item before the delete
 	
 ## Changelogs
+
+### 0.2.5 `14. Okt. 2013`
+
+- Feature: added numeric functions feature
 
 ### 0.2.4 `14. Okt. 2013`
 

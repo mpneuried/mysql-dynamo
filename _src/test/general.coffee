@@ -433,7 +433,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 				return
 			return
 
-		it "update third item with `number` field = `null`", ( done )->
+		it "update third item to check numeric functions", ( done )->
 
 			_opt = 
 				fields: [ "id", "name", "age" ]
@@ -441,6 +441,25 @@ describe "----- #{ testTitle } TESTS -----", ->
 			tableG.set _G[ "insert3" ][ _C.hashKey ], _D[ "update3_2" ], _opt, ( err, item )->
 				should.not.exist( err )
 				
+				should.exist( item.id )
+				should.exist( item.name )
+				should.exist( item.age )
+				item.age.should.equal( _G[ "insert3" ].age + _D[ "update3_2" ].age[ "$add" ] )
+
+				_G[ "insert3" ] = item
+
+				done()
+				return
+			return
+
+		it "update third item with `number` field = `null`", ( done )->
+
+			_opt = 
+				fields: [ "id", "name", "age" ]
+			console.log _G[ "insert3" ][ _C.hashKey ], _D[ "update3_3" ]
+			tableG.set _G[ "insert3" ][ _C.hashKey ], _D[ "update3_3" ], _opt, ( err, item )->
+				console.log item
+				should.not.exist( err )
 				should.exist( item.id )
 				should.exist( item.name )
 				should.not.exist( item.age )

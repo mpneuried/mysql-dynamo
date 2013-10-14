@@ -8,8 +8,8 @@ module.exports =
 		"update1": { name: "First employee", additional: "" }
 		"update2": { name: "Second employee Update", email: "second@employee.com", age: 35, additional: null }
 		"update3": { name: "Third employee Conditional Update", email: "third@employee.com", age: 35 }
-		"update3_2": { name: "Third employee Conditional Update", email: "third@employee.com", age: null }
-
+		"update3_2": { age: { "$add": 5 } }
+		"update3_3": { name: "Third employee Conditional Update", email: "third@employee.com", age: null }
 	"Todos": 
 		"insert1": { id: "123456", title: "First", done: 0 }
 		"insert2": { id: "123456", title: "Second", done: 0  }

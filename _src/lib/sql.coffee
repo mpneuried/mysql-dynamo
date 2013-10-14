@@ -931,7 +931,14 @@ module.exports = ( options )->
 				_cnf = @_getAttrConfig( _key )
 				if _cnf
 					switch _cnf.type
-						when "string", "number", "S", "N"
+						when "number", "N"
+							# create regular values
+							_keys.push( _key )
+							if _.isNumber( _val )
+								_vals.push( mysql.escape( _val ) )
+							else
+								_vals.push( @_generateNumberMethod( _key, _val ) )
+						when "string", "S"
 							# create regular values
 							_keys.push( _key )
 							_vals.push( mysql.escape( _val ) )
@@ -944,6 +951,31 @@ module.exports = ( options )->
 							@log "debug", "setCommand", _setval, _val, _key
 			return [ _keys, _vals ]
 			return null
+
+		###
+		## _generateNumberMethod
+		
+		`sql._generateNumberMethod( key, inp, dlm )`
+		
+		Calculate a number inside sql
+		
+		@param { String } key The field name 
+		@param { String|Number|Object } inp the numeric function description as object with key "$reset", "$add", "$rem" to set, add or decrese a number with a single command.
+
+		@return { String } Return Desc 
+		
+		@api private
+		###
+		_generateNumberMethod: ( key, inp )=>
+
+			if inp?[ "$reset" ]
+				return mysql.escape( inp )
+			else if inp?[ "$add" ]
+				return "#{key} + #{ inp[ "$add" ]}"
+			else if inp?[ "$rem" ]
+				return "#{key} + #{ inp[ "$rem" ]}"
+			else
+				return mysql.escape( inp )
 
 		# **_generateSetCommandTmpls** *Object* Underscore templates for the set sql commands. Used by the method `_generateSetCommand`
 		_generateSetCommandTmpls:
