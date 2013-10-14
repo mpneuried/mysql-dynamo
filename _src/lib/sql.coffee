@@ -284,13 +284,13 @@ module.exports = ( options )->
 								_filter += "#{ _operand } #{ mysql.escape( _val ) }"
 						when "contains"
 							# `column like "%?%"`
-							_filter += "like '#{ mysql.escape( "%" + _val + "%" ) }'"
+							_filter += "like #{ mysql.escape( "%" + _val + "%" ) }"
 						when "!contains"
 							# `column not like "%?%"`
-							_filter += "not like '#{ mysql.escape( "%" + _val + "%" ) }'"
+							_filter += "not like #{ mysql.escape( "%" + _val + "%" ) }"
 						when "startsWith"
 							# `column like "?%"`
-							_filter += "like '#{ mysql.escape( _val + "%" ) }'"
+							_filter += "like #{ mysql.escape( _val + "%" ) }"
 						when "in"
 							# `column in ( ?[0], ?[1], ... ?[n] )`
 							if not _.isArray( _val )

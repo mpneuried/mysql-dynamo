@@ -103,7 +103,7 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 
 			# define the return method to release the connection
 			args.push =>
-				conn.end()
+				conn.release()
 				cb.apply( @, arguments )
 				return
 			# run the query with `node-mysql`
