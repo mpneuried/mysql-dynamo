@@ -325,7 +325,7 @@ module.exports = class MySQLDynamoManager extends require( "./basic" )
 					delete @_tables[ tableName ]
 				
 				# generate a [Table](table.coffee.html) object for each table-element out of @tableSettings
-				_ext = @_dbTables[ ( @config.tablePrefix or "" ) + table.name ]
+				_ext = @_dbTables[ ( @config.tablePrefix or "" ) + ( if table.combineTableTo? then table.combineTableTo + "_" else "" ) + table.name ]
 				_opt = 
 					manager: @
 					external: _ext

@@ -37,7 +37,7 @@ module.exports = class MySQLDynamoTable extends require( "./basic" )
 			@_model_settings.name
 
 		@getter "tableName", =>
-			( options.tablePrefix or "" ) + @_model_settings.name
+			( options.tablePrefix or "" ) + ( if @_model_settings.combineTableTo? then @_model_settings.combineTableTo + "_" else "" ) + @_model_settings.name
 
 		@getter "existend", =>
 			@external?

@@ -50,6 +50,7 @@ module.exports  =
 			]
 
 		"Logs1":
+			combineTableTo: "logs"
 			name: "log1"
 			hashKey:  "id"
 			hashKeyType: "S"
@@ -69,6 +70,7 @@ module.exports  =
 			]
 
 		"Logs2":
+			combineTableTo: "logs"
 			name: "log2"
 			hashKey:  "id"
 			hashKeyType: "S"
