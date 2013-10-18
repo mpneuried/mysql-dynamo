@@ -728,7 +728,7 @@ If the used table is a range table you have to use an array `[hash,range]` as co
 			when "N", "numeric"
 				parseFloat( val, 10 )
 			when "S", "string"
-				val.toString( val ) if val
+				val.toString() if val
 			else
 				val
 

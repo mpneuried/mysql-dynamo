@@ -575,6 +575,10 @@ To provide a API to react on different events you can listen to a bunch of event
 	
 ## Changelogs
 
+### 0.2.6 `18. Okt. 2013`
+
+- Bugfix converting data
+
 ### 0.2.5 `14. Okt. 2013`
 
 - Feature: added numeric functions feature
