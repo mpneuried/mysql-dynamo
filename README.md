@@ -342,7 +342,7 @@ tblRangeTodos.mget [ [ 'myHash', 1 ], [ 'myHash', 2 ] ], ( err, todos )->
 
 ## Update an item (UPDATE)
 
-update an existing item.  
+update an existing item. If you try to update a not existing item it will be created.
 To remove a attribute you have to set the value to `null`
 
 **`Table.set( id, data, options, fnCallback )` Arguments** : 
@@ -574,6 +574,10 @@ To provide a API to react on different events you can listen to a bunch of event
 	- **item_old**: the item before the delete
 	
 ## Changelogs
+
+### 0.3.0 `15. April 2014`
+
+- Do a insert during update for a simple set call. This has been done due to compatibility to dynamo db.
 
 ### 0.2.7 `18. Okt. 2013`
 

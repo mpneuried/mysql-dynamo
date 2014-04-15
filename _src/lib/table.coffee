@@ -478,9 +478,12 @@ If the used table is a range table you have to use an array `[hash,range]` as co
 					# add the conditionals to the update
 					if options.conditionals?
 						sql.filter( options.conditionals )
+						_update = sql.update( attributes )
+					else
+						_update = sql.update( attributes, _query )
 
 					# create the statement array
-					statements = [ sql.update( attributes ), _select ]
+					statements = [ _update, _select ]
 
 					# execute the query
 					@sql statements, ( err, results )=>

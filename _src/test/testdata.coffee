@@ -10,6 +10,7 @@ module.exports =
 		"update3": { name: "Third employee Conditional Update", email: "third@employee.com", age: 35 }
 		"update3_2": { age: { "$add": 5 } }
 		"update3_3": { name: "Third employee Conditional Update", email: "third@employee.com", age: null }
+		"update4": { id:"666", name: "New employee Update", email: "new@employee.com", age: 55 }
 	"Todos": 
 		"insert1": { id: "123456", title: "First", done: 0 }
 		"insert2": { id: "123456", title: "Second", done: 0  }

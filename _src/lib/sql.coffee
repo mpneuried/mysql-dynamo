@@ -164,22 +164,35 @@ module.exports = ( options )->
 		
 		@api public
 		###
-		update: ( attributes )=>
-
+		update: ( attributes, _query )=>
 			attributes = @_validateAttributes( false, attributes )
 
 			statement = []
-			statement.push "UPDATE #{ @table }"
 
-			[ _keys, _vals ] = @_getSaveVariables( attributes )
+			# Do a insert or update if a simple update by id has been detected.
+			if _query? and Object.keys( _query ).length is 1 and _query[ @hashkey ]?
+				_insertUpdate = true
+
+				[ _keys, _vals ] = @_getSaveVariables( _.extend( {}, attributes, _query ) )
+
+
+				statement.push "INSERT INTO #{ @table }"
+
+				statement.push( "( #{ _keys.join( ", " )} )" ) 
+				statement.push( "VALUES ( #{ _vals.join( ", " ) } )" )
+
+				statement.push "ON DUPLICATE KEY UPDATE"
+			else
+				[ _keys, _vals ] = @_getSaveVariables( attributes )
+				statement.push "UPDATE #{ @table }\nSET"
 
 			_sets = []
 			for _key, _idx in _keys
 				_sets.push( "#{ _key } = #{ _vals[ _idx ] }" ) 
 			
-			statement.push( "SET #{ _sets.join( ", " ) }" )
+			statement.push( "#{ _sets.join( ", " ) }" )
 
-			statement.push @where
+			statement.push @where if not _insertUpdate
 
 			return _.compact( statement ).join( "\n" )
 

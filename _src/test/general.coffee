@@ -456,9 +456,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 
 			_opt = 
 				fields: [ "id", "name", "age" ]
-			console.log _G[ "insert3" ][ _C.hashKey ], _D[ "update3_3" ]
 			tableG.set _G[ "insert3" ][ _C.hashKey ], _D[ "update3_3" ], _opt, ( err, item )->
-				console.log item
 				should.not.exist( err )
 				should.exist( item.id )
 				should.exist( item.name )
@@ -468,6 +466,28 @@ describe "----- #{ testTitle } TESTS -----", ->
 				item.name.should.equal( _G[ "insert3" ].name )
 
 				_G[ "insert3" ] = item
+
+				done()
+				return
+			return
+
+		it "update not existing item to be inserted", ( done )->
+			tableG.set _D[ "update4" ][ _C.hashKey ], _D[ "update4" ], fields: [ "id", "name", "age" ], ( err, item )->
+				throw err if err
+
+				should.exist( item.id )
+				should.exist( item.name )
+				should.exist( item.age )
+				should.not.exist( item.email )
+				should.not.exist( item.additional )
+
+				item.id.should.equal( _D[ "update4" ].id )
+				item.name.should.equal( _D[ "update4" ].name )
+				item.age.should.equal( _D[ "update4" ].age )
+
+
+				_G[ "update4" ] = item
+				_ItemCount++
 
 				done()
 				return
@@ -485,6 +505,15 @@ describe "----- #{ testTitle } TESTS -----", ->
 		it "delete the third inserted item", ( done )->
 			
 			tableG.del _G[ "insert3" ][ _C.hashKey ], ( err )->
+				throw err if err
+				_ItemCount--
+				done()
+				return
+			return
+
+		it "delete the forth inserted item", ( done )->
+			
+			tableG.del _G[ "update4" ][ _C.hashKey ], ( err )->
 				throw err if err
 				_ItemCount--
 				done()
