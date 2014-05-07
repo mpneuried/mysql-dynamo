@@ -147,7 +147,7 @@ module.exports = ( options )->
 
 			[ _keys, _vals ] = @_getSaveVariables( attributes )
 			
-			statement.push( "( #{ _keys.join( ", " )} )" ) 
+			statement.push( "( `#{ _keys.join( "`, `" )}` )" ) 
 			statement.push( "VALUES ( #{ _vals.join( ", " ) } )" )
 			return _.compact( statement ).join( "\n" )
 
@@ -178,7 +178,7 @@ module.exports = ( options )->
 
 				statement.push "INSERT INTO #{ @table }"
 
-				statement.push( "( #{ _keys.join( ", " )} )" ) 
+				statement.push( "( `#{ _keys.join( "`, `" )}` )" ) 
 				statement.push( "VALUES ( #{ _vals.join( ", " ) } )" )
 
 				statement.push "ON DUPLICATE KEY UPDATE"
@@ -188,7 +188,7 @@ module.exports = ( options )->
 
 			_sets = []
 			for _key, _idx in _keys
-				_sets.push( "#{ _key } = #{ _vals[ _idx ] }" ) 
+				_sets.push( "`#{ _key }` = #{ _vals[ _idx ] }" ) 
 			
 			statement.push( "#{ _sets.join( ", " ) }" )
 
@@ -270,7 +270,7 @@ module.exports = ( options )->
 					@filter( _k, _pred )
 			else
 				# create the SQL where statement
-				_filter = "#{ key } "
+				_filter = "`#{ key }` "
 
 				if not pred?
 					# is null if pred is `null`
@@ -773,7 +773,10 @@ module.exports = ( options )->
 		###
 		setFields: ( _fields = @config.fields )=>
 			if _.isArray( _fields )
-				@_c.fields = _fields.join( ", " )
+				@_c.fields = "`" + _fields.join( "`, `" ) + "`"
+			else if _fields isnt "*" and _fields.indexOf?( "," ) >= 0
+				
+				@_c.fields = "`" + _fields.split( "," ).join( "`, `" ) + "`"
 			else
 				@_c.fields = _fields
 			return

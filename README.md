@@ -575,6 +575,10 @@ To provide a API to react on different events you can listen to a bunch of event
 	
 ## Changelogs
 
+### 0.3.1 `07. May 2014`
+
+- Bugfix to be able to use reserved words like `key` as fieldnames
+
 ### 0.3.0 `15. April 2014`
 
 - Do a insert during update for a simple set call. This has been done due to compatibility to dynamo db.
