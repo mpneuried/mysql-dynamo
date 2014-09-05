@@ -147,7 +147,7 @@ module.exports = ( options )->
 
 			[ _keys, _vals ] = @_getSaveVariables( attributes )
 			
-			statement.push( "( #{ _keys.join( ", " )} )" ) 
+			statement.push( "( #{ _keys.map(mysql.escapeId).join( ", " )} )" ) 
 			statement.push( "VALUES ( #{ _vals.join( ", " ) } )" )
 			return _.compact( statement ).join( "\n" )
 

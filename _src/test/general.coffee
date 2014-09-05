@@ -311,7 +311,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 				items.should.have.length( 2 )
 				aPred = [ _G[ "insert1" ], _G[ "insert2" ] ]
 				for item in items
-					aPred.should.includeEql( item )
+					aPred.should.containEql( item )
 
 				done()
 				return
@@ -324,7 +324,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 				items.should.have.length( 2 )
 				aPred = [ _G[ "insert1" ], _G[ "insert2" ] ]
 				for item in items
-					aPred.should.includeEql( item )
+					aPred.should.containEql( item )
 
 				done()
 				return
@@ -683,7 +683,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 				items.should.have.length( 2 )
 				aPred = [ _G1[ 1 ], _G1[ 5 ] ]
 				for item in items
-					aPred.should.includeEql( item )
+					aPred.should.containEql( item )
 
 				done()
 				return
@@ -696,7 +696,7 @@ describe "----- #{ testTitle } TESTS -----", ->
 				items.should.have.length( 2 )
 				aPred = [ _G2[ 1 ], _G2[ 5 ] ]
 				for item in items
-					aPred.should.includeEql( item )
+					aPred.should.containEql( item )
 
 				done()
 				return
