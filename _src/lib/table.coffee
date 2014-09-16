@@ -551,7 +551,7 @@ If the used table is a range table you have to use an array `[hash,range]` as co
 				if err
 					cb( err )
 					return
-				[ _meta, _deleted ] = results
+				[ _deleted, _meta ] = results
 
 				@log "debug", "deleted", _meta, _deleted
 				if _deleted?.length

@@ -575,6 +575,9 @@ To provide a API to react on different events you can listen to a bunch of event
 	
 ## Changelogs
 
+### 0.3.3 `16. Sep. 2014`
+
+Fixed delete to return the correct data;
 
 ### 0.3.2 `5. Sep. 2014`
 
@@ -583,7 +586,6 @@ Small fix for escaping the keys; fixes for current dependencies;
 ### 0.3.1 `07. May 2014`
 
 - Bugfix to be able to use reserved words like `key` as fieldnames
->>>>>>> eaa0e8f0da9d0dbdbbc83d6d0ef9a8026c70cae6
 
 ### 0.3.0 `15. April 2014`
 

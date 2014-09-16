@@ -4,7 +4,7 @@
 	"description": "A solution to use the `simple-dynamo` interface with a MySQL database. So you can create a offline version of a AWS-DynamoDB project.",
 	"keywords": [ "dynamo", "aws", "amazon", "model", "abstraction", "db", "simple", "offline", "local", "mysql" ],
 	"tags": [ "dynamo", "aws", "amazon", "model", "abstraction", "db", "simple", "offline", "local", "mysql" ],
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"homepage": "http://mpneuried.github.com/mysql-dynamo/",
 	"repository": {
 		"type": "git",
